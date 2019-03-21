@@ -1,0 +1,21 @@
+{
+  "name": "cs2102g53",
+  "version": "1.0.0",
+  "description": "`Express` is for the backend (API, Database connection, etc).",
+  "main": "express/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-client": "cd my-app && yarn build",
+    "start": "cd express && yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emer7/CS2102G53.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emer7/CS2102G53/issues"
+  },
+  "homepage": "https://github.com/emer7/CS2102G53#readme"
+}
