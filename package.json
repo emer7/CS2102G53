@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "`Express` is for the backend (API, Database connection, etc).",
   "main": "express/app.js",
+  "engines": {
+    "node": "8.11.3",
+    "yarn": "1.12.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd my-app && yarn && yarn build && cd .. && cd express && yarn",
