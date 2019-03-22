@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { pool } = require('../config/db.js')
+const pool = require('../config/db.js')
 
 var sql_query = 'SELECT * FROM student_info';
 
