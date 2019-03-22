@@ -1,15 +1,23 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Navbar } from "./Components/Navbar";
 import { Users } from "./Components/Users";
 class App extends Component {
   state = {};
 
+  componentDidMount() {
+    fetch("http://localhost:5000/users").then(data =>
+      data.json().then(data => {
+        this.setState({
+          data: data.slice(0, 1)
+        });
+      })
+    );
+  }
+
   onClick() {
     fetch("http://localhost:5000/users").then(data =>
       data.json().then(data => {
-        console.log(data);
         this.setState({
           data
         });
