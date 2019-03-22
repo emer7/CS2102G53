@@ -8,8 +8,8 @@ var sql_query = 'SELECT * FROM student_info';
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   pool.query(sql_query, (err, data) => {
-		res.send(data.rows);
-	});
+    res.send(data.rows);
+  });
 });
 
 module.exports = router;
