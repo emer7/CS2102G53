@@ -1,13 +1,4 @@
-const Pool = require('pg').Pool
-// To add our own postgres crudentials
-const pool = new Pool({
-    user: 'me',
-    host: 'localhost',
-    database: 'api',
-    passwordd: 'password',
-    // Port is optional
-    //port: 5432,
-})
+const pool = require('../config/db.js')
 
 // Creates new user
 // Need to think about how to generate the item SSNs
