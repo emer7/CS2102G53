@@ -1,7 +1,23 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import styled from "styled-components";
+
 import "./App.css";
-import { Navbar } from "./Components/Navbar";
+
 import { Users } from "./Components/Users";
+import { Profile } from "./Components/Profile";
+import { Login } from "./Components/Login";
+
+const Navbar = styled.div`
+  background-color: black;
+  padding: 10px;
+`;
+
+const Navlink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
+
 class App extends Component {
   state = {};
 
@@ -27,10 +43,16 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Navbar />
+      <Router>
+        <Navbar>
+          <Navlink to="/profile">Profile</Navlink>
+          <Navlink to="/login">Login</Navlink>
+        </Navbar>
         <Users onClick={this.onClick.bind(this)} users={this.state.data || []} />
-      </div>
+
+        <Route path="/profile" component={Profile} />
+        <Route path="/login" component={Login} />
+      </Router>
     );
   }
 }
