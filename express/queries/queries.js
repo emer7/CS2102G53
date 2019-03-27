@@ -72,7 +72,7 @@ const deleteItem = (request, response) => {
 }
 
 // Updates an exisiting item to be on loan
-const LoanedItem = (request, response) => {
+const loanedItem = (request, response) => {
     const itemSSN = parseInt(request.params.itemSSN)
 
     pool.query(
@@ -283,7 +283,7 @@ const returnedItem = (request, response) => {
     const transactionSSN = parseInt(request.params.transactionSSN)
 
     pool.query(
-        'UPDATE Transactions SET returnedStatus = TRUE WHERE transactionSSN = $1', [transactionSSN,
+        'UPDATE Transactions SET returnedStatus = TRUE WHERE transactionSSN = $1', [transactionSSN],
         (error, results) => {
             if (error) {
                 throw error
