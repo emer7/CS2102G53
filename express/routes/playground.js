@@ -16,7 +16,6 @@ router.get('/login', (req, res, next) => {
 });
 
 router.get('/auth', (req, res) => {
-  console.log(req.isAuthenticated());
   req.isAuthenticated() ? res.send('You are logged in') : res.redirect('/playground/login');
 });
 
@@ -39,6 +38,10 @@ router.post('/register', (req, res) => {
       }
     });
   });
+});
+
+router.post('/echo', (req, res) => {
+  res.send(req.body);
 });
 
 module.exports = router;
