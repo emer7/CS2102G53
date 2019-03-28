@@ -33,9 +33,8 @@ const deleteUser = (request, response) => {
 // Updates an exisiting user
 // Can we get the SSN to update?
 const updateUser = (request, response) => {
-  const userSSN = parseInt(request.params.userSSN);
   const {
-    username, passwordd, namee, age, email, dob, contact, address, nationality,
+    userSSN, username, passwordd, namee, age, email, dob, contact, address, nationality,
   } = request.body;
 
   pool.query(
@@ -168,7 +167,7 @@ const acceptWinningBid = (request, response) => {
   );
 };
 
-// Create an new transaction and borrows upon accepting a winning bid\
+// Create an new transaction and borrows upon accepting a winning bid
 const addTransactionAndBorrows = (request, response) => {
   const {
     transactionSSN, startDate, endDate, itemSSN, borrowerSSN,
