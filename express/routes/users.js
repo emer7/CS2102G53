@@ -3,7 +3,7 @@ const query = require('./queries/queries')
 
 const router = express.Router();
 
-const pool = require('../config/db.js');
+const pool = require('../config/db');
 
 const sql_query = 'SELECT * FROM student_info';
 
