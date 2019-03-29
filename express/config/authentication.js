@@ -5,32 +5,36 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('./db');
 
 passport.use(
-  new LocalStrategy({ usernameField: 'username', passwordField: 'password' }, (username, pass, done) => {
-    const query = 'SELECT accountid, username, pass FROM accounts WHERE username=$1';
-    const values = [username];
+  new LocalStrategy(
+    { usernameField: 'username', passwordField: 'password' },
+    (username, password, done) => {
+      const query = 'SELECT accountid, username, pass FROM accounts WHERE username=$1';
+      const values = [username];
 
-    pool.query(query, values, (errorQuery, resultQuery) => {
-      if (errorQuery) {
-        done(errorQuery);
-      }
+      pool.query(query, values, (errorQuery, resultQuery) => {
+        if (errorQuery) {
+          done(errorQuery);
+        }
 
-      if (resultQuery || resultQuery.rows || resultQuery.rows.length > 0) {
-        const first = resultQuery.rows[0];
-        bcrypt.compare(pass, first.pass, (errorBcrypt, resultBcrypt) => {
-          if (errorBcrypt) {
-            done(errorBcrypt);
-          }
+        if (resultQuery && resultQuery.rows && resultQuery.rows.length > 0) {
+          const firstRow = resultQuery.rows[0];
+          bcrypt.compare(password, firstRow.pass, (errorCompare, resultBcrypt) => {
+            if (errorCompare) {
+              done(errorCompare);
+            }
 
-          if (resultBcrypt) {
-            done(null, first);
-          }
-          done(null, false, { message: 'Incorrect password.' });
-        });
-      } else {
-        done(null, false);
-      }
-    });
-  }),
+            if (resultBcrypt) {
+              done(null, firstRow);
+            } else {
+              done(null, false, { message: 'Incorrect password' });
+            }
+          });
+        } else {
+          done(null, false, { message: 'User not  found' });
+        }
+      });
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
@@ -43,8 +47,9 @@ passport.deserializeUser((accountid, done) => {
   pool.query(query, values, (errorQuery, resultQuery) => {
     if (errorQuery) {
       done(errorQuery);
+    } else {
+      done(null, resultQuery.rows[0]);
     }
-    done(null, resultQuery.rows[0]);
   });
 });
 

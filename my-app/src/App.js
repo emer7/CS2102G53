@@ -23,20 +23,18 @@ class App extends Component {
     };
   }
 
-  hasLoggedIn = () => {
-    this.setState({ isAuthenticated: true });
+  handleLogin = (login) => {
+    this.setState({ isAuthenticated: login });
   };
 
   componentDidMount() {
-    fetch("http://localhost:5000/authenticate/check")
-      .then(res => res.json())
-      .then(data => this.setState({ isAuthenticated: data }));
+    this.authenticate();
   }
 
   authenticate = () => {
     fetch("http://localhost:5000/authenticate/check")
       .then(res => res.json())
-      .then(data => this.setState({ isAuthenticated: data }));
+      .then(data => this.setState({ isAuthenticated: data.login }));
   };
 
   render() {
@@ -74,7 +72,7 @@ class App extends Component {
             path="/login"
             render={props => (
               <Login
-                hasLoggedIn={this.hasLoggedIn}
+                handleLogin={this.handleLogin}
                 isAuthenticated={this.state.isAuthenticated}
                 {...props}
               />

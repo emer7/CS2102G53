@@ -47,8 +47,7 @@ class Login extends Component {
       .then(res => res.json())
       .then(data => {
         if (data) {
-          this.props.hasLoggedIn();
-          console.log(this.props.isAuthenticated);
+          this.props.handleLogin(data.login);
         }
       });
   };
