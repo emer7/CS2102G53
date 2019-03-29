@@ -13,6 +13,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const playgroundRouter = require('./routes/playground');
 const authenticationRouter = require('./routes/authenticate');
+const itemRouter = require('./routes/items');
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/playground', playgroundRouter);
 app.use('/authenticate', authenticationRouter);
+app.use('/items', itemRouter);
 
 module.exports = app;
