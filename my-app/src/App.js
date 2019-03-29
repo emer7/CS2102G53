@@ -1,29 +1,94 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link, Redirect, NavLink, Switch } from "react-router-dom";
+import styled from "styled-components";
+
+import Login from "./Components/Login";
+import Register from "./Components/Register";
+
+const Navbar = styled.div`
+  background-color: black;
+  padding: 10px;
+`;
+
+const Navlink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthenticated: false
+    };
+  }
+
+  hasLoggedIn = () => {
+    this.setState({ isAuthenticated: true });
+  };
+
+  componentDidMount() {
+    fetch("http://localhost:5000/authenticate/check")
+      .then(res => res.json())
+      .then(data => this.setState({ isAuthenticated: data }));
+  }
+
+  authenticate = () => {
+    fetch("http://localhost:5000/authenticate/check")
+      .then(res => res.json())
+      .then(data => this.setState({ isAuthenticated: data }));
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-            Really? Let's try it
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Router>
+        <Navbar>
+          <NavLink to="/">Home</NavLink>
+          <Navlink to="/lend">Lend</Navlink>
+          <Navlink to="/borrow">Borrow</Navlink>
+          <Navlink to="/profile">Profile</Navlink>
+          <Navlink to="/login">Login</Navlink>
+          <Navlink to="/register">Register</Navlink>
+        </Navbar>
+
+        <Switch>
+          <Route
+            path="/lend"
+            render={props =>
+              this.state.isAuthenticated ? <Lend {...props} /> : <Redirect to="/login" />
+            }
+          />
+          <Route
+            path="/borrow"
+            render={props =>
+              this.state.isAuthenticated ? <Borrow {...props} /> : <Redirect to="/login" />
+            }
+          />
+          <Route
+            path="/profile"
+            render={props =>
+              this.state.isAuthenticated ? <Profile {...props} /> : <Redirect to="/login" />
+            }
+          />
+          <Route
+            path="/login"
+            render={props => (
+              <Login
+                hasLoggedIn={this.hasLoggedIn}
+                isAuthenticated={this.state.isAuthenticated}
+                {...props}
+              />
+            )}
+          />
+          <Route path="/register" render={props => <Register {...props} />} />
+        </Switch>
+      </Router>
     );
   }
 }
+
+const Lend = () => <h1>Lend</h1>;
+const Borrow = () => <h1>Borrow</h1>;
+const Profile = () => <h1>Profile</h1>;
 
 export default App;
