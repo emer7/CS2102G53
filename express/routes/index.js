@@ -1,10 +1,10 @@
 const express = require('express');
-const query = require('./queries/queries');
+const query = require('../queries/queries');
 
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.render('index', { title: 'Express' });
 });
 

@@ -29,9 +29,9 @@ const createUser = (request, response) => {
 
 // Deletes an exisiting user
 const deleteUser = (request, response) => {
-  const userSSN = parseInt(request.params.userSSN);
+  const userSSN = parseInt(request.params.userSSN, 10);
 
-  pool.query('DELETE FROM Users WHERE userSSN = $1', [userSSN], (error, results) => {
+  pool.query('DELETE FROM Users WHERE userSSN = $1', [userSSN], (error) => {
     if (error) {
       throw error;
     }
@@ -56,12 +56,13 @@ const updateUser = (request, response) => {
 
   pool.query(
     'UPDATE Users SET username = $1, passwordd = $2, namee = $3, age = $4, email = $5, dob = $6, contact = $7, address = $8, nationality = $9 WHERE UserSSN = $10',
-    [username, passwordd, namee, age, email, dob, contact, address, nationality, userSSN],
-    (error, results) => {
+    // [username, passwordd, namee, age, email, dob, contact, address, nationality, userSSN], // fix
+    [username, passwordd, namee, age, email, dob, contact, address, nationality],
+    (error) => {
       if (error) {
         throw error;
       }
-      response.status(200).send(`User modified with UserSSN: ${userSSN}`);
+      response.status(200).send(`User modified with UserSSN: ${'userSSN'}`); // fix
     },
   );
 };
@@ -75,20 +76,20 @@ const createItem = (request, response) => {
   pool.query(
     'INSERT INTO Items (transactionSSN, loanedByUserSSN, namee, description, minBidPrice, loanDuration) VALUES (NULL, $1, $2, $3, $4, $5)',
     [loanedByUserSSN, namee, description, minBidPrice, loanDuration],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
-      response.status(200).send(`Item added with ItemSSN: ${itemSSN}`);
+      response.status(200).send(`Item added with ItemSSN: ${'itemSSN'}`); // fix
     },
   );
 };
 
 // Deletes an exisiting item
 const deleteItem = (request, response) => {
-  const itemSSN = parseInt(request.params.itemSSN);
+  const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  pool.query('DELETE FROM Items WHERE itemSSN = $1', [itemSSN], (error, results) => {
+  pool.query('DELETE FROM Items WHERE itemSSN = $1', [itemSSN], (error) => {
     if (error) {
       throw error;
     }
@@ -98,23 +99,19 @@ const deleteItem = (request, response) => {
 
 // Updates an exisiting item to be on loan
 const loanedItem = (request, response) => {
-  const itemSSN = parseInt(request.params.itemSSN);
+  const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  pool.query(
-    'UPDATE Items SET transactionSSN = NULL where itemSSN = $1',
-    [itemSSN],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`Item with ItemSSN: ${itemSSN} is on loan`);
-    },
-  );
+  pool.query('UPDATE Items SET transactionSSN = NULL where itemSSN = $1', [itemSSN], (error) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).send(`Item with ItemSSN: ${itemSSN} is on loan`);
+  });
 };
 
 // Loaner wants to search for all the items under User SSN
 const searchAllItems = (request, response) => {
-  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN);
+  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   pool.query(`SELECT * FROM Items WHERE loanedByUserSSN = ${loanedByUserSSN}`, (error, results) => {
     if (error) {
@@ -126,7 +123,7 @@ const searchAllItems = (request, response) => {
 
 // Loaner wants to search for items that are not loaned yet
 const searchAvailableItems = (request, response) => {
-  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN);
+  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   pool.query(
     `SELECT * FROM Items WHERE loanedByUserSSN = ${loanedByUserSSN} AND transactionSSN IS NOT NULL`,
@@ -141,7 +138,7 @@ const searchAvailableItems = (request, response) => {
 
 // Loaner wants to find all current borrowers of his/her item
 const searchBorrower = (request, response) => {
-  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN);
+  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   pool.query(
     `SELECT I.itemSSN, B.borrowSSN FROM Items I LEFT OUTER JOIN Borrows B ON I.itemSSN = B.transactionSSN WHERE I.loanedByUserSSN = ${loanedByUserSSN}`,
@@ -156,7 +153,7 @@ const searchBorrower = (request, response) => {
 
 // Loaner wants to check all transactions for all his items
 const searchTransactions = (request, response) => {
-  const loanerSSN = parseInt(request.params.loanerSSN);
+  const loanerSSN = parseInt(request.params.loanerSSN, 10);
 
   pool.query(
     `SELECT itemSSN, transactionSSN FROM Borrows WHERE itemSSN IN (SELECT itemSSN FROM Items WHERE loanerSSN = ${loanerSSN}`,
@@ -176,7 +173,7 @@ const acceptWinningBid = (request, response) => {
   pool.query(
     'INSERT INTO WinningBid (bidSSN, itemSSN) VALUES ($1, $2)',
     [bidSSN, itemSSN],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
@@ -194,7 +191,7 @@ const addTransactionAndBorrows = (request, response) => {
   pool.query(
     'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)',
     [transactionSSN, startDate, endDate],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
@@ -205,7 +202,7 @@ const addTransactionAndBorrows = (request, response) => {
   pool.query(
     'INSERT INTO Borrows (itemSSN, borrowerSSN, transactionSSN) VALUES ($1, $2, $3)',
     [itemSSN, borrowerSSN, transactionSSN],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
@@ -227,7 +224,7 @@ const createFeedback = (request, response) => {
   pool.query(
     'INSERT INTO Feedbacks (feedbackSSN, givenByUserSSN, receivedByUserSSN, typee, commentt) VALUES ($1, $2, $3, $4, $5',
     [feedbackSSN, givenByUserSSN, receivedByUserSSN, typee, commentt],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
@@ -240,9 +237,9 @@ const createFeedback = (request, response) => {
 
 // Delete a feedback
 const deleteFeedback = (request, response) => {
-  const feedbackSSN = parseInt(request.params.feedbackSSN);
+  const feedbackSSN = parseInt(request.params.feedbackSSN, 10);
 
-  pool.qeury('DELETE FROM Feedbacks WHERE feedbackSSN = $1', feedbackSSN, (error, results) => {
+  pool.qeury('DELETE FROM Feedbacks WHERE feedbackSSN = $1', feedbackSSN, (error) => {
     if (error) {
       throw error;
     }
@@ -253,7 +250,7 @@ const deleteFeedback = (request, response) => {
 // View all feedbacks to a specific user
 // Maybe showing the username will be more beneficial
 const viewAllFeedback = (request, response) => {
-  const receivedByUserSSN = parseInt(request.params.receivedByUserSSN);
+  const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
   pool.query(
     'SELECT typee, commentt givenByUserSSN, date FROM Feedbacks WHERE receivedByUserSSN = $1 ORDER BY date desc',
@@ -269,7 +266,7 @@ const viewAllFeedback = (request, response) => {
 
 // View all transactions status of all items he/she has borrowed
 const viewAllTransactionStatus = (request, response) => {
-  const borrowerSSN = parseInt(request.params.borrowerSSN);
+  const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
   pool.query(
     'SELECT B.itemSSN, T.returnedStatus FROM Borrows NATURAL JOIN Transactions WHERE borrowerSSN = $1',
@@ -323,7 +320,7 @@ const viewMostActiveBorrower = (request, response) => {
 };
 
 // View user with most number of positive feedback
-const viewMostPositiveUser = (request, reponse) => {
+const viewMostPositiveUser = (request, response) => {
   pool.query(
     'SELECT receivedByUserSSN, COUNT(*) as numOfTimesPraised FROM Feedbacks WHERE typee = PRAISE GROUP BY receivedByUserSSN ORDER BY numOfTimesPraised desc',
     (error, results) => {
@@ -337,12 +334,12 @@ const viewMostPositiveUser = (request, reponse) => {
 
 // Change loan status of item when item has been returned
 const returnedItem = (request, response) => {
-  const transactionSSN = parseInt(request.params.transactionSSN);
+  const transactionSSN = parseInt(request.params.transactionSSN, 10);
 
   pool.query(
     'UPDATE Transactions SET returnedStatus = TRUE WHERE transactionSSN = $1',
     [transactionSSN],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }
@@ -350,10 +347,10 @@ const returnedItem = (request, response) => {
     },
   );
 
-  poo.query(
+  pool.query(
     'UPDATE Items SET transactionSSN = NULL WHERE transactionSSN = $1',
     [transactionSSN],
-    (error, results) => {
+    (error) => {
       if (error) {
         throw error;
       }

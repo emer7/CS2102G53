@@ -1,15 +1,15 @@
 const express = require('express');
-const query = require('./queries/queries');
+const query = require('../queries/queries');
 
 const router = express.Router();
 
 const pool = require('../config/db');
 
-const sql_query = 'SELECT * FROM student_info';
+const sqlQuery = 'SELECT * FROM student_info';
 
 /* GET users listing. */
-router.get('/', (req, res, next) => {
-  pool.query(sql_query, (err, data) => {
+router.get('/', (req, res) => {
+  pool.query(sqlQuery, (err, data) => {
     res.send(data.rows);
   });
 });
