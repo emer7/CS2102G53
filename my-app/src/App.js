@@ -1,19 +1,31 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link, Redirect, NavLink, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import styled from "styled-components";
 
 import Login from "./Components/Login";
 import Register from "./Components/Register";
+import Borrow from "./Components/Borrow";
+import Lend from "./Components/Lend";
+import Item from "./Components/Item";
 
 const Navbar = styled.div`
   background-color: black;
   padding: 10px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Navlink = styled(Link)`
   color: white;
   text-decoration: none;
+  & + & {
+    margin-left: 10px;
+  }
 `;
+
+const Left = styled.div``;
+
+const Right = styled.div``;
 
 class App extends Component {
   constructor(props) {
@@ -23,12 +35,12 @@ class App extends Component {
     };
   }
 
-  handleLogin = (login) => {
-    this.setState({ isAuthenticated: login });
+  handleLogin = ({ login, user }) => {
+    this.setState({ isAuthenticated: login, user });
   };
 
   componentDidMount() {
-    this.authenticate();
+    // this.authenticate();
   }
 
   authenticate = () => {
@@ -38,17 +50,26 @@ class App extends Component {
   };
 
   render() {
+    // const { user } = this.state;
+    const user = { userSSN: 1, username: "mock" };
+
     return (
       <Router>
         <Navbar>
-          <NavLink to="/">Home</NavLink>
-          <Navlink to="/lend">Lend</Navlink>
-          <Navlink to="/borrow">Borrow</Navlink>
-          <Navlink to="/profile">Profile</Navlink>
-          <Navlink to="/login">Login</Navlink>
-          <Navlink to="/register">Register</Navlink>
+          <Left>
+            <Navlink to="/">Home</Navlink>
+            <Navlink to="/lend">Lend</Navlink>
+            <Navlink to="/borrow">Borrow</Navlink>
+          </Left>
+          {this.state.isAuthenticated ? (
+            <Navlink to="/profile">{user ? `Hi, ${user.username}!` : "Profile"}</Navlink>
+          ) : (
+            <Right>
+              <Navlink to="/login">Login</Navlink>
+              <Navlink to="/register">Register</Navlink>
+            </Right>
+          )}
         </Navbar>
-
         <Switch>
           <Route
             path="/lend"
@@ -79,14 +100,13 @@ class App extends Component {
             )}
           />
           <Route path="/register" render={props => <Register {...props} />} />
+          <Route path="/item/:itemSSN" render={props => <Item user={user} {...props} />} />
         </Switch>
       </Router>
     );
   }
 }
 
-const Lend = () => <h1>Lend</h1>;
-const Borrow = () => <h1>Borrow</h1>;
 const Profile = () => <h1>Profile</h1>;
 
 export default App;
