@@ -8,7 +8,7 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'username', passwordField: 'password' },
     (username, password, done) => {
-      const query = 'SELECT accountid, username, pass FROM accounts WHERE username=$1';
+      const query = 'SELECT userssn, username, password FROM users WHERE username=$1';
       const values = [username];
 
       pool.query(query, values, (errorQuery, resultQuery) => {
@@ -18,7 +18,7 @@ passport.use(
 
         if (resultQuery && resultQuery.rows && resultQuery.rows.length > 0) {
           const firstRow = resultQuery.rows[0];
-          bcrypt.compare(password, firstRow.pass, (errorCompare, resultBcrypt) => {
+          bcrypt.compare(password, firstRow.password, (errorCompare, resultBcrypt) => {
             if (errorCompare) {
               done(errorCompare);
             }
@@ -38,12 +38,12 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.accountid);
+  done(null, user.userssn);
 });
 
-passport.deserializeUser((accountid, done) => {
-  const query = 'SELECT accountid, username, pass FROM accounts WHERE accountid=$1';
-  const values = [accountid];
+passport.deserializeUser((userSSN, done) => {
+  const query = 'SELECT userssn, username, password FROM users WHERE userssn=$1';
+  const values = [userSSN];
   pool.query(query, values, (errorQuery, resultQuery) => {
     if (errorQuery) {
       done(errorQuery);

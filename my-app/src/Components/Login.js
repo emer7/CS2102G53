@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 import { AccountForm } from "./AccountForm";
@@ -9,13 +9,11 @@ const Box = styled.div`
   border-width: 5px;
   border-radius: 30px;
   width: 400px;
-  height: 600px;
 
   position: absolute;
   top: 50%;
   left: 50%;
-
-  margin: -320px 0 0 -220px;
+  transform: translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;
@@ -47,7 +45,7 @@ class Login extends Component {
       .then(res => res.json())
       .then(data => {
         if (data) {
-          this.props.handleLogin(data.login);
+          this.props.handleLogin(data);
         }
       });
   };
@@ -58,29 +56,27 @@ class Login extends Component {
 
     return (
       <Box>
-        <Switch>
-          <Route
-            path={`${match.path}`}
-            render={() =>
-              isAuthenticated ? (
-                <Redirect to="/" />
-              ) : (
-                <LoginForm
-                  username={username}
-                  password={password}
-                  handleUsernameChange={this.handleUsernameChange}
-                  handlePasswordChange={this.handlePasswordChange}
-                  handleSubmit={this.handleSubmit}
-                />
-              )
-            }
-          />
-        </Switch>
+        <Route
+          path={`${match.path}`}
+          render={() =>
+            isAuthenticated ? (
+              <Redirect to="/" />
+            ) : (
+              <LoginForm
+                username={username}
+                password={password}
+                handleUsernameChange={this.handleUsernameChange}
+                handlePasswordChange={this.handlePasswordChange}
+                handleSubmit={this.handleSubmit}
+              />
+            )
+          }
+        />
       </Box>
     );
   }
 }
 
-const LoginForm = props => <AccountForm type={"Login"} {...props} />;
+const LoginForm = props => <AccountForm type="Login" {...props} />;
 
 export default Login;

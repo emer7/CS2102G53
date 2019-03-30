@@ -9,13 +9,11 @@ const Box = styled.div`
   border-width: 5px;
   border-radius: 30px;
   width: 400px;
-  height: 600px;
 
   position: absolute;
   top: 50%;
   left: 50%;
-
-  margin: -320px 0 0 -220px;
+  transform: translate(-50%, -50%);
 
   display: flex;
   flex-direction: column;
@@ -33,6 +31,34 @@ class Register extends Component {
 
   handlePasswordChange = event => {
     this.setState({ password: event.target.value });
+  };
+
+  handleNameChange = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  handleAgeChange = event => {
+    this.setState({ age: event.target.value });
+  };
+
+  handleEmailChange = event => {
+    this.setState({ email: event.target.value });
+  };
+
+  handleDobChange = event => {
+    this.setState({ dob: event.target.value });
+  };
+
+  handlePhonenumChange = event => {
+    this.setState({ phoneNum: event.target.value });
+  };
+
+  handleAddressChange = event => {
+    this.setState({ address: event.target.value });
+  };
+
+  handleNationalityChange = event => {
+    this.setState({ nationality: event.target.value });
   };
 
   handleSubmit = event => {
@@ -54,7 +80,17 @@ class Register extends Component {
 
   render() {
     const { match } = this.props;
-    const { username, password } = this.state;
+    const {
+      username,
+      password,
+      name,
+      age,
+      email,
+      dob,
+      phoneNum,
+      address,
+      nationality
+    } = this.state;
 
     return (
       <Box>
@@ -64,8 +100,22 @@ class Register extends Component {
             <RegistrationForm
               username={username}
               password={password}
+              name={name}
+              age={age}
+              email={email}
+              dob={dob}
+              phoneNum={phoneNum}
+              address={address}
+              nationality={nationality}
               handleUsernameChange={this.handleUsernameChange}
               handlePasswordChange={this.handlePasswordChange}
+              handleNameChange={this.handleNameChange}
+              handleAgeChange={this.handleAgeChange}
+              handleEmailChange={this.handleEmailChange}
+              handleDobChange={this.handleDobChange}
+              handlePhonenumChange={this.handlePhonenumChange}
+              handleAddressChange={this.handleAddressChange}
+              handleNationalityChange={this.handleNationalityChange}
               handleSubmit={this.handleSubmit}
             />
           )}
@@ -75,6 +125,6 @@ class Register extends Component {
   }
 }
 
-const RegistrationForm = props => <AccountForm type={"Register"} {...props} />;
+const RegistrationForm = props => <AccountForm type="Register" {...props} />;
 
 export default Register;
