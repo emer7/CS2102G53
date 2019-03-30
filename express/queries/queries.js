@@ -85,6 +85,16 @@ const createItem = (request, response) => {
   );
 };
 
+// View all available items
+const viewAllAvailableItems = (request, response) => {
+  pool.query('SELECT * FROM Items where transactionSSN = NULL', (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  })
+}
+
 // Deletes an exisiting item
 const deleteItem = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
@@ -97,17 +107,6 @@ const deleteItem = (request, response) => {
   });
 };
 
-// Updates an exisiting item to be on loan
-const loanedItem = (request, response) => {
-  const itemSSN = parseInt(request.params.itemSSN, 10);
-
-  pool.query('UPDATE Items SET transactionSSN = NULL where itemSSN = $1', [itemSSN], (error) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).send(`Item with ItemSSN: ${itemSSN} is on loan`);
-  });
-};
 
 // Loaner wants to search for all the items under User SSN
 const searchAllItems = (request, response) => {
@@ -354,7 +353,7 @@ const returnedItem = (request, response) => {
       if (error) {
         throw error;
       }
-      response.status(200).send(`Item with transactionSSN ${transactionSSN} updated`);
+      response.status(200).send(`Item with transactionSSN ${transactionSSN} updated as returned`);
     },
   );
 };
@@ -364,8 +363,8 @@ module.exports = {
   deleteUser,
   updateUser,
   createItem,
+  viewAllAvailableItems,
   deleteItem,
-  loanedItem,
   searchAllItems,
   searchAvailableItems,
   searchBorrower,

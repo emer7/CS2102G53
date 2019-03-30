@@ -21,6 +21,6 @@ router.post('/winning_bid/accept', query.acceptWinningBid);
 router.get('/bid/view/most_expensive', query.viewMostExpensiveMinBid);
 
 // Route to create a new transaction and borrows when a winning bid is accepted
-router.post('/transactions/add', query.addTransactionAndBorrows);
+router.post('/borrow/add', query.addTransactionAndBorrows);
 
 module.exports = router;
