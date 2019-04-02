@@ -517,24 +517,9 @@ const createPayment = (request, response) => {
     [paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN],
     (error) => {
       if (error) {
-        throw.error;
-      }
-      response.status(200).send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
-    },
-  );
-};
-
-const createBid = (request, response) => {
-  const { placedBySSN, itemSSN, bidAmt } = request.body;
-
-  pool.query(
-    'INSERT INTO Bids (placedBySSN, itemSSN, bidAmt, bidDateTime) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)',
-    [placedBySSN, itemSSN, bidAmt],
-    (error, results) => {
-      if (error) {
         throw error;
       }
-      response.status(200).send(`User added with UserSSN: ${'results.insertUserSSN'}`);
+      response.status(200).send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
     },
   );
 };
