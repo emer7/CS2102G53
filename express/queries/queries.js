@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const pool = require('../config/db');
 
 // Creates new user
@@ -44,56 +46,73 @@ const deleteUser = (request, response) => {
 const updateUser = (request, response) => {
   const {
     username,
-    passwordd,
-    namee,
+    password,
+    name,
     age,
     email,
     dob,
-    contact,
+    phonenum,
     address,
     nationality,
+    userssn,
   } = request.body;
 
-  pool.query(
-    'UPDATE Users SET username = $1, passwordd = $2, namee = $3, age = $4, email = $5, dob = $6, contact = $7, address = $8, nationality = $9 WHERE UserSSN = $10',
-    // [username, passwordd, namee, age, email, dob, contact, address, nationality, userSSN], // fix
-    [username, passwordd, namee, age, email, dob, contact, address, nationality],
-    (error) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`User modified with UserSSN: ${'userSSN'}`); // fix
-    },
-  );
+  bcrypt.hash(password, 12, (errorHash, hash) => {
+    if (errorHash) {
+      response.send({ message: 'Password cannot be empty' });
+    } else {
+      const query = 'UPDATE Users SET username = $1, password = $2, name = $3, age = $4, email = $5, dob = $6, phoneNum = $7, address = $8, nationality = $9 WHERE userssn = $10';
+      const values = [
+        username,
+        hash,
+        name,
+        age,
+        email,
+        dob,
+        phonenum,
+        address,
+        nationality,
+        userssn,
+      ];
+      pool.query(query, values, (errorQuery) => {
+        if (errorQuery) {
+          response.send(errorQuery);
+        } else {
+          response.send(true);
+        }
+      });
+    }
+  });
 };
 
 // Creates new item
 const createItem = (request, response) => {
   const {
-    loanedByUserSSN, namee, description, minBidPrice, loanDuration,
+    loanedByUserSSN, name, description, minBidPrice, loanDuration,
   } = request.body;
 
   pool.query(
-    'INSERT INTO Items (transactionSSN, loanedByUserSSN, namee, description, minBidPrice, loanDuration) VALUES (NULL, $1, $2, $3, $4, $5)',
-    [loanedByUserSSN, namee, description, minBidPrice, loanDuration],
+    'INSERT INTO Items (loanedbyuserssn, name, description, minbidprice, loanduration) VALUES ($1, $2, $3, $4, $5)',
+    [loanedByUserSSN, name, description, minBidPrice, loanDuration],
     (error) => {
       if (error) {
-        throw error;
+        response.send({ error, message: 'User not created' });
+      } else {
+        response.send(`Item added with ItemSSN: ${'itemSSN'}`); // fix. UPDATE: query result is empty array
       }
-      response.status(200).send(`Item added with ItemSSN: ${'itemSSN'}`); // fix
     },
   );
 };
 
 // View all available items
 const viewAllAvailableItems = (request, response) => {
-  pool.query('SELECT * FROM Items where transactionSSN = NULL', (error, results) => {
+  pool.query('SELECT * FROM Items where transactionSSN IS NULL', (error, results) => {
     if (error) {
       throw error;
     }
     response.status(200).json(results.rows);
-  })
-}
+  });
+};
 
 // Deletes an exisiting item
 const deleteItem = (request, response) => {
@@ -106,7 +125,6 @@ const deleteItem = (request, response) => {
     response.status(200).send(`Item deleted from the list with ItemSSN: ${itemSSN}`);
   });
 };
-
 
 // Loaner wants to search for all the items under User SSN
 const searchAllItems = (request, response) => {
@@ -125,12 +143,13 @@ const searchAvailableItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   pool.query(
-    `SELECT * FROM Items WHERE loanedByUserSSN = ${loanedByUserSSN} AND transactionSSN IS NOT NULL`,
+    'SELECT * FROM Items WHERE loanedByUserSSN = $1 AND transactionSSN IS NULL',
+    [loanedByUserSSN],
     (error, results) => {
       if (error) {
         throw error;
       }
-      response.status(200).json(results.rows);
+      response.send(results.rows);
     },
   );
 };
@@ -358,6 +377,21 @@ const returnedItem = (request, response) => {
   );
 };
 
+const createBid = (request, response) => {
+  const { placedBySSN, itemSSN, bidAmt } = request.body;
+
+  pool.query(
+    'INSERT INTO Bids (placedBySSN, itemSSN, bidAmt, bidDateTime) VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)',
+    [placedBySSN, itemSSN, bidAmt],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).send(`User added with UserSSN: ${'results.insertUserSSN'}`);
+    },
+  );
+};
+
 module.exports = {
   createUser,
   deleteUser,
@@ -380,4 +414,5 @@ module.exports = {
   viewMostActiveBorrower,
   viewMostPositiveUser,
   returnedItem,
+  createBid,
 };

@@ -33,4 +33,8 @@ app.use('/playground', playgroundRouter);
 app.use('/authenticate', authenticationRouter);
 app.use('/items', itemRouter);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../my-app/build/index.html'));
+});
+
 module.exports = app;
