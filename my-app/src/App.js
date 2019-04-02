@@ -7,6 +7,7 @@ import Register from "./Components/Register";
 import Borrow from "./Components/Borrow";
 import Lend from "./Components/Lend";
 import Item from "./Components/Item";
+import Profile from "./Components/Profile";
 
 const Navbar = styled.div`
   background-color: black;
@@ -37,6 +38,11 @@ class App extends Component {
 
   handleLogin = ({ login, user }) => {
     this.setState({ isAuthenticated: login, user });
+    user && this.getDetail(user);
+  };
+
+  handleChosenItem = item => {
+    this.setState({ item });
   };
 
   componentDidMount() {
@@ -44,14 +50,26 @@ class App extends Component {
   }
 
   authenticate = () => {
-    fetch("http://localhost:5000/authenticate/check")
+    fetch("/authenticate/check")
       .then(res => res.json())
       .then(data => this.setState({ isAuthenticated: data.login }));
   };
 
+  getDetail = user => {
+    const { userssn } = user;
+    fetch(`/users/detail/${userssn}`)
+      .then(res => res.json())
+      .then(data => this.setDetail(data));
+  };
+
+  setDetail = user => {
+    this.setState({ user });
+  };
+
   render() {
-    // const { user } = this.state;
-    const user = { userSSN: 1, username: "mock" };
+    const { user, item } = this.state;
+    // const { item } = this.state;
+    // const user = { userssn: 1, username: "a" };
 
     return (
       <Router>
@@ -74,19 +92,31 @@ class App extends Component {
           <Route
             path="/lend"
             render={props =>
-              this.state.isAuthenticated ? <Lend {...props} /> : <Redirect to="/login" />
+              this.state.isAuthenticated ? (
+                <Lend user={user} handleChosenItem={this.handleChosenItem} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
             path="/borrow"
             render={props =>
-              this.state.isAuthenticated ? <Borrow {...props} /> : <Redirect to="/login" />
+              this.state.isAuthenticated ? (
+                <Borrow user={user} handleChosenItem={this.handleChosenItem} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
             path="/profile"
             render={props =>
-              this.state.isAuthenticated ? <Profile {...props} /> : <Redirect to="/login" />
+              this.state.isAuthenticated ? (
+                <Profile user={user} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
@@ -100,13 +130,14 @@ class App extends Component {
             )}
           />
           <Route path="/register" render={props => <Register {...props} />} />
-          <Route path="/item/:itemSSN" render={props => <Item user={user} {...props} />} />
+          <Route
+            path="/item/:itemSSN"
+            render={props => <Item user={user} item={item} {...props} />}
+          />
         </Switch>
       </Router>
     );
   }
 }
-
-const Profile = () => <h1>Profile</h1>;
 
 export default App;
