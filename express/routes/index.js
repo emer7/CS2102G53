@@ -3,11 +3,6 @@ const query = require('../queries/queries');
 
 const router = express.Router();
 
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
-
 // Route to view all transactions on a user's items
 router.get('/transactions/search/:loanerSSN', query.searchTransactions);
 

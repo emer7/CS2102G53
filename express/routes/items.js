@@ -24,4 +24,7 @@ router.get('/search/most_borrowed', query.viewMostBorrowedItem);
 // Route to view all items
 router.get('/view/all', query.viewAllAvailableItems);
 
+// Route to create bid
+router.post('/bid/create', query.createBid);
+
 module.exports = router;
