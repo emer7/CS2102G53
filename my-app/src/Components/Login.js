@@ -35,7 +35,7 @@ class Login extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    fetch("http://localhost:5000/authenticate/login", {
+    fetch("/authenticate/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

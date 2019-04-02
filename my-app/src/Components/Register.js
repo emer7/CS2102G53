@@ -63,7 +63,7 @@ class Register extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    fetch("http://localhost:5000/authenticate/register", {
+    fetch("/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
