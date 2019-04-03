@@ -1,21 +1,21 @@
 const express = require('express');
-const query = require('../queries/queries');
+const queries = require('../queries/queries');
 
 const router = express.Router();
 
 // Route to view all transactions on a user's items
-router.get('/transactions/search/:loanerSSN', query.searchTransactions);
+router.get('/transactions/search/:loanerSSN', queries.searchTransactions);
 
 // Route to view all transaction status of all items he/she has borrowed
-router.get('/transactions/view_all/:borrowerSSN', query.viewAllTransactionStatus);
+router.get('/transactions/view_all/:borrowerSSN', queries.viewAllTransactionStatus);
 
 // Route to accept winning bid
-router.post('/winning_bid/accept', query.acceptWinningBid);
+router.post('/winning_bid/accept', queries.acceptWinningBid);
 
 // Route to view the most expensive minimum bid
-router.get('/bid/view/most_expensive', query.viewMostExpensiveMinBid);
+router.get('/bid/view/most_expensive', queries.viewMostExpensiveMinBid);
 
 // Route to create a new transaction and borrows when a winning bid is accepted
-router.post('/borrow/add', query.addTransactionAndBorrows);
+router.post('/borrow/add', queries.addTransactionAndBorrows);
 
 module.exports = router;
