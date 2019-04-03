@@ -14,7 +14,7 @@ export const ItemsTable = ({ rows, handleItemClick }) => {
           <TableCell>Name</TableCell>
           <TableCell align="right">Description</TableCell>
           <TableCell align="right">Min Bid Price</TableCell>
-          <TableCell align="right">Loan Duration</TableCell>
+          <TableCell align="right">Loan Duration in Days</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

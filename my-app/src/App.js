@@ -37,11 +37,13 @@ const Right = styled.div``;
 class App extends Component {
   constructor(props) {
     const user = { userssn: 1, username: "a" };
+    const item = {};
 
     super(props);
     this.state = {
-      isAuthenticated: true,
-      user
+      isAuthenticated: false,
+      user,
+      item
     };
   }
 
@@ -164,7 +166,7 @@ class App extends Component {
           />
           <Route path="/register" render={props => <Register {...props} />} />
           <Route
-            path="/item/:itemSSN"
+            path="/item/:itemssn"
             render={props => <Item user={user} item={item} {...props} />}
           />
         </Switch>

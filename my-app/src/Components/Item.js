@@ -7,8 +7,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import AcceptBid from './AcceptBid'
-import ProposeBid from './ProposeBid'
+import AcceptBid from "./AcceptBid";
+import ProposeBid from "./ProposeBid";
 
 class Item extends Component {
   constructor(props) {
@@ -20,15 +20,36 @@ class Item extends Component {
     // fetch("/search/available/:loanedByUserSSN") // fix to get the item from db
     //   .then(res => res.json())
     //   .then(data => this.setState({ rows: data }));
-    const rows = [
-      { itemSSN: 0, name: 1, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 0 },
-      { itemSSN: 1, name: 2, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 1 },
-      { itemSSN: 2, name: 3, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 2 }
-    ];
+    // const rows = [
+    //   {
+    //     itemssn: 0,
+    //     name: 1,
+    //     description: 2,
+    //     minbidprice: 3,
+    //     loandurationindays: 4,
+    //     loanedbyuserssn: 2
+    //   },
+    //   {
+    //     itemssn: 1,
+    //     name: 2,
+    //     description: 2,
+    //     minbidprice: 3,
+    //     loandurationindays: 4,
+    //     loanedbyuserssn: 1
+    //   },
+    //   {
+    //     itemssn: 2,
+    //     name: 3,
+    //     description: 2,
+    //     minbidprice: 3,
+    //     loandurationindays: 4,
+    //     loanedbyuserssn: 0
+    //   }
+    // ];
     const { match, item } = this.props;
-    const { itemSSN } = match.params;
-    // const row = rows.find(row => row.itemSSN == itemSSN);
-    const row = item;
+    // const { itemssn } = match.params;
+    // const row = rows.find(row => row.itemssn == itemssn);
+    const row = item || {};
     this.setState({ row });
   }
 
@@ -60,7 +81,7 @@ class Item extends Component {
           </TableBody>
         </Table>
 
-        {user.userssn == loanedbyuserssn ? <AcceptBid /> : <ProposeBid />}
+        {user.userssn == loanedbyuserssn ? <AcceptBid itemssn={row.itemssn} /> : <ProposeBid />}
       </div>
     );
   }
