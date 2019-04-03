@@ -97,7 +97,7 @@ class Profile extends Component {
       <Form>
         <FormField
           name="userSSN"
-          label="userSSN"
+          label="User SNN"
           InputLabelProps={{ shrink: true }}
           value={userssn}
           disabled
