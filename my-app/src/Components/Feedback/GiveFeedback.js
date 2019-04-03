@@ -42,7 +42,7 @@ class GiveFeedback extends Component {
       { userssn: 2, username: "ef", name: "orig3 name" }
     ];
     super(props);
-    this.state = { rows: rows };
+    this.state = { rows };
   }
 
   handleItemClick = user => {
