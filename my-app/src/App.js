@@ -19,9 +19,14 @@ const Navbar = styled.div`
 const Navlink = styled(Link)`
   color: white;
   text-decoration: none;
-  & + & {
+  & + * {
     margin-left: 10px;
   }
+`;
+
+const LogoutLink = styled.span`
+  color: white;
+  cursor: pointer;
 `;
 
 const Left = styled.div``;
@@ -39,6 +44,18 @@ class App extends Component {
   handleLogin = ({ login, user }) => {
     this.setState({ isAuthenticated: login, user });
     user && this.getDetail(user);
+  };
+
+  handleLogout = () => {
+    fetch("/authenticate/logout", {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          this.setState({ isAuthenticated: data.login, user: undefined });
+        }
+      });
   };
 
   handleChosenItem = item => {
@@ -78,9 +95,13 @@ class App extends Component {
             <Navlink to="/">Home</Navlink>
             <Navlink to="/lend">Lend</Navlink>
             <Navlink to="/borrow">Borrow</Navlink>
+            <Navlink to="/feedback">Feedback</Navlink>
           </Left>
           {this.state.isAuthenticated ? (
-            <Navlink to="/profile">{user ? `Hi, ${user.username}!` : "Profile"}</Navlink>
+            <Right>
+              <Navlink to="/profile">{user ? `Hi, ${user.username}!` : "Profile"}</Navlink>
+              <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
+            </Right>
           ) : (
             <Right>
               <Navlink to="/login">Login</Navlink>
@@ -104,6 +125,16 @@ class App extends Component {
             render={props =>
               this.state.isAuthenticated ? (
                 <Borrow user={user} handleChosenItem={this.handleChosenItem} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/feedback"
+            render={props =>
+              this.state.isAuthenticated ? (
+                <Feedback user={user} {...props} />
               ) : (
                 <Redirect to="/login" />
               )
@@ -139,5 +170,7 @@ class App extends Component {
     );
   }
 }
+
+const Feedback = () => <h1>Feedback</h1>;
 
 export default App;

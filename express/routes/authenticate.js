@@ -32,4 +32,12 @@ router.post('/login', (request, response) => {
   })(request, response);
 });
 
+router.post('/logout', (request, response) => {
+  request.logOut();
+  response.send({
+    message: 'Successfully logout',
+    login: false,
+  });
+});
+
 module.exports = router;
