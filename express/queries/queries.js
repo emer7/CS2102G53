@@ -136,7 +136,7 @@ const updateItem = (request, response) => {
 // View all available items
 // T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableItems = (request, response) => {
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 WHERE T.returnedStatus = FALSE)';
+  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -206,11 +206,11 @@ const viewAllItemsIAmBorrowing = (request, response) => {
   );
 };
 
-// Loaner wants to search for items that are not loaned yet owned by the loaner
+// Loaner wants to search for items that are not loaned yet
 const searchAvailableItemsOfLoaner = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T WHERE I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR T.returnedStatus = TRUE)';
+  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
 
   pool.query(query, values, (error, results) => {
