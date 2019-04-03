@@ -4,22 +4,22 @@ const passport = require('../config/authentication');
 
 const router = express.Router();
 
-router.get('/check', (req, res) => {
-  res.send(req.isAuthenticated() ? { login: true } : {});
+router.get('/check', (request, response) => {
+  response.send(request.isAuthenticated() ? { login: true } : {});
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (request, response) => {
   passport.authenticate('local', (errorAuthenticate, user, info) => {
     if (errorAuthenticate) {
-      res.send(errorAuthenticate);
+      response.send(errorAuthenticate);
     }
 
     if (user) {
-      req.login(user, (errorLogin) => {
+      request.login(user, (errorLogin) => {
         if (errorLogin) {
-          res.send(errorLogin);
+          response.send(errorLogin);
         } else {
-          res.send({
+          response.send({
             message: 'Successfully login',
             login: true,
             user: { userssn: user.userssn, username: user.username },
@@ -27,9 +27,17 @@ router.post('/login', (req, res) => {
         }
       });
     } else {
-      res.send(info);
+      response.send(info);
     }
-  })(req, res);
+  })(request, response);
+});
+
+router.post('/logout', (request, response) => {
+  request.logOut();
+  response.send({
+    message: 'Successfully logout',
+    login: false,
+  });
 });
 
 module.exports = router;

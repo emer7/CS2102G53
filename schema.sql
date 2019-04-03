@@ -18,32 +18,44 @@ CREATE TABLE Loaners (
     FOREIGN KEY (loanerSSN ) REFERENCES Users(userSSN)
 );
 
-CREATE TABLE Transactions (
-    transactionSSN SERIAL,
-    loanedItemSSN INTEGER NOT NULL,
-    paidStatus BOOLEAN NOT NULL,
-    returnedStatus BOOLEAN NOT NULL,
-    startDate DATE,
-    endDate DATE,
-    PRIMARY KEY (transactionSSN)
+CREATE TABLE Borrowers (
+    borrowerSSN INTEGER,
+    PRIMARY KEY (borrowerSSN ),
+    FOREIGN KEY (borrowerSSN ) REFERENCES Users(userSSN)
+);
+
+CREATE TABLE Feedbacks (
+    feedbackSSN	SERIAL,
+    givenByUserSSN INTEGER NOT NULL,
+    receivedByUserSSN INTEGER NOT NULL,
+    commentType TEXT NOT NULL,
+    commentBody TEXT NOT NULL,
+    PRIMARY KEY (feedbackSSN),
+    FOREIGN KEY (givenByUserSSN ) REFERENCES Users(userSSN),
+    FOREIGN KEY (receivedByUserSSN ) REFERENCES Users(userSSN) 
+);
+
+CREATE TABLE Payments (
+    paymentSSN SERIAL,
+    paymentType VARCHAR(30) NOT NULL,
+    paymentAmount INTEGER NOT NULL,
+    madeByUserSSN INTEGER NOT NULL,
+    receivedByUserSSN INTEGER NOT NULL,
+    PRIMARY KEY (paymentSSN),
+    FOREIGN KEY (madeByUserSSN) REFERENCES Users(userSSN),
+    FOREIGN KEY (receivedByUserSSN) REFERENCES Users(userSSN)
 );
 
 CREATE TABLE Items (
     itemSSN SERIAL,
-    transactionSSN INTEGER,
     loanedByUserSSN INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     minBidPrice INTEGER NOT NULL,
-    loanDuration INTEGER,
+    loanDurationInDays INTEGER,
     PRIMARY KEY (itemSSN),
-    FOREIGN KEY (loanedByUserSSN ) REFERENCES Loaners(loanerSSN),
-    FOREIGN KEY (transactionSSN) REFERENCES Transactions(transactionSSN)
+    FOREIGN KEY (loanedByUserSSN ) REFERENCES Loaners(loanerSSN)
 );
-
-ALTER TABLE Transactions
-    ADD CONSTRAINT transactions_loaneditemssn_fkey FOREIGN KEY (loaneditemssn) REFERENCES  items(itemssn)
-;
 
 CREATE TABLE Bids (
     bidSSN SERIAL,
@@ -53,5 +65,36 @@ CREATE TABLE Bids (
     bidDateTime TIMESTAMP,
     PRIMARY KEY (bidSSN),
     FOREIGN KEY (placedBySSN) REFERENCES Users(userSSN),
+    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN)
+);
+
+CREATE TABLE Transactions (
+    transactionSSN SERIAL,
+    itemSSN INTEGER NOT NULL,
+    paymentSSN INTEGER NOT NULL,
+    paidStatus BOOLEAN NOT NULL,
+    returnedStatus BOOLEAN NOT NULL,
+    startDate DATE,
+    endDate DATE,
+    PRIMARY KEY (transactionSSN),
+    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN),
+    FOREIGN KEY (paymentSSN) REFERENCES Payments(paymentSSN)
+);
+
+CREATE TABLE Borrows (
+    itemSSN SERIAL,
+    borrowerSSN INTEGER,
+    transactionSSN INTEGER NOT NULL,
+    PRIMARY KEY (itemSSN, borrowerSSN, transactionSSN),
+    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN),
+    FOREIGN KEY (borrowerSSN) REFERENCES Borrowers(borrowerSSN),
+    FOREIGN KEY (transactionSSN) REFERENCES Transactions(transactionSSN)
+);
+
+CREATE TABLE WinningBids (
+    bidSSN SERIAL,
+    itemSSN	INTEGER,
+    PRIMARY KEY (bidSSN, itemSSN),
+    FOREIGN KEY (bidSSN) REFERENCES Bids(bidSSN),
     FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN)
 );
