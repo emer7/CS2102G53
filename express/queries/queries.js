@@ -89,13 +89,14 @@ const updateItem = (request, response) => {
     loanDurationInDays,
   } = request.body;
 
-  const query = 'UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDuration = $5 WHERE itemSSN = $6';
+  const query = 'UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDurationInDays = $5 WHERE itemSSN = $6';
   const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays, itemSSN];
+
   pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`${itemSSN} has been updated`);
+    response.send(true);
   });
 };
 
@@ -123,7 +124,7 @@ const deleteItem = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`${itemSSN} successfully deleted`);
+    response.send(true);
   });
 };
 
@@ -412,7 +413,7 @@ const viewMostActiveBorrower = (request, response) => {
 
 // View user with most number of positive feedback
 const viewMostPositiveUser = (request, response) => {
-  const query = 'SELECT receivedByUserSSN, COUNT(*) as numOfTimesPraised FROM Feedbacks WHERE typee = GOOD GROUP BY receivedByUserSSN ORDER BY numOfTimesPraised desc';
+  const query = 'SELECT receivedByUserSSN, COUNT(*) as numOfTimesPraised FROM Feedbacks WHERE type = GOOD GROUP BY receivedByUserSSN ORDER BY numOfTimesPraised desc';
 
   pool.query(query, (error, results) => {
     if (error) {

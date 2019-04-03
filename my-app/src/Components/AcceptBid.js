@@ -51,8 +51,52 @@ class AcceptBid extends Component {
       .then(data => this.setState({ rows: data }));
   }
 
+  handleNameChange = event => {
+    this.setState({ name: event.target.value });
+  };
+
+  handleDescriptionChange = event => {
+    this.setState({ description: event.target.value });
+  };
+
+  handleMinBidPriceChange = event => {
+    this.setState({ minBidPrice: event.target.value });
+  };
+
+  handleLoandDurationChange = event => {
+    this.setState({ loanDurationInDays: event.target.value });
+  };
+
   handleItemClick = bid => {
     this.setState({ bid });
+  };
+
+  handleEditItem = () => {
+    const { user, item } = this.props;
+    const { itemssn } = item;
+
+    fetch("/items/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ...this.state, loanedByUserSSN: user.userssn, itemSSN: itemssn })
+    })
+      .then(res => res.json())
+      .then(console.log);
+  };
+
+  handleDeleteItem = () => {
+    const { item, history } = this.props;
+    const { itemssn } = item;
+
+    fetch(`/items/delete/${itemssn}`, {
+      method: "DELETE"
+    })
+      .then(res => res.json())
+      .then(console.log);
+
+    history.push("/lend/available");
   };
 
   handleSubmit = () => {
@@ -66,9 +110,40 @@ class AcceptBid extends Component {
 
   render() {
     const { rows, bid } = this.state;
+    const { name, description, minBidPrice, loanDurationInDays } = this.state;
 
     return (
       <div>
+        <Form>
+          <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
+          <FormField
+            name="description"
+            label="Description"
+            value={description}
+            onChange={this.handleDescriptionChange}
+          />
+          <FormField
+            name="minBidPrice"
+            type="number"
+            label="Minimum bid price"
+            value={minBidPrice}
+            onChange={this.handleMinBidPriceChange}
+          />
+          <FormField
+            name="loanDuration"
+            type="number"
+            label="Loan Duration in Days"
+            value={loanDurationInDays}
+            onChange={this.handleLoandDurationChange}
+          />
+          <FormButton variant="contained" onClick={this.handleEditItem}>
+            Update
+          </FormButton>
+          <FormButton variant="contained" onClick={this.handleDeleteItem}>
+            Delete
+          </FormButton>
+        </Form>
+
         <Table>
           <TableHead>
             <TableRow>

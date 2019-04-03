@@ -55,7 +55,7 @@ class Item extends Component {
 
   render() {
     const { row } = this.state;
-    const { user } = this.props;
+    const { user, history } = this.props;
     const { loanedbyuserssn } = row;
 
     return (
@@ -82,7 +82,7 @@ class Item extends Component {
         </Table>
 
         {user.userssn == loanedbyuserssn ? (
-          <AcceptBid item={row} />
+          <AcceptBid item={row} user={user} history={history} />
         ) : (
           <ProposeBid item={row} user={user} />
         )}
