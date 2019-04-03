@@ -270,17 +270,17 @@ const addTransactionAndBorrows = (request, response) => {
 // Create a feedback
 const createFeedback = (request, response) => {
   const {
-    feedbackSSN, givenByUserSSN, receivedByUserSSN, typee, commentt,
+    userssn, receivedbyuserssn, commenttype, commentbody,
   } = request.body;
 
-  const query = 'INSERT INTO Feedbacks (feedbackSSN, givenByUserSSN, receivedByUserSSN, typee, commentt) VALUES ($1, $2, $3, $4, $5)';
-  const values = [feedbackSSN, givenByUserSSN, receivedByUserSSN, typee, commentt];
+  const query = 'INSERT INTO Feedbacks (givenByUserSSN, receivedByUserSSN, commentType, commentBody) VALUES ($1, $2, $3, $4)';
+  const values = [userssn, receivedbyuserssn, commenttype, commentbody];
 
   pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`Feedback added for ${receivedByUserSSN} given by ${givenByUserSSN}`);
+    response.send(true);
   });
 };
 
@@ -318,14 +318,14 @@ const updateFeedback = (request, response) => {
 const viewAllFeedback = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
-  const query = 'SELECT type, comment givenByUserSSN, date FROM Feedbacks WHERE receivedByUserSSN = $1 ORDER BY date desc';
+  const query = 'SELECT F.givenByUserSSN, F.commenttype, F.commentbody, U.username FROM Feedbacks F INNER JOIN Users U ON F.givenbyuserssn = U.userssn WHERE receivedByUserSSN = $1';
   const values = [receivedByUserSSN];
 
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.send(results.rows);
   });
 };
 
@@ -547,6 +547,20 @@ const createPayment = (request, response) => {
   });
 };
 
+const getAllUserExceptSelf = (request, response) => {
+  const userSSN = parseInt(request.params.userSSN, 10);
+
+  const query = 'SELECT userssn, username, name FROM Users WHERE userssn <> $1';
+  const values = [userSSN];
+
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.send(results.rows);
+  });
+};
+
 module.exports = {
   deleteUser,
   updateUser,
@@ -581,4 +595,5 @@ module.exports = {
   createPayment,
   viewAllItemBid,
   viewAllMyBid,
+  getAllUserExceptSelf,
 };

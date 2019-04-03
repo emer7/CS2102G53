@@ -12,16 +12,25 @@ class ViewFeedback extends Component {
     const rows = [
       {
         feedbackssn: 0,
-        givenByUsername: "abc",
+        username: "abc",
         commenttype: "ab",
         commentbody:
           "orig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig name"
       },
-      { feedbackssn: 1, givenByUsername: "abe", commenttype: "cd", commentbody: "orig2 name" },
-      { feedbackssn: 2, givenByUsername: "abd", commenttype: "ef", commentbody: "orig3 name" }
+      { feedbackssn: 1, username: "abe", commenttype: "cd", commentbody: "orig2 name" },
+      { feedbackssn: 2, username: "abd", commenttype: "ef", commentbody: "orig3 name" }
     ];
     super(props);
     this.state = { rows: rows };
+  }
+
+  componentDidMount() {
+    const { user } = this.props;
+    const { userssn } = user;
+
+    fetch(`/users/feedback/view_all/${userssn}`)
+      .then(res => res.json())
+      .then(data => this.setState({ rows: data }));
   }
 
   render() {
@@ -40,7 +49,7 @@ class ViewFeedback extends Component {
           {rows.map(row => (
             <TableRow key={row.feedbackssn}>
               <TableCell component="th" scope="row">
-                {row.givenByUsername}
+                {row.username}
               </TableCell>
               <TableCell align="right">{row.commenttype}</TableCell>
               <TableCell align="right">{row.commentbody}</TableCell>

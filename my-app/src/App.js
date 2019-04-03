@@ -155,6 +155,16 @@ class App extends Component {
             }
           />
           <Route
+            path="/item/:itemssn"
+            render={props =>
+              this.state.isAuthenticated ? (
+                <Item user={user} item={item} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+          <Route
             path="/login"
             render={props => (
               <Login
@@ -165,10 +175,6 @@ class App extends Component {
             )}
           />
           <Route path="/register" render={props => <Register {...props} />} />
-          <Route
-            path="/item/:itemssn"
-            render={props => <Item user={user} item={item} {...props} />}
-          />
         </Switch>
       </Router>
     );

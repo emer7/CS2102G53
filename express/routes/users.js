@@ -6,6 +6,9 @@ const pool = require('../config/db');
 
 const router = express.Router();
 
+// Route to get all users except oneself
+router.get('/all/except/:userSSN', queries.getAllUserExceptSelf);
+
 // Route to delete users
 router.delete('/delete/:userSSN', queries.deleteUser);
 

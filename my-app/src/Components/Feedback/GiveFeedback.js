@@ -7,6 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const Divider = styled.div`
   display: flex;
@@ -45,6 +46,15 @@ class GiveFeedback extends Component {
     this.state = { rows };
   }
 
+  componentDidMount() {
+    const { user } = this.props;
+    const { userssn } = user;
+
+    fetch(`/users/all/except/${userssn}`)
+      .then(res => res.json())
+      .then(data => this.setState({ rows: data }));
+  }
+
   handleItemClick = user => {
     const { userssn, username } = user;
     this.setState({ receivedByUsername: username, receivedbyuserssn: userssn });
@@ -63,7 +73,15 @@ class GiveFeedback extends Component {
     const { commenttype, commentbody, receivedbyuserssn } = this.state;
     const feedbackObject = { userssn, commenttype, commentbody, receivedbyuserssn };
 
-    console.log(feedbackObject);
+    fetch("/users/feedback/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(feedbackObject)
+    })
+      .then(res => res.json())
+      .then(console.log);
   };
 
   render() {
@@ -98,12 +116,16 @@ class GiveFeedback extends Component {
             value={receivedByUsername}
           />
           <FormField
-            name="commenttype"
-            label="Type"
+            select
+            label="Comment Type"
             InputLabelProps={{ shrink: true }}
             value={commenttype}
             onChange={this.handleCommentType}
-          />
+            margin="normal"
+          >
+            <MenuItem value="Good">Good</MenuItem>
+            <MenuItem value="Bad">Bad</MenuItem>
+          </FormField>
           <FormField
             name="commentbody"
             label="Body"
