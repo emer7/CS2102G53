@@ -57,7 +57,7 @@ const deleteUser = (request, response) => {
 // Updates an exisiting user
 const updateUser = (request, response) => {
   const {
-    username,
+    userName,
     password,
     name,
     age,
@@ -66,7 +66,7 @@ const updateUser = (request, response) => {
     phonenum,
     address,
     nationality,
-    userssn,
+    userSSN,
   } = request.body;
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
@@ -84,7 +84,7 @@ const updateUser = (request, response) => {
         phonenum,
         address,
         nationality,
-        userssn,
+        userSSN,
       ];
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
@@ -115,10 +115,27 @@ const createItem = (request, response) => {
   });
 };
 
+// Updates an existing item
+const updateItem = (request, response) => {
+  const {
+    itemSSN, loanedByUserSSN, name, description, minBidPrice, loanDurationInDays,
+  } = request.body;
+
+  const query = "UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDuration = $5 WHERE itemSSN = $6";
+  const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays, itemSSN];
+  pool.query(query, values, (error) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).send(`${itemSSN} has been updated`);
+    },
+  );
+};
+
 // View all available items
 // T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableItems = (request, response) => {
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 WHERE T.returnedStatus = FALSE)';
+  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -158,11 +175,41 @@ const searchAllItems = (request, response) => {
   });
 };
 
-// Loaner wants to search for items that are not loaned yet
-const searchAvailableItems = (request, response) => {
+// View all your items that are currently lent out
+const viewLentOutItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T WHERE I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR T.returnedStatus = TRUE)';
+  const query = "SELECT * FROM Items I LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE";
+  const values = [loanedByUserSSN];
+  pool.query(query, values, (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    },
+  );
+}
+
+// Borrower wants to view all items that are currently borrowed by him/her
+const viewAllItemsIAmBorrowing = (request, response) => {
+  const borrowerSSN = parseInt(request.prarms.borrowerSSN, 10);
+
+  const query =  "SELECT * FROM Borrows B LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1";
+  const values = [borrowerSSN];
+  pool.query(query, values, (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    },
+  );
+};
+
+// Loaner wants to search for items that are not loaned yet
+const searchAvailableItemsOfLoaner = (request, response) => {
+  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
+
+  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
 
   pool.query(query, values, (error, results) => {
@@ -221,7 +268,7 @@ const acceptWinningBid = (request, response) => {
 // Create an new transaction and borrows upon accepting a winning bid
 const addTransactionAndBorrows = (request, response) => {
   const {
-    transactionSSN, startDate, endDate, itemSSN, borrowerSSN,
+    transactionSSN, itemSSN, paymentSSN, paidStatus, startDate, endDate, borrowerSSN,
   } = request.body;
 
   const queryTransactions = 'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)';
@@ -281,8 +328,27 @@ const deleteFeedback = (request, response) => {
   });
 };
 
+// Updates an existing feedback
+const updateFeedback = (request, response) => {
+  const {
+    feedbackSSN, 
+    commentType,
+    commentBody,
+  } = request.body;
+
+  const query = "UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3";
+  const values = [commentType, commentBody, feedbackSSN];
+
+  pool.query(query, values, (error) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).send(`${feedbackSSN} has been updated`);
+    },
+  );
+};
+
 // View all feedbacks to a specific user
-// Maybe showing the userName will be more beneficial
 const viewAllFeedback = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
@@ -440,7 +506,9 @@ const deleteBid = (request, response) => {
 // Update an existing bid
 // Need to edit to add in more fields
 const updateBid = (request, response) => {
-  const { bidSSN, bidAmt } = request.body;
+  const {
+    bidSSN, bidAmt
+  } = request.body;
 
   const query = 'UPDATE Bid SET bidAmt = $1 WHERE bidSSN = $2';
   const values = [bidAmt, bidSSN];
@@ -524,17 +592,18 @@ module.exports = {
   createItem,
   viewAllAvailableItems,
   deleteItem,
-  // updateItem,
-  // viewAllNotReturnedItems,
+  updateItem,
+  viewAllItemsIAmBorrowing,
   searchAllItems,
-  searchAvailableItems,
+  searchAvailableItemsOfLoaner,
+  viewLentOutItems,
   searchBorrower,
   searchTransactions,
   acceptWinningBid,
   addTransactionAndBorrows,
   createFeedback,
   deleteFeedback,
-  // updateFeedback,
+  updateFeedback,
   viewAllFeedback,
   viewGoodFeedbacks,
   viewBadFeedbacks,
