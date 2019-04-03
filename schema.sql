@@ -98,3 +98,26 @@ CREATE TABLE WinningBids (
     FOREIGN KEY (bidSSN) REFERENCES Bids(bidSSN),
     FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN)
 );
+
+CREATE OR REPLACE FUNCTION not_exist_loaner_upon_create_item()
+RETURNS TRIGGER AS
+$$
+DECLARE count NUMERIC;
+BEGIN
+SELECT COUNT(*) INTO count
+FROM Loaners
+WHERE NEW.loanedbyuserssn = Loaners.loanerssn;
+IF count > 0 THEN
+RETURN NEW;
+ELSE
+INSERT INTO Loaners VALUES (NEW.loanedbyuserssn); RETURN NEW;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER loaner_item
+BEFORE INSERT OR UPDATE
+ON Items
+FOR EACH ROW
+EXECUTE PROCEDURE not_exist_loaner_upon_create_item();
