@@ -118,18 +118,22 @@ const createItem = (request, response) => {
 // Updates an existing item
 const updateItem = (request, response) => {
   const {
-    itemSSN, loanedByUserSSN, name, description, minBidPrice, loanDurationInDays,
+    itemSSN,
+    loanedByUserSSN,
+    name,
+    description,
+    minBidPrice,
+    loanDurationInDays,
   } = request.body;
 
-  const query = "UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDuration = $5 WHERE itemSSN = $6";
+  const query = 'UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDuration = $5 WHERE itemSSN = $6';
   const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays, itemSSN];
   pool.query(query, values, (error) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`${itemSSN} has been updated`);
-    },
-  );
+    if (error) {
+      throw error;
+    }
+    response.status(200).send(`${itemSSN} has been updated`);
+  });
 };
 
 // View all available items
@@ -179,30 +183,28 @@ const searchAllItems = (request, response) => {
 const viewLentOutItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = "SELECT * FROM Items I LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE";
+  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE';
   const values = [loanedByUserSSN];
   pool.query(query, values, (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
-    },
-  );
-}
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
 
 // Borrower wants to view all items that are currently borrowed by him/her
 const viewAllItemsIAmBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.prarms.borrowerSSN, 10);
 
-  const query =  "SELECT * FROM Borrows B LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1";
+  const query = 'SELECT * FROM Borrows B LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
   pool.query(query, values, (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
-    },
-  );
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
 };
 
 // Loaner wants to search for items that are not loaned yet
@@ -268,7 +270,13 @@ const acceptWinningBid = (request, response) => {
 // Create an new transaction and borrows upon accepting a winning bid
 const addTransactionAndBorrows = (request, response) => {
   const {
-    transactionSSN, itemSSN, paymentSSN, paidStatus, startDate, endDate, borrowerSSN,
+    transactionSSN,
+    itemSSN,
+    paymentSSN,
+    paidStatus,
+    startDate,
+    endDate,
+    borrowerSSN,
   } = request.body;
 
   const queryTransactions = 'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)';
@@ -330,22 +338,17 @@ const deleteFeedback = (request, response) => {
 
 // Updates an existing feedback
 const updateFeedback = (request, response) => {
-  const {
-    feedbackSSN, 
-    commentType,
-    commentBody,
-  } = request.body;
+  const { feedbackSSN, commentType, commentBody } = request.body;
 
-  const query = "UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3";
+  const query = 'UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3';
   const values = [commentType, commentBody, feedbackSSN];
 
   pool.query(query, values, (error) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).send(`${feedbackSSN} has been updated`);
-    },
-  );
+    if (error) {
+      throw error;
+    }
+    response.status(200).send(`${feedbackSSN} has been updated`);
+  });
 };
 
 // View all feedbacks to a specific user
@@ -506,9 +509,7 @@ const deleteBid = (request, response) => {
 // Update an existing bid
 // Need to edit to add in more fields
 const updateBid = (request, response) => {
-  const {
-    bidSSN, bidAmt
-  } = request.body;
+  const { bidSSN, bidAmt } = request.body;
 
   const query = 'UPDATE Bid SET bidAmt = $1 WHERE bidSSN = $2';
   const values = [bidAmt, bidSSN];
