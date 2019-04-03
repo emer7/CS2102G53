@@ -472,7 +472,10 @@ const viewAllItemBid = (request, response) => {
 const viewAllMyBid = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
-  pool.query('SELECT * FROM Bids WHERE placedBySSN = $1', [placedBySSN], (error, results) => {
+  const query = 'SELECT * FROM Bids WHERE placedBySSN = $1';
+  const values = [placedBySSN];
+
+  pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
