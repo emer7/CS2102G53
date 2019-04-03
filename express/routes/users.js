@@ -33,38 +33,38 @@ router.delete('/feedback/delete/:feedbackSSN', queries.deleteFeedback);
 // Route to view all feedbacks for a specific user
 router.get('/feedback/view_all/:receivedByUserSSN', queries.viewAllFeedback);
 
-router.get('/detail/:userSSN', (req, res) => {
-  const { userSSN } = req.params;
+router.get('/detail/:userSSN', (request, response) => {
+  const { userSSN } = request.params;
 
   const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userssn = $1';
   const values = [userSSN];
 
   pool.query(query, values, (errorQuery, resultQuery) => {
     if (errorQuery) {
-      res.send(errorQuery);
+      response.send(errorQuery);
     } else {
-      res.send(resultQuery.rows[0]);
+      response.send(resultQuery.rows[0]);
     }
   });
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', (request, response) => {
   const {
     username, password, name, age, email, dob, phoneNum, address, nationality,
-  } = req.body;
+  } = request.body;
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
     if (errorHash) {
-      res.send({ message: 'Password cannot be empty' });
+      response.send({ message: 'Password cannot be empty' });
     } else {
       const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
       const values = [username, hash, name, age, email, dob, phoneNum, address, nationality];
 
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
-          res.send(errorQuery);
+          response.send(errorQuery);
         } else {
-          res.send(true);
+          response.send(true);
         }
       });
     }
