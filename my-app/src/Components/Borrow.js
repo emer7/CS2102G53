@@ -1,24 +1,24 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { ItemsTable } from "./ItemsTable";
 
 class Borrow extends Component {
   // Show borrowed item and item to borrow
 
   constructor(props) {
+    const rows = [
+      { itemssn: 0, name: 1, description: 2, minbidprice: 3, loandurationindays: 4 },
+      { itemssn: 1, name: 2, description: 2, minbidprice: 3, loandurationindays: 4 },
+      { itemssn: 2, name: 3, description: 2, minbidprice: 3, loandurationindays: 4 }
+    ];
     super(props);
-    this.state = {};
+    this.state = { rows };
   }
 
   componentDidMount() {
-    fetch("/items/view/all")
-      .then(res => res.json())
-      .then(data => this.setState({ rows: data }));
+    // fetch("/items/view/all")
+    //   .then(res => res.json())
+    //   .then(data => this.setState({ rows: data }));
   }
 
   handleItemClick = item => {
@@ -31,40 +31,7 @@ class Borrow extends Component {
   render() {
     const { rows } = this.state;
 
-    // const rows = [
-    //   { itemSSN: 0, name: 1, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 0 },
-    //   { itemSSN: 1, name: 2, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 1 },
-    //   { itemSSN: 2, name: 3, description: 2, minBidPrice: 3, loanDuration: 4, loanedByUserSSN: 2 }
-    // ];
-
-    return (
-      <div>
-        {rows && (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Description</TableCell>
-                <TableCell align="right">Min Bid Price</TableCell>
-                <TableCell align="right">Loan Duration</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow key={row.itemSSN} hover onClick={() => this.handleItemClick(row)}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.description}</TableCell>
-                  <TableCell align="right">{row.minbidprice}</TableCell>
-                  <TableCell align="right">{row.loanduration}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-    );
+    return <ItemsTable rows={rows} handleItemClick={this.handleItemClick} />;
   }
 }
 
