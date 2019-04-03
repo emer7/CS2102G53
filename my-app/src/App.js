@@ -8,6 +8,7 @@ import Borrow from "./Components/Borrow";
 import Lend from "./Components/Lend";
 import Item from "./Components/Item";
 import Profile from "./Components/Profile";
+import Feedback from "./Components/Feedback";
 
 const Navbar = styled.div`
   background-color: black;
@@ -35,9 +36,12 @@ const Right = styled.div``;
 
 class App extends Component {
   constructor(props) {
+    const user = { userssn: 1, username: "a" };
+
     super(props);
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: true,
+      user
     };
   }
 
@@ -85,8 +89,6 @@ class App extends Component {
 
   render() {
     const { user, item } = this.state;
-    // const { item } = this.state;
-    // const user = { userssn: 1, username: "a" };
 
     return (
       <Router>
@@ -170,7 +172,5 @@ class App extends Component {
     );
   }
 }
-
-const Feedback = () => <h1>Feedback</h1>;
 
 export default App;
