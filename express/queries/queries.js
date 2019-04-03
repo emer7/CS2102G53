@@ -100,17 +100,17 @@ const updateUser = (request, response) => {
 // Creates new item
 const createItem = (request, response) => {
   const {
-    loanedByUserSSN, name, description, minBidPrice, loanDuration,
+    loanedByUserSSN, name, description, minBidPrice, loanDurationInDays,
   } = request.body;
 
-  const query = 'INSERT INTO Items (loanedbyuserssn, name, description, minbidprice, loanduration) VALUES ($1, $2, $3, $4, $5)';
-  const values = [loanedByUserSSN, name, description, minBidPrice, loanDuration];
+  const query = 'INSERT INTO Items (loanedbyuserssn, name, description, minbidprice, loandurationindays) VALUES ($1, $2, $3, $4, $5)';
+  const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays];
 
   pool.query(query, values, (error) => {
     if (error) {
       response.send({ error, message: 'User not created' });
     } else {
-      response.send(`Item added with ItemSSN: ${'itemSSN'}`); // fix. UPDATE: query result is empty array
+      response.send({ message: 'Item created' }); // fix. UPDATE: query result is empty array
     }
   });
 };
