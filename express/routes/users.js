@@ -6,9 +6,6 @@ const pool = require('../config/db');
 
 const router = express.Router();
 
-// Route to create users
-router.post('/create', queries.createUser);
-
 // Route to delete users
 router.delete('/delete/:userSSN', queries.deleteUser);
 

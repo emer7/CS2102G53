@@ -2,43 +2,6 @@ const bcrypt = require('bcrypt');
 
 const pool = require('../config/db');
 
-// Creates new user
-const createUser = (request, response) => {
-  const {
-    userSSN,
-    userName,
-    password,
-    name,
-    age,
-    email,
-    dob,
-    phoneNum,
-    address,
-    nationality,
-  } = request.body;
-
-  const query = 'INSERT INTO Users (userSSN, userName, password, name, age, email, dob, phoneNum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
-  const values = [
-    userSSN,
-    userName,
-    password,
-    name,
-    age,
-    email,
-    dob,
-    phoneNum,
-    address,
-    nationality,
-  ];
-
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).send(`User added with UserSSN: ${results.insertUserSSN}`);
-  });
-};
-
 // Deletes an exisiting user
 const deleteUser = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
@@ -57,7 +20,7 @@ const deleteUser = (request, response) => {
 // Updates an exisiting user
 const updateUser = (request, response) => {
   const {
-    userName,
+    username,
     password,
     name,
     age,
@@ -139,7 +102,7 @@ const updateItem = (request, response) => {
 // View all available items
 // T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableItems = (request, response) => {
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
+  const query = 'SELECT I.itemssn as itemssn, loanedbyuserssn, name, description, minbidprice, loandurationindays FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -195,7 +158,7 @@ const viewLentOutItems = (request, response) => {
 
 // Borrower wants to view all items that are currently borrowed by him/her
 const viewAllItemsIAmBorrowing = (request, response) => {
-  const borrowerSSN = parseInt(request.prarms.borrowerSSN, 10);
+  const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
   const query = 'SELECT * FROM Borrows B LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
@@ -211,7 +174,7 @@ const viewAllItemsIAmBorrowing = (request, response) => {
 const searchAvailableItemsOfLoaner = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
+  const query = 'SELECT I.itemssn as itemssn, loanedbyuserssn, name, description, minbidprice, loandurationindays FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
 
   pool.query(query, values, (error, results) => {
@@ -280,7 +243,7 @@ const addTransactionAndBorrows = (request, response) => {
   } = request.body;
 
   const queryTransactions = 'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)';
-  const valuesTransactions = [transactionSSN, startDate, endDate];
+  const valuesTransactions = [transactionSSN, paidStatus, startDate, endDate];
 
   pool.query(queryTransactions, valuesTransactions, (error) => {
     if (error) {
@@ -587,7 +550,6 @@ const createPayment = (request, response) => {
 };
 
 module.exports = {
-  createUser,
   deleteUser,
   updateUser,
   createItem,

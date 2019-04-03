@@ -40,7 +40,7 @@ router.post('/bid/create', queries.createBid);
 router.delete('/bid/delete/:bidSSN', queries.deleteBid);
 
 // Route to view all bids of an item
-router.get('/bid/view/all/item/:itemSSN', queries.viewAllBidOfItem);
+router.get('/bid/view/all/item/:itemSSN', queries.viewAllItemBid);
 
 // Route to view all bids that the user has posted
 router.get('bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
