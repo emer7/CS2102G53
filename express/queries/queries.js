@@ -439,18 +439,16 @@ const returnedItem = (request, response) => {
 
 // Create a new bid
 const createBid = (request, response) => {
-  const {
-    bidSSN, placedBySSN, itemSSN, bidAmt, dateTime,
-  } = request.body;
+  const { userssn, itemssn, bidamt } = request.body;
 
-  const query = 'INSERT INTO Bids (bidSSN, placedBySSN, itemSSN, bidAmt, dateTime) VALUES ($1, $2, $3, $4, $5)';
-  const values = [bidSSN, placedBySSN, itemSSN, bidAmt, dateTime];
+  const query = 'INSERT INTO Bids (placedBySSN, itemSSN, bidAmt, bidDateTime) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)';
+  const values = [userssn, itemssn, bidamt];
 
   pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`Bid for ${itemSSN} placed with bidSSN: ${bidSSN}`);
+    response.status(200).send(true);
   });
 };
 
@@ -489,14 +487,14 @@ const updateBid = (request, response) => {
 const viewAllItemBid = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  const query = 'SELECT * FROM Bids WHERE itemSSN = $1';
+  const query = 'SELECT B.itemssn, B.placedbyssn, B.bidamt, B.biddatetime, U.username FROM Bids B INNER JOIN Users U ON B.placedbyssn = U.userssn WHERE itemSSN = $1';
   const values = [itemSSN];
 
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.json(results.rows);
   });
 };
 

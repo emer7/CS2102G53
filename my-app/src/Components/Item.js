@@ -66,7 +66,7 @@ class Item extends Component {
               <TableCell>Name</TableCell>
               <TableCell align="right">Description</TableCell>
               <TableCell align="right">Min Bid Price</TableCell>
-              <TableCell align="right">Loan Duration</TableCell>
+              <TableCell align="right">Loan Duration in Days</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -76,12 +76,16 @@ class Item extends Component {
               </TableCell>
               <TableCell align="right">{row.description}</TableCell>
               <TableCell align="right">{row.minbidprice}</TableCell>
-              <TableCell align="right">{row.loanduration}</TableCell>
+              <TableCell align="right">{row.loandurationindays}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
 
-        {user.userssn == loanedbyuserssn ? <AcceptBid itemssn={row.itemssn} /> : <ProposeBid />}
+        {user.userssn == loanedbyuserssn ? (
+          <AcceptBid item={row} />
+        ) : (
+          <ProposeBid item={row} user={user} />
+        )}
       </div>
     );
   }

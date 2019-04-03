@@ -34,22 +34,30 @@ class AcceptBid extends Component {
 
   constructor(props) {
     const rows = [
-      { bidssn: 0, placedByUsername: "ab", placedbyssn: 1, bidamt: 10, biddatetime: "01" },
-      { bidssn: 1, placedByUsername: "asdf", placedbyssn: 2, bidamt: 20, biddatetime: "02" },
-      { bidssn: 2, placedByUsername: "ewqr", placedbyssn: 3, bidamt: 30, biddatetime: "03" }
+      { bidssn: 0, username: "ab", placedbyssn: 1, bidamt: 10, biddatetime: "01" },
+      { bidssn: 1, username: "asdf", placedbyssn: 2, bidamt: 20, biddatetime: "02" },
+      { bidssn: 2, username: "ewqr", placedbyssn: 3, bidamt: 30, biddatetime: "03" }
     ];
     super(props);
     this.state = { rows, bid: {} };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { item } = this.props;
+    const { itemssn } = item;
+
+    fetch(`/items/bid/view/all/item/${itemssn}`)
+      .then(res => res.json())
+      .then(data => this.setState({ rows: data }));
+  }
 
   handleItemClick = bid => {
     this.setState({ bid });
   };
 
   handleSubmit = () => {
-    const { itemssn } = this.props;
+    const { item } = this.props;
+    const { itemssn } = item;
     const { bid } = this.state;
     const bidObject = { itemssn, ...bid };
 
@@ -73,7 +81,7 @@ class AcceptBid extends Component {
             {rows.map(row => (
               <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
                 <TableCell component="th" scope="row">
-                  {row.placedByUsername}
+                  {row.username}
                 </TableCell>
                 <TableCell align="right">{row.bidamt}</TableCell>
                 <TableCell align="right">{row.biddatetime}</TableCell>
@@ -83,11 +91,11 @@ class AcceptBid extends Component {
         </Table>
         <Form>
           <FormField
-            name="placedByUsername"
+            name="username"
             label="Placed By"
             InputLabelProps={{ shrink: true }}
             disabled
-            value={bid.placedByUsername}
+            value={bid.username}
           />
           <FormButton variant="contained" onClick={this.handleSubmit}>
             Accept

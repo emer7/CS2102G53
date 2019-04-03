@@ -30,37 +30,43 @@ class ProposeBid extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { bid: 0 };
+    this.state = { bidamt: 0 };
   }
 
   componentDidMount() {}
 
   handleBidChange = event => {
-    this.setState({ bid: event.target.value });
+    this.setState({ bidamt: event.target.value });
   };
 
   handleSubmit = () => {
-    // fetch("/items/create", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({ ...this.state, loanedByUserSSN: user.userssn })
-    // })
-    //   .then(res => res.json())
-    //   .then(console.log);
+    const { item, user } = this.props;
+    const { itemssn } = item;
+    const { userssn } = user;
+    const { bidamt } = this.state;
+    const bidObject = { itemssn, bidamt, userssn };
+
+    fetch("/items/bid/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bidObject)
+    })
+      .then(res => res.json())
+      .then(console.log);
   };
 
   render() {
-    const { bid } = this.state;
+    const { bidamt } = this.state;
 
     return (
       <Form>
         <FormField
-          name="bid"
-          label="Bid"
+          name="bidamt"
+          label="Bid Amount"
           type="number"
-          value={bid}
+          value={bidamt}
           onChange={this.handleBidChange}
         />
 
