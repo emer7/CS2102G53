@@ -111,14 +111,14 @@ class GiveFeedback extends Component {
           <FormField
             name="receivedByUsername"
             label="To"
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{ shrink: !!receivedByUsername }}
             disabled
             value={receivedByUsername}
           />
           <FormField
             select
             label="Comment Type"
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{ shrink: !!commenttype }}
             value={commenttype}
             onChange={this.handleCommentType}
             margin="normal"
@@ -129,7 +129,7 @@ class GiveFeedback extends Component {
           <FormField
             name="commentbody"
             label="Body"
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{ shrink: !!commentbody }}
             value={commentbody}
             onChange={this.handleCommentBody}
           />

@@ -18,37 +18,15 @@ const deleteUser = (request, response) => {
 };
 
 // Updates an exisiting user
-const updateUser = (request, response) => {
-  const {
-    username,
-    password,
-    name,
-    age,
-    email,
-    dob,
-    phonenum,
-    address,
-    nationality,
-    userSSN,
-  } = request.body;
+const updatePassword = (request, response) => {
+  const { password, userSSN } = request.body;
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
     if (errorHash) {
       response.send({ message: 'Password cannot be empty' });
     } else {
-      const query = 'UPDATE Users SET username = $1, password = $2, name = $3, age = $4, email = $5, dob = $6, phoneNum = $7, address = $8, nationality = $9 WHERE userssn = $10';
-      const values = [
-        username,
-        hash,
-        name,
-        age,
-        email,
-        dob,
-        phonenum,
-        address,
-        nationality,
-        userSSN,
-      ];
+      const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
+      const values = [hash, userSSN];
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
           response.send(errorQuery);
@@ -56,6 +34,23 @@ const updateUser = (request, response) => {
           response.send(true);
         }
       });
+    }
+  });
+};
+
+// Updates an exisiting user
+const updateUser = (request, response) => {
+  const {
+    name, age, email, dob, phonenum, address, nationality, userssn,
+  } = request.body;
+
+  const query = 'UPDATE Users SET name = $1, age = $2, email = $3, dob = $4, phoneNum = $5, address = $6, nationality = $7 WHERE userssn = $8';
+  const values = [name, age, email, dob, phonenum, address, nationality, userssn];
+  pool.query(query, values, (errorQuery) => {
+    if (errorQuery) {
+      response.send(errorQuery);
+    } else {
+      response.send(true);
     }
   });
 };
@@ -597,4 +592,5 @@ module.exports = {
   viewAllItemBid,
   viewAllMyBid,
   getAllUserExceptSelf,
+  updatePassword,
 };

@@ -168,7 +168,7 @@ class AcceptBid extends Component {
           <FormField
             name="username"
             label="Placed By"
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{ shrink: !!bid.username }}
             disabled
             value={bid.username}
           />

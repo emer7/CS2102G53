@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { TextField, Button } from "@material-ui/core";
 
+import { AccountForm } from "./AccountForm";
+
 const FormField = styled(TextField)`
   & + & {
     margin-top: 15px;
@@ -67,7 +69,6 @@ class Profile extends Component {
   };
 
   handleSubmit = () => {
-    console.log(this.state)
     fetch("/users/update", {
       method: "PUT",
       headers: {
@@ -94,84 +95,30 @@ class Profile extends Component {
     } = this.state;
 
     return (
-      <Form>
-        <FormField
-          name="userSSN"
-          label="User SNN"
-          InputLabelProps={{ shrink: true }}
-          value={userssn}
-          disabled
-        />
-        <FormField
-          name="username"
-          label="Username"
-          InputLabelProps={{ shrink: true }}
-          value={username}
-          disabled
-        />
-        <FormField
-          name="password"
-          label="Password"
-          InputLabelProps={{ shrink: true }}
-          value={password}
-          onChange={this.handlePasswordChange}
-        />
-        <FormField
-          name="name"
-          label="Name"
-          InputLabelProps={{ shrink: true }}
-          value={name}
-          onChange={this.handleNameChange}
-        />
-        <FormField
-          name="age"
-          label="Age"
-          type="number"
-          InputLabelProps={{ shrink: true }}
-          value={age}
-          onChange={this.handleAgeChange}
-        />
-        <FormField
-          name="email"
-          label="Email"
-          type="email"
-          InputLabelProps={{ shrink: true }}
-          value={email}
-          onChange={this.handleEmailChange}
-        />
-        <FormField
-          name="dob"
-          label="Date of Birth"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          value={dob}
-          onChange={this.handleDobChange}
-        />
-        <FormField
-          name="phoneNum"
-          label="Phone Number"
-          InputLabelProps={{ shrink: true }}
-          value={phonenum}
-          onChange={this.handlePhonenumChange}
-        />
-        <FormField
-          name="address"
-          label="Address"
-          InputLabelProps={{ shrink: true }}
-          value={address}
-          onChange={this.handleAddressChange}
-        />
-        <FormField
-          name="nationality"
-          label="Nationality"
-          InputLabelProps={{ shrink: true }}
-          value={nationality}
-          onChange={this.handleNationalityChange}
-        />
-        <FormButton variant="contained" fullWidth onClick={this.handleSubmit}>
-          Submit
-        </FormButton>
-      </Form>
+      <AccountForm
+        userssn={userssn}
+        disableUsername
+        hidePassword
+        username={username}
+        password={password}
+        name={name}
+        age={age}
+        email={email}
+        dob={dob}
+        phoneNum={phonenum}
+        address={address}
+        nationality={nationality}
+        handleUsernameChange={this.handleUsernameChange}
+        handlePasswordChange={this.handlePasswordChange}
+        handleNameChange={this.handleNameChange}
+        handleAgeChange={this.handleAgeChange}
+        handleEmailChange={this.handleEmailChange}
+        handleDobChange={this.handleDobChange}
+        handlePhonenumChange={this.handlePhonenumChange}
+        handleAddressChange={this.handleAddressChange}
+        handleNationalityChange={this.handleNationalityChange}
+        handleSubmit={this.handleSubmit}
+      />
     );
   }
 }
