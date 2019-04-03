@@ -483,7 +483,7 @@ const updateBid = (request, response) => {
 const viewAllItemBid = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  const query = 'SELECT B.itemssn, B.placedbyssn, B.bidamt, B.biddatetime, U.username FROM Bids B INNER JOIN Users U ON B.placedbyssn = U.userssn WHERE itemSSN = $1';
+  const query = 'SELECT B.itemssn, max(B.placedbyssn), B.bidamt, B.biddatetime, U.username FROM Bids B INNER JOIN Users U ON B.placedbyssn = U.userssn WHERE itemSSN = $1 GROUP BY placedbyssn';
   const values = [itemSSN];
 
   pool.query(query, values, (error, results) => {
