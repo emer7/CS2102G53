@@ -15,6 +15,9 @@ router.delete('/delete/:userSSN', queries.deleteUser);
 // Route to update users
 router.put('/update', queries.updateUser);
 
+// Route to update password
+router.put('/update/password', queries.updatePassword);
+
 // Route to find all current borrowers of his/her item
 router.get('/search/borrowers/:loanedByUserSSN', queries.searchBorrower);
 
@@ -40,7 +43,10 @@ router.get('/feedback/view/good/:receivedByUserSSN', queries.viewGoodFeedbacks);
 router.get('/feedback/view/bad/:receivedByUserSSN', queries.viewBadFeedbacks);
 
 // Route to view all feedbacks for a specific user
-router.get('/feedback/view_all/:receivedByUserSSN', queries.viewAllFeedback);
+router.get('/feedback/view/all/:receivedByUserSSN', queries.viewAllFeedback);
+
+// Route to view all feedbacks given by a user
+router.get('/feedback/view/all/given/:givenByUserSSN', queries.viewAllGivenFeedback);
 
 router.get('/detail/:userSSN', (request, response) => {
   const { userSSN } = request.params;

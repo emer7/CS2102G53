@@ -33,7 +33,6 @@ export const AccountForm = ({
   type,
   userssn,
   disableUsername,
-  hidePassword,
   username,
   password,
   name,
@@ -65,15 +64,17 @@ export const AccountForm = ({
         disabled
       />
     )}
-    <FormField
-      name="username"
-      label="Username"
-      disabled={disableUsername}
-      InputLabelProps={{ shrink: !!username }}
-      value={username}
-      onChange={handleUsernameChange}
-    />
-    {!hidePassword && (
+    {handleUsernameChange && (
+      <FormField
+        name="username"
+        label="Username"
+        disabled={disableUsername}
+        InputLabelProps={{ shrink: !!username }}
+        value={username}
+        onChange={handleUsernameChange}
+      />
+    )}
+    {handlePasswordChange && (
       <FormField
         name="password"
         label="Password"

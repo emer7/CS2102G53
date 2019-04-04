@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { TextField, Button } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MenuItem from "@material-ui/core/MenuItem";
+import { TextField, Button } from "@material-ui/core";
 
 const Divider = styled.div`
   display: flex;
@@ -68,7 +68,7 @@ class GiveFeedback extends Component {
     this.setState({ commentbody: event.target.value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = () => {
     const { userssn } = this.props.user;
     const { commenttype, commentbody, receivedbyuserssn } = this.state;
     const feedbackObject = { userssn, commenttype, commentbody, receivedbyuserssn };

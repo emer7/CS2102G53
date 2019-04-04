@@ -18,6 +18,7 @@ const Navlink = styled(Link)`
     margin-left: 10px;
   }
 `;
+
 class Borrow extends Component {
   constructor(props) {
     super(props);

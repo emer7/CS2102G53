@@ -4,6 +4,8 @@ const pool = require('../config/db');
 
 // Deletes an exisiting user
 const deleteUser = (request, response) => {
+  request.logOut();
+
   const userSSN = parseInt(request.params.userSSN, 10);
 
   const query = 'DELETE FROM Users WHERE userSSN = $1';
@@ -13,20 +15,20 @@ const deleteUser = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`${userSSN} successfully deleted`);
+    response.send(true);
   });
 };
 
 // Updates an exisiting user
 const updatePassword = (request, response) => {
-  const { password, userSSN } = request.body;
+  const { password, userssn } = request.body;
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
     if (errorHash) {
       response.send({ message: 'Password cannot be empty' });
     } else {
       const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
-      const values = [hash, userSSN];
+      const values = [hash, userssn];
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
           response.send(errorQuery);
@@ -287,26 +289,41 @@ const deleteFeedback = (request, response) => {
   const query = 'DELETE FROM Feedbacks WHERE feedbackSSN = $1';
   const values = [feedbackSSN];
 
-  pool.qeury(query, values, (error) => {
+  pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`Feedback deleted with feedbackSSN: ${feedbackSSN}`);
+    response.send(true);
   });
 };
 
 // Updates an existing feedback
 const updateFeedback = (request, response) => {
-  const { feedbackSSN, commentType, commentBody } = request.body;
+  const { commenttype, commentbody, feedbackssn } = request.body;
 
   const query = 'UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3';
-  const values = [commentType, commentBody, feedbackSSN];
+  const values = [commenttype, commentbody, feedbackssn];
 
   pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`${feedbackSSN} has been updated`);
+    response.send(true);
+  });
+};
+
+// View all feedbacks to a specific user
+const viewAllGivenFeedback = (request, response) => {
+  const givenByUserSSN = parseInt(request.params.givenByUserSSN, 10);
+
+  const query = 'SELECT F.feedbackSSN, F.receivedByUserSSN, F.commenttype, F.commentbody, U.username FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn WHERE givenByUserSSN = $1';
+  const values = [givenByUserSSN];
+
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.send(results.rows);
   });
 };
 
@@ -314,7 +331,7 @@ const updateFeedback = (request, response) => {
 const viewAllFeedback = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
-  const query = 'SELECT F.givenByUserSSN, F.commenttype, F.commentbody, U.username FROM Feedbacks F INNER JOIN Users U ON F.givenbyuserssn = U.userssn WHERE receivedByUserSSN = $1';
+  const query = 'SELECT F.feedbackSSN, F.givenByUserSSN, F.commenttype, F.commentbody, U.username FROM Feedbacks F INNER JOIN Users U ON F.givenbyuserssn = U.userssn WHERE receivedByUserSSN = $1';
   const values = [receivedByUserSSN];
 
   pool.query(query, values, (error, results) => {
@@ -593,4 +610,5 @@ module.exports = {
   viewAllMyBid,
   getAllUserExceptSelf,
   updatePassword,
+  viewAllGivenFeedback,
 };

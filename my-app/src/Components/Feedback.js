@@ -32,11 +32,13 @@ class Feedback extends Component {
       <div>
         <Navbar>
           <Navlink to="/feedback/give">Give Feedback</Navlink>
-          <Navlink to="/feedback/view">View Received Feedback</Navlink>
+          <Navlink to="/feedback/view/given">View Given Feedback</Navlink>
+          <Navlink to="/feedback/view/received">View Received Feedback</Navlink>
         </Navbar>
 
         <Route path="/feedback/give" render={() => <GiveFeedback user={user} />} />
-        <Route path="/feedback/view" render={() => <ViewFeedback user={user} />} />
+        <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given/>} />
+        <Route path="/feedback/view/received" render={() => <ViewFeedback user={user} />} />
       </div>
     );
   }

@@ -145,20 +145,20 @@ class App extends Component {
             }
           />
           <Route
-            path="/profile"
+            path="/item/:itemssn"
             render={props =>
               this.state.isAuthenticated ? (
-                <Profile user={user} {...props} />
+                <Item user={user} item={item} {...props} />
               ) : (
                 <Redirect to="/login" />
               )
             }
           />
           <Route
-            path="/item/:itemssn"
+            path="/profile"
             render={props =>
               this.state.isAuthenticated ? (
-                <Item user={user} item={item} {...props} />
+                <Profile user={user} handleLogin={this.handleLogin} {...props} />
               ) : (
                 <Redirect to="/login" />
               )
