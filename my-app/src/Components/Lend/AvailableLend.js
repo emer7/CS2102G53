@@ -43,11 +43,19 @@ class AvailableLend extends Component {
   }
 
   componentDidMount() {
+    this.fetchResources();
+  }
+
+  componentDidUpdate() {
+    this.fetchResources();
+  }
+
+  fetchResources = () => {
     const { user } = this.props;
     fetch(`/items/search/available/${user.userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
-  }
+  };
 
   handleItemClick = item => {
     const { history, handleChosenItem } = this.props;
@@ -63,6 +71,8 @@ class AvailableLend extends Component {
     })
       .then(res => res.json())
       .then(console.log);
+
+    this.setState(this.state);
   };
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 import styled from "styled-components";
 
 import GiveFeedback from "./Feedback/GiveFeedback";
@@ -37,7 +37,7 @@ class Feedback extends Component {
         </Navbar>
 
         <Route path="/feedback/give" render={() => <GiveFeedback user={user} />} />
-        <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given/>} />
+        <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given />} />
         <Route path="/feedback/view/received" render={() => <ViewFeedback user={user} />} />
       </div>
     );

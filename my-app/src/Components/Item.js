@@ -7,8 +7,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import AcceptBid from "./AcceptBid";
-import ProposeBid from "./ProposeBid";
+import AcceptBid from "./Item/AcceptBid";
+import ProposeBid from "./Item/ProposeBid";
 
 class Item extends Component {
   constructor(props) {
@@ -84,9 +84,9 @@ class Item extends Component {
         </Table>
 
         {user.userssn == loanedbyuserssn ? (
-          <AcceptBid item={row} user={user} history={history} />
+          <AcceptBid item={row} user={user} />
         ) : (
-          <ProposeBid item={row} user={user} />
+          <ProposeBid item={row} user={user} history={history} />
         )}
       </div>
     );

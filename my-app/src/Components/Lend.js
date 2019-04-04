@@ -42,7 +42,7 @@ class Lend extends Component {
           <Navlink to="/lend/current">Currently Lent</Navlink>
         </Navbar>
 
-        <Route path="/lend/form" render={() => <LendForm user={user} />} />
+        <Route path="/lend/form" render={props => <LendForm user={user} {...props} />} />
         <Route
           path="/lend/available"
           render={props => (

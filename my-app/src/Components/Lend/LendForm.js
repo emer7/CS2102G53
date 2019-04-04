@@ -32,13 +32,6 @@ class LendForm extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    // const { user } = this.props;
-    // fetch(`/items/search/available/${user.userssn}`)
-    //   .then(res => res.json())
-    //   .then(data => this.setState({ rows: data }));
-  }
-
   handleItemClick = item => {
     const { history, handleChosenItem } = this.props;
     const { itemssn } = item;
@@ -63,7 +56,7 @@ class LendForm extends Component {
   };
 
   handleSubmit = () => {
-    const { user } = this.props;
+    const { user, history } = this.props;
 
     fetch("/items/create", {
       method: "POST",
@@ -74,6 +67,8 @@ class LendForm extends Component {
     })
       .then(res => res.json())
       .then(console.log);
+
+    history.push("/lend/available");
   };
 
   render() {
