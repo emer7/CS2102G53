@@ -27,6 +27,9 @@ router.get('/search/most_borrowed', queries.viewMostBorrowedItem);
 // Route to view all items
 router.get('/view/all', queries.viewAllAvailableItems);
 
+// Route to view all items
+router.get('/view/all/except/:loanedByUserSSN', queries.viewAllAvailableExceptMyItems);
+
 // Route to view all items that I am currently borrowing
 router.get('/view/all_i_am_borrowing/:borrowerSSN', queries.viewAllItemsIAmBorrowing);
 
@@ -37,12 +40,12 @@ router.get('/view/my_items_on_loan/:loanedByUserSSN', queries.viewLentOutItems);
 router.post('/bid/create', queries.createBid);
 
 // Route to delete bid
-router.delete('/bid/delete/:bidSSN', queries.deleteBid);
+router.delete('/bid/delete', queries.deleteBid);
 
 // Route to view all bids of an item
 router.get('/bid/view/all/item/:itemSSN', queries.viewAllItemBid);
 
 // Route to view all bids that the user has posted
-router.get('bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
+router.get('/bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
 
 module.exports = router;
