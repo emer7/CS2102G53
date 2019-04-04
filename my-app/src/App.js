@@ -60,10 +60,6 @@ class App extends Component {
       .then(data => data && this.setState({ isAuthenticated: data.login, user: undefined }));
   };
 
-  handleChosenItem = item => {
-    this.setState({ item });
-  };
-
   authenticate = () => {
     fetch("/authenticate/check")
       .then(res => res.json())
@@ -87,6 +83,10 @@ class App extends Component {
     const transformedUser = { ...user, dob: transformedDob };
 
     this.setState({ user: transformedUser });
+  };
+
+  handleChosenItem = item => {
+    this.setState({ item });
   };
 
   render() {
