@@ -64,10 +64,6 @@ class App extends Component {
     this.setState({ item });
   };
 
-  componentDidMount() {
-    // this.authenticate();
-  }
-
   authenticate = () => {
     fetch("/authenticate/check")
       .then(res => res.json())
