@@ -38,7 +38,10 @@ class AvailableBorrow extends Component {
   }
 
   componentDidMount() {
-    fetch("/items/view/all")
+    const { user } = this.props;
+    const { userssn } = user;
+
+    fetch(`/items/view/all/except/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
   }
