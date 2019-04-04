@@ -483,16 +483,16 @@ const createBid = (request, response) => {
 
 // Delete an existing bid
 const deleteBid = (request, response) => {
-  const bidSSN = parseInt(request.params.bidSSN, 10);
+  const { itemssn, userssn } = request.body;
 
-  const query = 'DELETE FROM Bids WHERE bidSSN = $1';
-  const values = [bidSSN];
+  const query = 'DELETE FROM Bids WHERE itemSSN = $1 and placedBySSN = $2';
+  const values = [itemssn, userssn];
 
   pool.query(query, values, (error) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`${bidSSN} successfully deleted`);
+    response.send(true);
   });
 };
 
