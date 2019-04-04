@@ -12,6 +12,7 @@ const Title = styled.div`
 export const AccountForm = ({
   type,
   userssn,
+  hideUsername,
   disableUsername,
   username,
   password,
@@ -44,7 +45,7 @@ export const AccountForm = ({
         disabled
       />
     )}
-    {handleUsernameChange && (
+    {!hideUsername && (
       <FormField
         name="username"
         label="Username"

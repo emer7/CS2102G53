@@ -39,6 +39,8 @@ class UpdateProfile extends Component {
   };
 
   handleSubmit = () => {
+
+    console.log(this.state)
     fetch("/users/update", {
       method: "PUT",
       headers: {

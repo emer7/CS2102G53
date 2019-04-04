@@ -49,6 +49,7 @@ class UpdateSecurity extends Component {
     return (
       <div>
         <AccountForm
+          hideUsername
           password={password}
           handlePasswordChange={this.handlePasswordChange}
           handleSubmit={this.handleSubmit}

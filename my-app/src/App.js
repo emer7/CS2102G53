@@ -86,7 +86,14 @@ class App extends Component {
   };
 
   setDetail = user => {
-    this.setState({ user });
+    const { dob } = user;
+    const dobDate = new Date(dob);
+    const transformedDob = new Date(dobDate - dobDate.getTimezoneOffset() * 60000)
+      .toISOString()
+      .slice(0, 10);
+    const transformedUser = { ...user, dob: transformedDob };
+
+    this.setState({ user: transformedUser });
   };
 
   render() {
