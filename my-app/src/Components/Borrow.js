@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import AvailableBorrow from "./Borrow/AvailableBorrow";
 import CurrentlyBorrow from "./Borrow/CurrentlyBorrow";
+import CurrentlyBidding from "./Borrow/CurrentlyBidding";
 
 const Navbar = styled.div`
   padding: 10px;
@@ -32,6 +33,7 @@ class Borrow extends Component {
       <div>
         <Navbar>
           <Navlink to="/borrow/available">Available to Borrow</Navlink>
+          <Navlink to="/borrow/bidding">Currently Bidding</Navlink>
           <Navlink to="/borrow/current">Currently Borrowed</Navlink>
         </Navbar>
 
@@ -39,6 +41,12 @@ class Borrow extends Component {
           path="/borrow/available"
           render={props => (
             <AvailableBorrow user={user} handleChosenItem={handleChosenItem} {...props} />
+          )}
+        />
+        <Route
+          path="/borrow/bidding"
+          render={props => (
+            <CurrentlyBidding user={user} handleChosenItem={handleChosenItem} {...props} />
           )}
         />
         <Route
