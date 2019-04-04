@@ -34,6 +34,25 @@ class ViewFeedback extends Component {
     this.state = { rows: rows, row: {} };
   }
 
+  componentDidMount() {
+    this.fetchResources();
+  }
+
+  fetchResources = () => {
+    const { user, given } = this.props;
+    const { userssn } = user;
+
+    if (given) {
+      fetch(`/users/feedback/view/all/given/${userssn}`)
+        .then(res => res.json())
+        .then(data => this.setState({ rows: data }));
+    } else {
+      fetch(`/users/feedback/view/all/${userssn}`)
+        .then(res => res.json())
+        .then(data => this.setState({ rows: data }));
+    }
+  };
+
   handleItemClick = feedback => {
     this.setState({ ...feedback });
   };
@@ -52,6 +71,8 @@ class ViewFeedback extends Component {
     })
       .then(res => res.json())
       .then(console.log);
+
+    this.fetchResources();
   };
 
   handleSubmit = () => {
@@ -67,22 +88,9 @@ class ViewFeedback extends Component {
     })
       .then(res => res.json())
       .then(console.log);
+
+    this.fetchResources();
   };
-
-  componentDidMount() {
-    const { user, given } = this.props;
-    const { userssn } = user;
-
-    if (given) {
-      fetch(`/users/feedback/view/all/given/${userssn}`)
-        .then(res => res.json())
-        .then(data => this.setState({ rows: data }));
-    } else {
-      fetch(`/users/feedback/view/all/${userssn}`)
-        .then(res => res.json())
-        .then(data => this.setState({ rows: data }));
-    }
-  }
 
   render() {
     const { given } = this.props;
@@ -93,7 +101,7 @@ class ViewFeedback extends Component {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Given by </TableCell>
+              <TableCell>{given ? "Given to" : "Given by"}</TableCell>
               <TableCell align="right">Comment Type</TableCell>
               <TableCell align="right">Comment Body</TableCell>
               {given && <TableCell align="right">Delete</TableCell>}
@@ -155,7 +163,7 @@ class ViewFeedback extends Component {
               onChange={this.handleCommentBody}
             />
             <FormButton variant="contained" onClick={this.handleSubmit}>
-              Submit
+              Update
             </FormButton>
           </Form>
         )}

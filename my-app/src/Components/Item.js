@@ -41,7 +41,7 @@ class Item extends Component {
     //     loanedbyuserssn: 0
     //   }
     // ];
-    const { match, item } = this.props;
+    const { item } = this.props;
     // const { itemssn } = match.params;
     // const row = rows.find(row => row.itemssn == itemssn);
     const row = item || {};
