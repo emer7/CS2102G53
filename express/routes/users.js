@@ -6,16 +6,16 @@ const pool = require('../config/db');
 
 const router = express.Router();
 
-// Route to get all users except oneself
+// USED - Route to get all users except oneself
 router.get('/all/except/:userSSN', queries.getAllUserExceptSelf);
 
-// Route to delete users
+// USED - // Route to delete users
 router.delete('/delete/:userSSN', queries.deleteUser);
 
-// Route to update users
+// USED - // Route to update users
 router.put('/update', queries.updateUser);
 
-// Route to update password
+// USED - // Route to update password
 router.put('/update/password', queries.updatePassword);
 
 // Route to find all current borrowers of his/her item
@@ -27,13 +27,13 @@ router.get('/search/most_active', queries.viewMostActiveBorrower);
 // Route to find user with the most number of positive feedback
 router.get('/search/most_positive', queries.viewMostPositiveUser);
 
-// Route to create feedbacks
+// USED - // Route to create feedbacks
 router.post('/feedback/create', queries.createFeedback);
 
-// Route to delete feedbacks
+// USED - // Route to delete feedbacks
 router.delete('/feedback/delete/:feedbackSSN', queries.deleteFeedback);
 
-// Route to update feedback
+// USED - // Route to update feedback
 router.put('/feedback/update', queries.updateFeedback);
 
 // Route to view user's good feedbacks
@@ -42,12 +42,13 @@ router.get('/feedback/view/good/:receivedByUserSSN', queries.viewGoodFeedbacks);
 // Route to view user's bad feedbacks
 router.get('/feedback/view/bad/:receivedByUserSSN', queries.viewBadFeedbacks);
 
-// Route to view all feedbacks for a specific user
+// USED - // Route to view all feedbacks for a specific user
 router.get('/feedback/view/all/:receivedByUserSSN', queries.viewAllFeedback);
 
-// Route to view all feedbacks given by a user
+// USED - // Route to view all feedbacks given by a user
 router.get('/feedback/view/all/given/:givenByUserSSN', queries.viewAllGivenFeedback);
 
+// USED - 
 router.get('/detail/:userSSN', (request, response) => {
   const { userSSN } = request.params;
 
@@ -63,6 +64,7 @@ router.get('/detail/:userSSN', (request, response) => {
   });
 });
 
+// USED - 
 router.post('/register', (request, response) => {
   const {
     username,

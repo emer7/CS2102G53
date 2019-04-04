@@ -472,7 +472,7 @@ const createBid = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(true);
+    response.send(true);
   });
 };
 
