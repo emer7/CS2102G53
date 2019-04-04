@@ -40,7 +40,7 @@ class ProposeBid extends Component {
   };
 
   handleSubmit = () => {
-    const { item, user } = this.props;
+    const { item, user, history } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
     const { bidamt } = this.state;
@@ -55,6 +55,8 @@ class ProposeBid extends Component {
     })
       .then(res => res.json())
       .then(console.log);
+
+    history.push("/borrow/bidding");
   };
 
   render() {

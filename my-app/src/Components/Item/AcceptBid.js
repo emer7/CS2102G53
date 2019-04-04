@@ -97,19 +97,6 @@ class AcceptBid extends Component {
       .then(console.log);
   };
 
-  handleDeleteItem = () => {
-    const { item, history } = this.props;
-    const { itemssn } = item;
-
-    fetch(`/items/delete/${itemssn}`, {
-      method: "DELETE"
-    })
-      .then(res => res.json())
-      .then(console.log);
-
-    history.push("/lend/available");
-  };
-
   handleSubmit = () => {
     const { item } = this.props;
     const { itemssn } = item;
@@ -150,9 +137,6 @@ class AcceptBid extends Component {
             />
             <FormButton variant="contained" onClick={this.handleEditItem}>
               Update
-            </FormButton>
-            <FormButton variant="contained" onClick={this.handleDeleteItem}>
-              Delete
             </FormButton>
           </Form>
         </Half>
