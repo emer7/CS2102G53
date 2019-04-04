@@ -100,7 +100,7 @@ const updateItem = (request, response) => {
 // View all available items
 // T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableItems = (request, response) => {
-  const query = 'SELECT I.itemssn as itemssn, loanedbyuserssn, name, description, minbidprice, loandurationindays FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
+  const query = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -144,7 +144,7 @@ const searchAllItems = (request, response) => {
 const viewLentOutItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Items I LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE';
+  const query = 'SELECT * FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE';
   const values = [loanedByUserSSN];
   pool.query(query, values, (error, results) => {
     if (error) {
@@ -172,7 +172,7 @@ const viewAllItemsIAmBorrowing = (request, response) => {
 const searchAvailableItemsOfLoaner = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const query = 'SELECT I.itemssn as itemssn, loanedbyuserssn, name, description, minbidprice, loandurationindays FROM Items I LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
+  const query = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN where I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
 
   pool.query(query, values, (error, results) => {
