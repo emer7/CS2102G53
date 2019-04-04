@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import MenuItem from "@material-ui/core/MenuItem";
-import { TextField, Button } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { MenuItem } from "@material-ui/core";
+
+import { FormField, FormButton, Form as BaseForm } from "../Constants";
 
 const Divider = styled.div`
   display: flex;
@@ -15,23 +13,7 @@ const Divider = styled.div`
   align-items: stretch;
 `;
 
-const FormField = styled(TextField)`
-  & + & {
-    margin-top: 15px;
-  }
-`;
-
-const FormButton = styled(Button)`
-  && {
-    margin-top: 30px;
-  }
-`;
-
-const Form = styled.div`
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+const Form = styled(BaseForm)`
   width: 100%;
 `;
 

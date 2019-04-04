@@ -1,25 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { TextField, Button } from "@material-ui/core";
 
-const FormField = styled(TextField)`
-  & + & {
-    margin-top: 15px;
-  }
-`;
-
-const FormButton = styled(Button)`
-  && {
-    margin-top: 30px;
-  }
-`;
-
-const Form = styled.div`
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+import { FormField, FormButton, Form } from "../Constants";
 
 class ProposeBid extends Component {
   // read bid on mount

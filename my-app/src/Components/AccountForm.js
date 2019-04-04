@@ -1,32 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { FormField, FormButton, Form } from "./Constants";
 
 const Title = styled.div`
   text-align: center;
   font-size: 2em;
   font-weight: bold;
-`;
-
-const FormField = styled(TextField)`
-  & + & {
-    margin-top: 15px;
-  }
-`;
-
-const FormButton = styled(Button)`
-  && {
-    margin-top: 30px;
-  }
-`;
-
-const Form = styled.div`
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 `;
 
 export const AccountForm = ({
@@ -57,7 +37,7 @@ export const AccountForm = ({
     {type && <Title>{type}</Title>}
     {userssn && (
       <FormField
-        name="userSSN"
+        name="userssn"
         label="User SNN"
         InputLabelProps={{ shrink: !!userssn }}
         value={userssn}
@@ -125,7 +105,7 @@ export const AccountForm = ({
     )}
     {handlePhonenumChange && (
       <FormField
-        name="phoneNum"
+        name="phonenum"
         label="Phone Number"
         InputLabelProps={{ shrink: !!phoneNum }}
         value={phoneNum}

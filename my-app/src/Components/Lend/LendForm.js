@@ -1,26 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import { TextField, Button } from "@material-ui/core";
+import { FormField, FormButton, Form } from "../Constants";
 
-const FormField = styled(TextField)`
-  & + & {
-    margin-top: 15px;
-  }
-`;
-
-const FormButton = styled(Button)`
-  && {
-    margin-top: 30px;
-  }
-`;
-
-const Form = styled.div`
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
 class LendForm extends Component {
   // Lent items
   // To lend item
@@ -32,13 +14,6 @@ class LendForm extends Component {
     this.state = {};
   }
 
-  handleItemClick = item => {
-    const { history, handleChosenItem } = this.props;
-    const { itemssn } = item;
-    handleChosenItem(item);
-    history.push(`/item/${itemssn}`);
-  };
-
   handleNameChange = event => {
     this.setState({ name: event.target.value });
   };
@@ -48,22 +23,23 @@ class LendForm extends Component {
   };
 
   handleMinBidPriceChange = event => {
-    this.setState({ minBidPrice: event.target.value });
+    this.setState({ minbidprice: event.target.value });
   };
 
   handleLoandDurationChange = event => {
-    this.setState({ loanDurationInDays: event.target.value });
+    this.setState({ loandurationindays: event.target.value });
   };
 
   handleSubmit = () => {
     const { user, history } = this.props;
+    const { userssn } = user;
 
     fetch("/items/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ ...this.state, loanedByUserSSN: user.userssn })
+      body: JSON.stringify({ ...this.state, userssn })
     })
       .then(res => res.json())
       .then(console.log);
@@ -72,7 +48,7 @@ class LendForm extends Component {
   };
 
   render() {
-    const { name, description, minBidPrice, loanDurationInDays } = this.state;
+    const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
       <div>
@@ -88,14 +64,14 @@ class LendForm extends Component {
             name="minBidPrice"
             type="number"
             label="Minimum bid price"
-            value={minBidPrice}
+            value={minbidprice}
             onChange={this.handleMinBidPriceChange}
           />
           <FormField
             name="loanDuration"
             type="number"
             label="Loan Duration in Days"
-            value={loanDurationInDays}
+            value={loandurationindays}
             onChange={this.handleLoandDurationChange}
           />
           <FormButton variant="contained" onClick={this.handleSubmit}>

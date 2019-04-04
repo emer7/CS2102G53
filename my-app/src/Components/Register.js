@@ -61,8 +61,9 @@ class Register extends Component {
     this.setState({ nationality: event.target.value });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = () => {
+    const { history } = this.props;
+
     fetch("/users/register", {
       method: "POST",
       headers: {
@@ -76,6 +77,8 @@ class Register extends Component {
           console.log(data);
         }
       });
+
+    history.push("/login");
   };
 
   render() {

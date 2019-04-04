@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { TextField, Button } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+
+import { FormField, FormButton, Form as BaseForm } from "../Constants";
 
 const Divider = styled.div`
   display: flex;
@@ -14,23 +11,7 @@ const Divider = styled.div`
   align-items: stretch;
 `;
 
-const FormField = styled(TextField)`
-  & + & {
-    margin-top: 15px;
-  }
-`;
-
-const FormButton = styled(Button)`
-  && {
-    margin-top: 30px;
-  }
-`;
-
-const Form = styled.div`
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+const Form = styled(BaseForm)`
   flex-grow: 1;
 `;
 
@@ -49,8 +30,11 @@ class AcceptBid extends Component {
       { bidssn: 1, username: "asdf", placedbyssn: 2, bidamt: 20, biddatetime: "02" },
       { bidssn: 2, username: "ewqr", placedbyssn: 3, bidamt: 30, biddatetime: "03" }
     ];
+    const { item } = props;
+    const { name, description, minbidprice, loandurationindays } = item;
+
     super(props);
-    this.state = { rows, bid: {} };
+    this.state = { rows, bid: {}, name, description, minbidprice, loandurationindays };
   }
 
   componentDidMount() {
@@ -71,11 +55,11 @@ class AcceptBid extends Component {
   };
 
   handleMinBidPriceChange = event => {
-    this.setState({ minBidPrice: event.target.value });
+    this.setState({ minbidprice: event.target.value });
   };
 
   handleLoandDurationChange = event => {
-    this.setState({ loanDurationInDays: event.target.value });
+    this.setState({ loandurationindays: event.target.value });
   };
 
   handleItemClick = bid => {
@@ -85,13 +69,14 @@ class AcceptBid extends Component {
   handleEditItem = () => {
     const { user, item } = this.props;
     const { itemssn } = item;
+    const { userssn } = user;
 
     fetch("/items/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ ...this.state, loanedByUserSSN: user.userssn, itemSSN: itemssn })
+      body: JSON.stringify({ ...this.state, itemssn, userssn })
     })
       .then(res => res.json())
       .then(console.log);
@@ -108,7 +93,7 @@ class AcceptBid extends Component {
 
   render() {
     const { rows, bid } = this.state;
-    const { name, description, minBidPrice, loanDurationInDays } = this.state;
+    const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
       <Divider>
@@ -125,14 +110,14 @@ class AcceptBid extends Component {
               name="minBidPrice"
               type="number"
               label="Minimum bid price"
-              value={minBidPrice}
+              value={minbidprice}
               onChange={this.handleMinBidPriceChange}
             />
             <FormField
               name="loanDuration"
               type="number"
               label="Loan Duration in Days"
-              value={loanDurationInDays}
+              value={loandurationindays}
               onChange={this.handleLoandDurationChange}
             />
             <FormButton variant="contained" onClick={this.handleEditItem}>

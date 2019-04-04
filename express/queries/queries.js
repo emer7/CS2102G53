@@ -60,11 +60,11 @@ const updateUser = (request, response) => {
 // Creates new item
 const createItem = (request, response) => {
   const {
-    loanedByUserSSN, name, description, minBidPrice, loanDurationInDays,
+    userssn, name, description, minbidprice, loandurationindays,
   } = request.body;
 
   const query = 'INSERT INTO Items (loanedbyuserssn, name, description, minbidprice, loandurationindays) VALUES ($1, $2, $3, $4, $5)';
-  const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays];
+  const values = [userssn, name, description, minbidprice, loandurationindays];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -78,16 +78,11 @@ const createItem = (request, response) => {
 // Updates an existing item
 const updateItem = (request, response) => {
   const {
-    itemSSN,
-    loanedByUserSSN,
-    name,
-    description,
-    minBidPrice,
-    loanDurationInDays,
+    itemssn, userssn, name, description, minbidprice, loandurationindays,
   } = request.body;
 
   const query = 'UPDATE Items SET loanedByUserSSN = $1, name = $2, description = $3, minBidPrice = $4, loanDurationInDays = $5 WHERE itemSSN = $6';
-  const values = [loanedByUserSSN, name, description, minBidPrice, loanDurationInDays, itemSSN];
+  const values = [userssn, name, description, minbidprice, loandurationindays, itemssn];
 
   pool.query(query, values, (error) => {
     if (error) {

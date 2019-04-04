@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
 class CurrentlyBidding extends Component {
@@ -19,10 +15,6 @@ class CurrentlyBidding extends Component {
   }
 
   componentDidMount() {
-    this.fetchResources();
-  }
-
-  componentDidUpdate() {
     this.fetchResources();
   }
 
@@ -53,7 +45,7 @@ class CurrentlyBidding extends Component {
       .then(res => res.json())
       .then(console.log);
 
-    this.setState(this.state);
+    this.fetchResources();
   };
 
   handleItemClick = item => {

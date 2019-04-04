@@ -46,10 +46,6 @@ class AvailableLend extends Component {
     this.fetchResources();
   }
 
-  componentDidUpdate() {
-    this.fetchResources();
-  }
-
   fetchResources = () => {
     const { user } = this.props;
     fetch(`/items/search/available/${user.userssn}`)
@@ -72,7 +68,7 @@ class AvailableLend extends Component {
       .then(res => res.json())
       .then(console.log);
 
-    this.setState(this.state);
+    this.fetchResources();
   };
 
   render() {
