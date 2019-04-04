@@ -41,9 +41,7 @@ class LendForm extends Component {
       body: JSON.stringify({ ...this.state, userssn })
     })
       .then(res => res.json())
-      .then(console.log);
-
-    history.push("/lend/available");
+      .then(() => history.push("/lend/available"));
   };
 
   render() {

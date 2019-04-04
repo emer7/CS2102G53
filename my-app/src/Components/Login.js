@@ -34,6 +34,8 @@ class Login extends Component {
   };
 
   handleSubmit = () => {
+    const { handleLogin } = this.props;
+
     fetch("/authenticate/login", {
       method: "POST",
       headers: {
@@ -42,11 +44,7 @@ class Login extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(data => {
-        if (data) {
-          this.props.handleLogin(data);
-        }
-      });
+      .then(data => data && handleLogin(data));
   };
 
   render() {

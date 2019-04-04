@@ -72,13 +72,7 @@ class Register extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(data => {
-        if (data) {
-          console.log(data);
-        }
-      });
-
-    history.push("/login");
+      .then(data => history.push("/login"));
   };
 
   render() {

@@ -39,8 +39,8 @@ class UpdateProfile extends Component {
   };
 
   handleSubmit = () => {
+    const { fetchUserDetail, user } = this.props;
 
-    console.log(this.state)
     fetch("/users/update", {
       method: "PUT",
       headers: {
@@ -49,7 +49,7 @@ class UpdateProfile extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(console.log);
+      .then(() => fetchUserDetail(user));
   };
 
   render() {

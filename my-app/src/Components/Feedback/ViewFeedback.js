@@ -87,9 +87,7 @@ class ViewFeedback extends Component {
       body: JSON.stringify(feedbackObject)
     })
       .then(res => res.json())
-      .then(console.log);
-
-    this.fetchResources();
+      .then(() => this.fetchResources());
   };
 
   render() {

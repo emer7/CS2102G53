@@ -49,7 +49,7 @@ class App extends Component {
 
   handleLogin = ({ login, user }) => {
     this.setState({ isAuthenticated: login, user });
-    user && this.getDetail(user);
+    user && this.fetchUserDetail(user);
   };
 
   handleLogout = () => {
@@ -57,11 +57,7 @@ class App extends Component {
       method: "POST"
     })
       .then(res => res.json())
-      .then(data => {
-        if (data) {
-          this.setState({ isAuthenticated: data.login, user: undefined });
-        }
-      });
+      .then(data => data && this.setState({ isAuthenticated: data.login, user: undefined }));
   };
 
   handleChosenItem = item => {
@@ -78,14 +74,15 @@ class App extends Component {
       .then(data => this.setState({ isAuthenticated: data.login }));
   };
 
-  getDetail = user => {
+  fetchUserDetail = user => {
     const { userssn } = user;
+
     fetch(`/users/detail/${userssn}`)
       .then(res => res.json())
-      .then(data => this.setDetail(data));
+      .then(data => this.setUserDetail(data));
   };
 
-  setDetail = user => {
+  setUserDetail = user => {
     const { dob } = user;
     const dobDate = new Date(dob);
     const transformedDob = new Date(dobDate - dobDate.getTimezoneOffset() * 60000)
@@ -165,7 +162,12 @@ class App extends Component {
             path="/profile"
             render={props =>
               this.state.isAuthenticated ? (
-                <Profile user={user} handleLogin={this.handleLogin} {...props} />
+                <Profile
+                  user={user}
+                  handleLogin={this.handleLogin}
+                  fetchUserDetail={this.fetchUserDetail}
+                  {...props}
+                />
               ) : (
                 <Redirect to="/login" />
               )

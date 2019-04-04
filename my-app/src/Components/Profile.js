@@ -26,7 +26,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { user, handleLogin } = this.props;
+    const { user, handleLogin, fetchUserDetail } = this.props;
 
     return (
       <div>
@@ -35,7 +35,7 @@ class Profile extends Component {
           <Navlink to="/profile/security">Update Security</Navlink>
         </Navbar>
 
-        <Route path="/profile/update" render={props => <UpdateProfile user={user} {...props} />} />
+        <Route path="/profile/update" render={props => <UpdateProfile user={user} fetchUserDetail={fetchUserDetail} {...props} />} />
         <Route
           path="/profile/security"
           render={props => <UpdateSecurity user={user} handleLogin={handleLogin} {...props} />}

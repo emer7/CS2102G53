@@ -33,9 +33,7 @@ class ProposeBid extends Component {
       body: JSON.stringify(bidObject)
     })
       .then(res => res.json())
-      .then(console.log);
-
-    history.push("/borrow/bidding");
+      .then(() => history.push("/borrow/bidding"));
   };
 
   render() {
