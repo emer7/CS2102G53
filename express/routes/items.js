@@ -48,4 +48,7 @@ router.get('/bid/view/all/item/:itemSSN', queries.viewAllItemBid);
 // Route to view all bids that the user has posted
 router.get('/bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
 
+// Route to view item attributes
+router.get('view/:itemSSN', queries.viewItem);
+
 module.exports = router;

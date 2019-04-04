@@ -105,6 +105,21 @@ const viewAllAvailableItems = (request, response) => {
   });
 };
 
+// Views attributes of an item
+const viewItem = (request, response) => {
+    const itemSSN = parseInt(request.params.itemSSN, 10);
+
+    const query = "SELECT * FROM Items WHERE itemSSN = $1";
+    const values = [itemSSN];
+
+    pool.query(query, values, (error, results) => {
+        if (error) {
+            throw error;
+        }
+        response.status(200).json(results.rows);
+    });
+}
+
 // View all available items except mine
 // T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableExceptMyItems = (request, response) => {
@@ -592,6 +607,7 @@ module.exports = {
   viewAllAvailableItems,
   deleteItem,
   updateItem,
+  viewItem,
   viewAllItemsIAmBorrowing,
   searchAllItems,
   searchAvailableItemsOfLoaner,
