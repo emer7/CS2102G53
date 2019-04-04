@@ -17,7 +17,7 @@ class AvailableLend extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 2,
-        loanedByUsername: 'avc',
+        loanedByUsername: "avc"
       },
       {
         itemssn: 1,
@@ -26,7 +26,7 @@ class AvailableLend extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 1,
-        loanedByUsername: 'safd',
+        loanedByUsername: "safd"
       },
       {
         itemssn: 2,
@@ -35,7 +35,7 @@ class AvailableLend extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 0,
-        loanedByUsername: 'zx',
+        loanedByUsername: "zx"
       }
     ];
     super(props);
@@ -56,10 +56,26 @@ class AvailableLend extends Component {
     history.push(`/item/${itemssn}`);
   };
 
+  handleDelete = (event, { itemssn }) => {
+    event.stopPropagation();
+    fetch(`/items/delete/${itemssn}`, {
+      method: "DELETE"
+    })
+      .then(res => res.json())
+      .then(console.log);
+  };
+
   render() {
     const { rows } = this.state;
 
-    return <ItemsTable rows={rows} handleItemClick={this.handleItemClick} />;
+    return (
+      <ItemsTable
+        rows={rows}
+        handleItemClick={this.handleItemClick}
+        deleteButton
+        handleDelete={this.handleDelete}
+      />
+    );
   }
 }
 

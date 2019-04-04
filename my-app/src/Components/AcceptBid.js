@@ -8,6 +8,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TextField, Button } from "@material-ui/core";
 
+const Divider = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+`;
+
 const FormField = styled(TextField)`
   & + & {
     margin-top: 15px;
@@ -25,6 +31,11 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex-grow: 1;
+`;
+
+const Half = styled.div`
+  flex-grow: 1;
 `;
 
 class AcceptBid extends Component {
@@ -113,70 +124,73 @@ class AcceptBid extends Component {
     const { name, description, minBidPrice, loanDurationInDays } = this.state;
 
     return (
-      <div>
-        <Form>
-          <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
-          <FormField
-            name="description"
-            label="Description"
-            value={description}
-            onChange={this.handleDescriptionChange}
-          />
-          <FormField
-            name="minBidPrice"
-            type="number"
-            label="Minimum bid price"
-            value={minBidPrice}
-            onChange={this.handleMinBidPriceChange}
-          />
-          <FormField
-            name="loanDuration"
-            type="number"
-            label="Loan Duration in Days"
-            value={loanDurationInDays}
-            onChange={this.handleLoandDurationChange}
-          />
-          <FormButton variant="contained" onClick={this.handleEditItem}>
-            Update
-          </FormButton>
-          <FormButton variant="contained" onClick={this.handleDeleteItem}>
-            Delete
-          </FormButton>
-        </Form>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Placed By</TableCell>
-              <TableCell align="right">Bid Amount</TableCell>
-              <TableCell align="right">Bid Date Time</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="right">{row.bidamt}</TableCell>
-                <TableCell align="right">{row.biddatetime}</TableCell>
+      <Divider>
+        <Half>
+          <Form>
+            <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
+            <FormField
+              name="description"
+              label="Description"
+              value={description}
+              onChange={this.handleDescriptionChange}
+            />
+            <FormField
+              name="minBidPrice"
+              type="number"
+              label="Minimum bid price"
+              value={minBidPrice}
+              onChange={this.handleMinBidPriceChange}
+            />
+            <FormField
+              name="loanDuration"
+              type="number"
+              label="Loan Duration in Days"
+              value={loanDurationInDays}
+              onChange={this.handleLoandDurationChange}
+            />
+            <FormButton variant="contained" onClick={this.handleEditItem}>
+              Update
+            </FormButton>
+            <FormButton variant="contained" onClick={this.handleDeleteItem}>
+              Delete
+            </FormButton>
+          </Form>
+        </Half>
+        <Half>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Placed By</TableCell>
+                <TableCell align="right">Bid Amount</TableCell>
+                <TableCell align="right">Bid Date Time</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Form>
-          <FormField
-            name="username"
-            label="Placed By"
-            InputLabelProps={{ shrink: !!bid.username }}
-            disabled
-            value={bid.username}
-          />
-          <FormButton variant="contained" onClick={this.handleSubmit}>
-            Accept
-          </FormButton>
-        </Form>
-      </div>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell align="right">{row.bidamt}</TableCell>
+                  <TableCell align="right">{row.biddatetime}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <Form>
+            <FormField
+              name="username"
+              label="Placed By"
+              InputLabelProps={{ shrink: !!bid.username }}
+              disabled
+              value={bid.username}
+            />
+            <FormButton variant="contained" onClick={this.handleSubmit}>
+              Accept
+            </FormButton>
+          </Form>
+        </Half>
+      </Divider>
     );
   }
 }

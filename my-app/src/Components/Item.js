@@ -63,7 +63,8 @@ class Item extends Component {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Owner</TableCell>
+              <TableCell align="right">Name</TableCell>
               <TableCell align="right">Description</TableCell>
               <TableCell align="right">Min Bid Price</TableCell>
               <TableCell align="right">Loan Duration in Days</TableCell>
@@ -72,8 +73,9 @@ class Item extends Component {
           <TableBody>
             <TableRow>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.username}
               </TableCell>
+              <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.description}</TableCell>
               <TableCell align="right">{row.minbidprice}</TableCell>
               <TableCell align="right">{row.loandurationindays}</TableCell>
