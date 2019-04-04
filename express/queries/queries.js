@@ -531,14 +531,14 @@ const viewAllItemBid = (request, response) => {
 const viewAllMyBid = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
-  const query = 'SELECT * FROM Bids WHERE placedBySSN = $1';
+  const query = 'SELECT B1.bidSSN, B1.bidAmt, B1.bidDateTime, I.itemSSN, I.name, I.minBidPrice FROM Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn WHERE  placedBySSN = $1 and (B1.bidDateTime >= all (SELECT B2.bidDateTime FROM Bids B2 WHERE B2.placedBySSN = B1.placedBySSN))';
   const values = [placedBySSN];
 
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.send(results.rows);
   });
 };
 
@@ -627,4 +627,5 @@ module.exports = {
   getAllUserExceptSelf,
   updatePassword,
   viewAllGivenFeedback,
+  viewAllAvailableExceptMyItems,
 };
