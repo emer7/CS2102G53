@@ -38,13 +38,17 @@ class AcceptBid extends Component {
   }
 
   componentDidMount() {
+    this.fetchResources();
+  }
+
+  fetchResources = () => {
     const { item } = this.props;
     const { itemssn } = item;
 
     fetch(`/items/bid/view/all/item/${itemssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
-  }
+  };
 
   handleNameChange = event => {
     this.setState({ name: event.target.value });

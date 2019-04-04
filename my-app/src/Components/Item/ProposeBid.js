@@ -14,8 +14,6 @@ class ProposeBid extends Component {
     this.state = { bidamt: 0 };
   }
 
-  componentDidMount() {}
-
   handleBidChange = event => {
     this.setState({ bidamt: event.target.value });
   };

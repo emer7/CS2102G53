@@ -6,14 +6,10 @@ import { AccountForm } from "../AccountForm";
 
 class UpdateSecurity extends Component {
   constructor(props) {
-    super(props);
-    this.state = {};
-  }
+    const { user } = props;
 
-  componentDidMount() {
-    this.setState({
-      ...this.props.user
-    });
+    super(props);
+    this.state = { ...user };
   }
 
   handlePasswordChange = event => {

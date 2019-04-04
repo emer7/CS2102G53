@@ -12,7 +12,7 @@ class CurrentlyBorrow extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 2,
-        loanedByUsername: 'avc',
+        loanedByUsername: "avc"
       },
       {
         itemssn: 1,
@@ -21,7 +21,7 @@ class CurrentlyBorrow extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 1,
-        loanedByUsername: 'safd',
+        loanedByUsername: "safd"
       },
       {
         itemssn: 2,
@@ -30,7 +30,7 @@ class CurrentlyBorrow extends Component {
         minbidprice: 3,
         loandurationindays: 4,
         loanedbyuserssn: 0,
-        loanedByUsername: 'zx',
+        loanedByUsername: "zx"
       }
     ];
     super(props);
@@ -38,13 +38,17 @@ class CurrentlyBorrow extends Component {
   }
 
   componentDidMount() {
+    this.fetchResources();
+  }
+
+  fetchResources = () => {
     const { user } = this.props;
     const { userssn } = user;
 
     fetch(`/items/view/all_i_am_borrowing/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
-  }
+  };
 
   handleItemClick = item => {
     const { history, handleChosenItem } = this.props;

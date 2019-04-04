@@ -4,14 +4,10 @@ import { AccountForm } from "../AccountForm";
 
 class UpdateProfile extends Component {
   constructor(props) {
-    super(props);
-    this.state = {};
-  }
+    const { user } = props;
 
-  componentDidMount() {
-    this.setState({
-      ...this.props.user
-    });
+    super(props);
+    this.state = { ...user };
   }
 
   handleNameChange = event => {

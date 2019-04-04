@@ -28,13 +28,17 @@ class GiveFeedback extends Component {
   }
 
   componentDidMount() {
+    this.fetchResources();
+  }
+
+  fetchResources = () => {
     const { user } = this.props;
     const { userssn } = user;
 
     fetch(`/users/all/except/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
-  }
+  };
 
   handleItemClick = user => {
     const { userssn, username } = user;
