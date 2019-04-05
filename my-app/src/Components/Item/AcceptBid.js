@@ -87,12 +87,21 @@ class AcceptBid extends Component {
   };
 
   handleSubmit = () => {
-    const { item } = this.props;
-    const { itemssn } = item;
+    const { user, item, history } = this.props;
     const { bid } = this.state;
-    const bidObject = { itemssn, ...bid };
+    const { itemssn } = item;
+    const { userssn } = user;
+    const bidObject = { userssn, itemssn, ...bid };
 
-    console.log(bidObject);
+    fetch("/winning_bid/accept", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bidObject)
+    })
+      .then(res => res.json())
+      .then(() => history.push("/lend/available"));
   };
 
   render() {

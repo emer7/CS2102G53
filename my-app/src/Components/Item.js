@@ -54,7 +54,7 @@ class Item extends Component {
         </Table>
 
         {user.userssn == loanedbyuserssn ? (
-          <AcceptBid item={row} user={user} />
+          <AcceptBid item={row} user={user} history={history} />
         ) : (
           <ProposeBid item={row} user={user} history={history} />
         )}
