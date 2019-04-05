@@ -18,4 +18,7 @@ router.get('/bid/view/most_expensive', queries.viewMostExpensiveMinBid);
 // Route to create a new transaction and borrows when a winning bid is accepted
 router.post('/borrow/add', queries.addTransactionAndBorrows);
 
+// USED - // Route to update payment to paid
+router.put('/payment/update/paid', queries.updatePaymentToPaid);
+
 module.exports = router;

@@ -49,6 +49,9 @@ router.get('/bid/view/all/item/:itemSSN', queries.viewAllItemBid);
 router.get('/bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
 
 // Route to view item attributes
-router.get('view/:itemSSN', queries.viewItem);
+router.get('/view/:itemSSN', queries.viewItem);
+
+// USED - // Get all items where the bid is accepted but not borrowed yet
+router.get('/view/all/accepted/:userSSN', queries.viewAllBidAcceptedItem);
 
 module.exports = router;
