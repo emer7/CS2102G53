@@ -649,7 +649,22 @@ const viewAllBidAcceptedItem = (request, response) => {
   });
 };
 
+const deletePayment = (request, response) => {
+  const paymentssn = parseInt(request.params.paymentSSN, 10);
+
+  const query = 'DELETE FROM Payments WHERE paymentssn = $1';
+  const values = [paymentssn];
+
+  pool.query(query, values, (error) => {
+    if (error) {
+      throw error;
+    }
+    response.send(true);
+  });
+};
+
 module.exports = {
+  deletePayment,
   deleteUser,
   updateUser,
   createItem,

@@ -21,4 +21,7 @@ router.post('/borrow/add', queries.addTransactionAndBorrows);
 // USED - // Route to update payment to paid
 router.put('/payment/update/paid', queries.updatePaymentToPaid);
 
+// USED - // Route to delete payment
+router.delete('/payment/delete/:paymentSSN', queries.deletePayment);
+
 module.exports = router;
