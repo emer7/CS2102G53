@@ -191,7 +191,7 @@ RETURNS TRIGGER AS
 $$
 BEGIN
 DELETE FROM Transactions
-WHERE transactionssn = OLD.transactionssn;
+WHERE paymentssn = OLD.paymentssn;
 RETURN NEW;
 END;
 $$
