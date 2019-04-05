@@ -19,7 +19,7 @@ router.get('/search/all/:loanedByUserSSN', queries.searchAllItems);
 router.get('/view/all/loaned/not/:loanedByUserSSN', queries.searchAvailableItemsOfLoaner);
 
 // Route to return item
-router.put('/returned/:transactionSSN', queries.returnedItem);
+router.put('/return/:transactionSSN', queries.returnedItem);
 
 // Route to view the most borrowed item
 router.get('/search/most_borrowed', queries.viewMostBorrowedItem);

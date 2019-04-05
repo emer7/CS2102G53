@@ -196,7 +196,7 @@ const viewLentOutItems = (request, response) => {
 const viewAllItemsIAmBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
-  const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn ';
   const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
   const where = 'WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
@@ -532,7 +532,7 @@ const returnedItem = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`Transaction with transactionSSN ${transactionSSN} updated`);
+    response.send(true);
   });
 };
 

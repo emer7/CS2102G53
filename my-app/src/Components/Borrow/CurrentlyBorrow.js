@@ -56,10 +56,26 @@ class CurrentlyBorrow extends Component {
     history.push(`/item/${itemssn}`);
   };
 
+  handleReturn = (event, { transactionssn }) => {
+    event.stopPropagation();
+    fetch(`/items/return/${transactionssn}`, {
+      method: "PUT"
+    })
+      .then(res => res.json())
+      .then(() => this.fetchResources());
+  };
+
   render() {
     const { rows } = this.state;
 
-    return <ItemsTable rows={rows} handleItemClick={this.handleItemClick} />;
+    return (
+      <ItemsTable
+        rows={rows}
+        handleItemClick={this.handleItemClick}
+        returnButton
+        handleReturn={this.handleReturn}
+      />
+    );
   }
 }
 
