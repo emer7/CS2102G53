@@ -43,9 +43,7 @@ class CurrentlyBidding extends Component {
       body: JSON.stringify(bidDeleteObject)
     })
       .then(res => res.json())
-      .then(console.log);
-
-    this.fetchResources();
+      .then(() => this.fetchResources());
   };
 
   handleItemClick = item => {

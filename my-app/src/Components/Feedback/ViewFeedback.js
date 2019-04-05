@@ -70,9 +70,7 @@ class ViewFeedback extends Component {
       method: "DELETE"
     })
       .then(res => res.json())
-      .then(console.log);
-
-    this.fetchResources();
+      .then(() => this.fetchResources());
   };
 
   handleSubmit = () => {

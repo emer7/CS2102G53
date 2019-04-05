@@ -36,11 +36,10 @@ class UpdateSecurity extends Component {
       method: "DELETE"
     })
       .then(res => res.json())
-      .then(console.log);
-
-    handleLogin({ login: false });
-
-    history.push("/");
+      .then(() =>{
+        handleLogin({ login: false });
+        history.push("/");
+      });
   };
 
   render() {
