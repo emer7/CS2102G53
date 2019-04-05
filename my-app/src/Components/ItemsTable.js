@@ -3,7 +3,7 @@ import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
-export const ItemsTable = ({ rows, handleItemClick, deleteButton, handleDelete }) => {
+export const ItemsTable = ({ rows, handleItemClick, deleteButton, handleDelete, acceptButton, handleAccept }) => {
   return (
     <Table>
       <TableHead>
@@ -14,6 +14,7 @@ export const ItemsTable = ({ rows, handleItemClick, deleteButton, handleDelete }
           <TableCell align="right">Min Bid Price</TableCell>
           <TableCell align="right">Loan Duration in Days</TableCell>
           {deleteButton && <TableCell align="right">Delete</TableCell>}
+          {acceptButton && <TableCell align="right">Pay</TableCell>}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -30,6 +31,13 @@ export const ItemsTable = ({ rows, handleItemClick, deleteButton, handleDelete }
               <TableCell align="right">
                 <Button variant="contained" fullWidth onClick={event => handleDelete(event, row)}>
                   Delete
+                </Button>
+              </TableCell>
+            )}
+            {acceptButton && (
+              <TableCell align="right">
+                <Button variant="contained" fullWidth onClick={event => handleAccept(event, row)}>
+                  Pay
                 </Button>
               </TableCell>
             )}
