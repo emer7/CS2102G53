@@ -49,6 +49,7 @@ CREATE TABLE Feedbacks (
 CREATE TABLE Payments (
     paymentSSN SERIAL,
     paymentType VARCHAR(30) NOT NULL,
+    paidStatus BOOLEAN NOT NULL,
     paymentAmount INTEGER NOT NULL,
     madeByUserSSN INTEGER NOT NULL,
     receivedByUserSSN INTEGER NOT NULL,
@@ -81,9 +82,8 @@ CREATE TABLE Bids (
 
 CREATE TABLE Transactions (
     transactionSSN SERIAL,
-    itemSSN INTEGER NOT NULL,
+    itemSSN INTEGER,
     paymentSSN INTEGER NOT NULL,
-    paidStatus BOOLEAN NOT NULL,
     returnedStatus BOOLEAN NOT NULL,
     startDate DATE,
     endDate DATE,
@@ -93,7 +93,7 @@ CREATE TABLE Transactions (
 );
 
 CREATE TABLE Borrows (
-    itemSSN SERIAL,
+    itemSSN INTEGER,
     borrowerSSN INTEGER,
     transactionSSN INTEGER NOT NULL,
     PRIMARY KEY (itemSSN, borrowerSSN, transactionSSN),
@@ -103,13 +103,14 @@ CREATE TABLE Borrows (
 );
 
 CREATE TABLE WinningBids (
-    bidSSN SERIAL,
+    bidSSN INTEGER,
     itemSSN	INTEGER,
     PRIMARY KEY (bidSSN, itemSSN),
     FOREIGN KEY (bidSSN) REFERENCES Bids(bidSSN) ON DELETE CASCADE,
     FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN) ON DELETE CASCADE
 );
 
+-- Trigger 1
 CREATE OR REPLACE FUNCTION not_exist_loaner_upon_create_item()
 RETURNS TRIGGER AS
 $$
@@ -132,3 +133,54 @@ BEFORE INSERT OR UPDATE
 ON Items
 FOR EACH ROW
 EXECUTE PROCEDURE not_exist_loaner_upon_create_item();
+
+-- Trigger 2
+CREATE OR REPLACE FUNCTION not_exist_borrower_upon_borrow_item()
+RETURNS TRIGGER AS
+$$
+DECLARE count NUMERIC;
+BEGIN
+SELECT COUNT(*) INTO count
+FROM Borrowers
+WHERE NEW.borrowerssn = Borrowers.borrowerssn;
+IF count > 0 THEN
+RETURN NEW;
+ELSE
+INSERT INTO Borrowers VALUES (NEW.borrowerssn); RETURN NEW;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER borrower_item
+BEFORE INSERT OR UPDATE
+ON Borrows
+FOR EACH ROW
+EXECUTE PROCEDURE not_exist_borrower_upon_borrow_item();
+
+-- Trigger 3
+CREATE OR REPLACE FUNCTION update_payment_propagates_to_transaction()
+RETURNS TRIGGER AS
+$$
+DECLARE transactionrow Transactions%ROWTYPE;
+BEGIN
+SELECT * INTO transactionrow
+FROM Transactions
+WHERE NEW.paymentssn = Transactions.paymentssn;
+UPDATE Transactions
+SET startDate = CURRENT_DATE
+WHERE transactionssn = transactionrow.transactionssn;
+INSERT INTO
+Borrows (itemssn, borrowerssn, transactionssn)
+VALUES
+(transactionrow.itemssn, NEW.madebyuserssn, transactionrow.transactionssn);
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER borrower_item
+BEFORE UPDATE
+ON Payments
+FOR EACH ROW
+EXECUTE PROCEDURE update_payment_propagates_to_transaction();
