@@ -12,41 +12,16 @@ class Item extends Component {
   }
 
   componentDidMount() {
-    // fetch("/search/available/:loanedByUserSSN") // fix to get the item from db
-    //   .then(res => res.json())
-    //   .then(data => this.setState({ rows: data }));
-    // const rows = [
-    //   {
-    //     itemssn: 0,
-    //     name: 1,
-    //     description: 2,
-    //     minbidprice: 3,
-    //     loandurationindays: 4,
-    //     loanedbyuserssn: 2
-    //   },
-    //   {
-    //     itemssn: 1,
-    //     name: 2,
-    //     description: 2,
-    //     minbidprice: 3,
-    //     loandurationindays: 4,
-    //     loanedbyuserssn: 1
-    //   },
-    //   {
-    //     itemssn: 2,
-    //     name: 3,
-    //     description: 2,
-    //     minbidprice: 3,
-    //     loandurationindays: 4,
-    //     loanedbyuserssn: 0
-    //   }
-    // ];
-    const { item } = this.props;
-    // const { itemssn } = match.params;
-    // const row = rows.find(row => row.itemssn == itemssn);
-    const row = item || {};
-    this.setState({ row });
+    this.fetchResources();
   }
+
+  fetchResources = () => {
+    const { match } = this.props;
+    const { itemssn } = match.params;
+    fetch(`/items/view/${itemssn}`)
+      .then(res => res.json())
+      .then(data => this.setState({ row: data }));
+  };
 
   render() {
     const { row } = this.state;

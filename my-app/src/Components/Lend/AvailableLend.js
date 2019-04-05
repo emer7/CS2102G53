@@ -54,9 +54,8 @@ class AvailableLend extends Component {
   };
 
   handleItemClick = item => {
-    const { history, handleChosenItem } = this.props;
+    const { history } = this.props;
     const { itemssn } = item;
-    handleChosenItem(item);
     history.push(`/item/${itemssn}`);
   };
 

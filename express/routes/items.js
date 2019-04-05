@@ -45,10 +45,10 @@ router.delete('/bid/delete', queries.deleteBid);
 // USED - // Route to view all bids of an item
 router.get('/bid/view/all/item/:itemSSN', queries.viewAllItemBid);
 
-// Route to view all bids that the user has posted
+// USED - Route to view all bids that the user has posted
 router.get('/bid/view/all/user/:placedBySSN', queries.viewAllMyBid);
 
-// Route to view item attributes
+// USED - Route to view item attributes
 router.get('/view/:itemSSN', queries.viewItem);
 
 // USED - // Get all items where the bid is accepted but not borrowed yet

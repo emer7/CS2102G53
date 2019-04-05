@@ -27,7 +27,7 @@ class Borrow extends Component {
   }
 
   render() {
-    const { user, handleChosenItem } = this.props;
+    const { user } = this.props;
 
     return (
       <div>
@@ -40,19 +40,19 @@ class Borrow extends Component {
         <Route
           path="/borrow/available"
           render={props => (
-            <AvailableBorrow user={user} handleChosenItem={handleChosenItem} {...props} />
+            <AvailableBorrow user={user} {...props} />
           )}
         />
         <Route
           path="/borrow/bidding"
           render={props => (
-            <CurrentlyBidding user={user} handleChosenItem={handleChosenItem} {...props} />
+            <CurrentlyBidding user={user} {...props} />
           )}
         />
         <Route
           path="/borrow/current"
           render={props => (
-            <CurrentlyBorrow user={user} handleChosenItem={handleChosenItem} {...props} />
+            <CurrentlyBorrow user={user} {...props} />
           )}
         />
       </div>

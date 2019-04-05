@@ -109,14 +109,14 @@ const viewAllAvailableItems = (request, response) => {
 const viewItem = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  const query = 'SELECT * FROM Items WHERE itemSSN = $1';
+  const query = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username FROM Items I INNER JOIN Users U ON I.loanedbyuserssn = U.userssn WHERE itemSSN = $1';
   const values = [itemSSN];
 
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.send(results.rows[0]);
   });
 };
 

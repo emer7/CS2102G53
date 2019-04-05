@@ -37,13 +37,11 @@ const Right = styled.div``;
 class App extends Component {
   constructor(props) {
     const user = { userssn: 1, username: "a" };
-    const item = {};
 
     super(props);
     this.state = {
       isAuthenticated: false,
       user,
-      item
     };
   }
 
@@ -85,12 +83,8 @@ class App extends Component {
     this.setState({ user: transformedUser });
   };
 
-  handleChosenItem = item => {
-    this.setState({ item });
-  };
-
   render() {
-    const { user, item } = this.state;
+    const { user } = this.state;
 
     return (
       <Router>
@@ -118,7 +112,7 @@ class App extends Component {
             path="/lend"
             render={props =>
               this.state.isAuthenticated ? (
-                <Lend user={user} handleChosenItem={this.handleChosenItem} {...props} />
+                <Lend user={user} {...props} />
               ) : (
                 <Redirect to="/login" />
               )
@@ -128,7 +122,7 @@ class App extends Component {
             path="/borrow"
             render={props =>
               this.state.isAuthenticated ? (
-                <Borrow user={user} handleChosenItem={this.handleChosenItem} {...props} />
+                <Borrow user={user} {...props} />
               ) : (
                 <Redirect to="/login" />
               )
@@ -148,7 +142,7 @@ class App extends Component {
             path="/item/:itemssn"
             render={props =>
               this.state.isAuthenticated ? (
-                <Item user={user} item={item} {...props} />
+                <Item user={user} {...props} />
               ) : (
                 <Redirect to="/login" />
               )

@@ -32,7 +32,7 @@ class Lend extends Component {
   }
 
   render() {
-    const { user, handleChosenItem } = this.props;
+    const { user } = this.props;
 
     return (
       <div>
@@ -46,13 +46,13 @@ class Lend extends Component {
         <Route
           path="/lend/available"
           render={props => (
-            <AvailableLend user={user} handleChosenItem={handleChosenItem} {...props} />
+            <AvailableLend user={user} {...props} />
           )}
         />
         <Route
           path="/lend/current"
           render={props => (
-            <CurrentlyLend user={user} handleChosenItem={handleChosenItem} {...props} />
+            <CurrentlyLend user={user} {...props} />
           )}
         />
       </div>
