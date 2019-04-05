@@ -588,7 +588,7 @@ const viewAllItemBid = (request, response) => {
 
   const select = 'SELECT B1.bidSSN, B1.placedBySSN, B1.itemSSN, B1.bidAmt, B1.bidDateTime, U.username ';
   const from = 'FROM Bids B1 INNER JOIN Users U ON B1.placedBySSN = U.userSSN ';
-  const where = 'WHERE B1.itemSSN = $1 and ( B1.bidDateTime >= all ( SELECT B2.bidDateTime FROM Bids B2 WHERE B2.placedBySSN = B1.placedBySSN and B2.itemSSN = B1.itemSSN ))';
+  const where = 'WHERE B1.itemSSN = $1 and (B1.bidDateTime >= all (SELECT B2.bidDateTime FROM Bids B2 WHERE B2.placedBySSN = B1.placedBySSN and B2.itemSSN = B1.itemSSN))';
   const values = [itemSSN];
 
   const query = select + from + where;
@@ -606,10 +606,11 @@ const viewAllMyBid = (request, response) => {
 
   const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.NAME, I.minbidprice ';
   const from = 'FROM Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn ';
-  const where = 'WHERE B1.placedbyssn = $1 AND ( B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) AND itemSSN NOT IN (SELECT itemSSN FROM WinningBids)';
+  const where = 'WHERE B1.placedbyssn = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) ';
+  const and = 'AND NOT EXISTS (SELECT 1 FROM Transactions T INNER JOIN Payments P ON T.paymentssn = P.paymentssn WHERE T.returnedStatus = FALSE or P.paidstatus = FALSE AND T.itemssn = B1.itemssn)';
   const values = [placedBySSN];
 
-  const query = select + from + where;
+  const query = select + from + where + and;
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
