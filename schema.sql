@@ -111,7 +111,7 @@ CREATE TABLE WinningBids (
 );
 
 -- Trigger 1
-CREATE OR REPLACE FUNCTION not_exist_loaner_upon_create_item()
+CREATE OR REPLACE FUNCTION create_loaner_if_not_exists()
 RETURNS TRIGGER AS
 $$
 DECLARE count NUMERIC;
@@ -128,14 +128,14 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER loaner_item
+CREATE TRIGGER create_loaner_if_not_exists
 BEFORE INSERT OR UPDATE
 ON Items
 FOR EACH ROW
-EXECUTE PROCEDURE not_exist_loaner_upon_create_item();
+EXECUTE PROCEDURE create_loaner_if_not_exists();
 
 -- Trigger 2
-CREATE OR REPLACE FUNCTION not_exist_borrower_upon_borrow_item()
+CREATE OR REPLACE FUNCTION create_borrower_if_not_exists()
 RETURNS TRIGGER AS
 $$
 DECLARE count NUMERIC;
@@ -152,11 +152,11 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER borrower_item
+CREATE TRIGGER create_borrower_if_not_exists
 BEFORE INSERT OR UPDATE
 ON Borrows
 FOR EACH ROW
-EXECUTE PROCEDURE not_exist_borrower_upon_borrow_item();
+EXECUTE PROCEDURE create_borrower_if_not_exists();
 
 -- Trigger 3
 CREATE OR REPLACE FUNCTION update_payment_propagates_to_transaction()
@@ -179,8 +179,26 @@ END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER borrower_item
-BEFORE UPDATE
+CREATE TRIGGER update_payment_propagates_to_transaction
+AFTER UPDATE
 ON Payments
 FOR EACH ROW
 EXECUTE PROCEDURE update_payment_propagates_to_transaction();
+
+-- Trigger 4
+CREATE OR REPLACE FUNCTION delete_payment_propagates_to_transaction()
+RETURNS TRIGGER AS
+$$
+BEGIN
+DELETE FROM Transactions
+WHERE transactionssn = OLD.transactionssn;
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_payment_propagates_to_transaction
+AFTER DELETE
+ON Payments
+FOR EACH ROW
+EXECUTE PROCEDURE delete_payment_propagates_to_transaction();
