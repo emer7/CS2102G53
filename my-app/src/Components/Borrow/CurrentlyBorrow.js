@@ -45,7 +45,7 @@ class CurrentlyBorrow extends Component {
     const { user } = this.props;
     const { userssn } = user;
 
-    fetch(`/items/view/all_i_am_borrowing/${userssn}`)
+    fetch(`/items/view/all/borrowing/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
   };

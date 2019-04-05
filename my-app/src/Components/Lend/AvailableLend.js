@@ -48,7 +48,7 @@ class AvailableLend extends Component {
 
   fetchResources = () => {
     const { user } = this.props;
-    fetch(`/items/search/available/${user.userssn}`)
+    fetch(`/items/view/all/loaned/not/${user.userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
   };

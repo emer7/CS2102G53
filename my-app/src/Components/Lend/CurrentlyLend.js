@@ -50,7 +50,7 @@ class CurrentlyLend extends Component {
     const { user } = this.props;
     const { userssn } = user;
 
-    fetch(`/items/view/my_items_on_loan/${userssn}`)
+    fetch(`/items/view/all/loaned/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
   };

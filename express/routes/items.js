@@ -16,7 +16,7 @@ router.put('/update', queries.updateItem);
 router.get('/search/all/:loanedByUserSSN', queries.searchAllItems);
 
 // USED - // Route to search for items that are not loaned of loaner
-router.get('/search/available/:loanedByUserSSN', queries.searchAvailableItemsOfLoaner);
+router.get('/view/all/loaned/not/:loanedByUserSSN', queries.searchAvailableItemsOfLoaner);
 
 // Route to return item
 router.put('/returned/:transactionSSN', queries.returnedItem);
@@ -31,10 +31,10 @@ router.get('/view/all', queries.viewAllAvailableItems);
 router.get('/view/all/except/:loanedByUserSSN', queries.viewAllAvailableExceptMyItems);
 
 // USED - // Route to view all items that I am currently borrowing
-router.get('/view/all_i_am_borrowing/:borrowerSSN', queries.viewAllItemsIAmBorrowing);
+router.get('/view/all/borrowing/:borrowerSSN', queries.viewAllItemsIAmBorrowing);
 
 // USED - // Route to view all a loaner's items that are borrowed
-router.get('/view/my_items_on_loan/:loanedByUserSSN', queries.viewLentOutItems);
+router.get('/view/all/loaned/:loanedByUserSSN', queries.viewLentOutItems);
 
 // USED - // Route to create bid
 router.post('/bid/create', queries.createBid);
