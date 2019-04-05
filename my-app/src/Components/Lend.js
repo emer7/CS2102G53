@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import LendForm from "./Lend/LendForm";
 import AvailableLend from "./Lend/AvailableLend";
+import WaitingLend from "./Lend/WaitingLend.js";
 import CurrentlyLend from "./Lend/CurrentlyLend";
 
 const Navbar = styled.div`
@@ -39,6 +40,7 @@ class Lend extends Component {
         <Navbar>
           <Navlink to="/lend/form">Lend an Item</Navlink>
           <Navlink to="/lend/available">Currently Not Lent</Navlink>
+          <Navlink to="/lend/waiting">Waiting For Payment</Navlink>
           <Navlink to="/lend/current">Currently Lent</Navlink>
         </Navbar>
 
@@ -47,6 +49,12 @@ class Lend extends Component {
           path="/lend/available"
           render={props => (
             <AvailableLend user={user} {...props} />
+          )}
+        />
+        <Route
+          path="/lend/waiting"
+          render={props => (
+            <WaitingLend user={user} {...props} />
           )}
         />
         <Route

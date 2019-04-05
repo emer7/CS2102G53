@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { ItemsTable } from "../ItemsTable";
 
-class CurrentlyBorrow extends Component {
+class WaitingLend extends Component {
   constructor(props) {
     const rows = [
       {
@@ -45,7 +45,7 @@ class CurrentlyBorrow extends Component {
     const { user } = this.props;
     const { userssn } = user;
 
-    fetch(`/items/view/all/borrowing/${userssn}`)
+    fetch(`/items/view/all/waiting/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
   };
@@ -54,27 +54,11 @@ class CurrentlyBorrow extends Component {
     console.log(item);
   };
 
-  handleReturn = (event, { transactionssn }) => {
-    event.stopPropagation();
-    fetch(`/items/return/${transactionssn}`, {
-      method: "PUT"
-    })
-      .then(res => res.json())
-      .then(() => this.fetchResources());
-  };
-
   render() {
     const { rows } = this.state;
 
-    return (
-      <ItemsTable
-        rows={rows}
-        handleItemClick={this.handleItemClick}
-        returnButton
-        handleReturn={this.handleReturn}
-      />
-    );
+    return <ItemsTable rows={rows} handleItemClick={this.handleItemClick} />;
   }
 }
 
-export default CurrentlyBorrow;
+export default WaitingLend;

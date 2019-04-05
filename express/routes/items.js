@@ -27,7 +27,7 @@ router.get('/search/most_borrowed', queries.viewMostBorrowedItem);
 // Route to view all items
 router.get('/view/all', queries.viewAllAvailableItems);
 
-// USED - // Route to view all items
+// USED - // Route to view all items except one self item
 router.get('/view/all/except/:loanedByUserSSN', queries.viewAllAvailableExceptMyItems);
 
 // USED - // Route to view all items that I am currently borrowing
@@ -53,5 +53,8 @@ router.get('/view/:itemSSN', queries.viewItem);
 
 // USED - // Get all items where the bid is accepted but not borrowed yet
 router.get('/view/all/accepted/:userSSN', queries.viewAllBidAcceptedItem);
+
+// USED - // Get all items where the loaner is waiting for payment
+router.get('/view/all/waiting/:loanedByUserSSN', queries.viewAllWaitingPaymentItem);
 
 module.exports = router;

@@ -56,9 +56,7 @@ class CurrentlyLend extends Component {
   };
 
   handleItemClick = item => {
-    const { history } = this.props;
-    const { itemssn } = item;
-    history.push(`/item/${itemssn}`);
+    console.log(item);
   };
 
   render() {

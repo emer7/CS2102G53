@@ -96,7 +96,7 @@ const updateItem = (request, response) => {
 const viewAllAvailableItems = (request, response) => {
   const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
-  const where = 'where T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
+  const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   const query = select + from + where;
   pool.query(query, (error, results) => {
@@ -179,8 +179,8 @@ const viewLentOutItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
-  const where = 'WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE';
+  const from = 'FROM ((Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn ';
+  const where = 'WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE AND P.paidStatus = TRUE';
   const values = [loanedByUserSSN];
 
   const query = select + from + where;
@@ -188,7 +188,7 @@ const viewLentOutItems = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.send(results.rows);
   });
 };
 
@@ -698,6 +698,23 @@ const deletePayment = (request, response) => {
   });
 };
 
+const viewAllWaitingPaymentItem = (request, response) => {
+  const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
+
+  const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const from = 'FROM ((Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) INNER JOIN Transactions T on I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
+  const where = 'WHERE P.receivedByUserSSN = $1 AND P.paidstatus = false';
+  const values = [loanedByUserSSN];
+
+  const query = select + from + where;
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.send(results.rows);
+  });
+};
+
 module.exports = {
   deletePayment,
   deleteUser,
@@ -740,4 +757,5 @@ module.exports = {
   viewAllAvailableExceptMyItems,
   viewAllBidAcceptedItem,
   updatePaymentToPaid,
+  viewAllWaitingPaymentItem,
 };
