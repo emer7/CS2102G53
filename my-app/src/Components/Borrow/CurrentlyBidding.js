@@ -61,7 +61,7 @@ class CurrentlyBidding extends Component {
           <TableRow>
             <TableCell>Item Name</TableCell>
             <TableCell align="right">Minimum Bid Price</TableCell>
-            <TableCell align="right">Bid Amount</TableCell>
+            <TableCell align="right">Latest Bid Amount</TableCell>
             <TableCell align="right">Bid Date Time</TableCell>
             <TableCell align="right">Delete</TableCell>
           </TableRow>
