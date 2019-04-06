@@ -162,13 +162,18 @@ EXECUTE PROCEDURE create_borrower_if_not_exists();
 CREATE OR REPLACE FUNCTION update_payment_propagates_to_transaction()
 RETURNS TRIGGER AS
 $$
-DECLARE transactionrow Transactions%ROWTYPE;
+DECLARE
+transactionrow Transactions%ROWTYPE;
+duration INTEGER;
 BEGIN
 SELECT * INTO transactionrow
 FROM Transactions
 WHERE NEW.paymentssn = Transactions.paymentssn;
+SELECT I.loandurationindays INTO duration
+FROM Items I
+WHERE I.itemssn = transactionrow.itemssn;
 UPDATE Transactions
-SET startDate = CURRENT_DATE
+SET startDate = CURRENT_DATE, endDate = CURRENT_DATE + duration
 WHERE transactionssn = transactionrow.transactionssn;
 INSERT INTO
 Borrows (itemssn, borrowerssn, transactionssn)
