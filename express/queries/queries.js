@@ -606,7 +606,7 @@ const viewAllMyBid = (request, response) => {
   const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.NAME, I.minbidprice ';
   const from = 'FROM Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn ';
   const where = 'WHERE B1.placedbyssn = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) ';
-  const and = 'AND NOT EXISTS (SELECT 1 FROM Transactions T INNER JOIN Payments P ON T.paymentssn = P.paymentssn WHERE T.returnedStatus = FALSE or P.paidstatus = FALSE AND T.itemssn = B1.itemssn)';
+  const and = 'AND NOT EXISTS (SELECT 1 FROM Transactions T INNER JOIN Payments P ON T.paymentssn = P.paymentssn WHERE (T.returnedStatus = FALSE OR P.paidstatus = FALSE) AND T.itemssn = B1.itemssn)';
   const values = [placedBySSN];
 
   const query = select + from + where + and;
