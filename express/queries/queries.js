@@ -129,7 +129,7 @@ const viewItem = (request, response) => {
 const viewAllAvailableExceptMyItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedByUserSSN <> $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
@@ -213,7 +213,7 @@ const viewAllItemsIAmBorrowing = (request, response) => {
 const searchAvailableItemsOfLoaner = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
   const values = [loanedByUserSSN];
