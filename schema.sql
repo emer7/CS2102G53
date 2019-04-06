@@ -97,7 +97,7 @@ CREATE TABLE Borrows (
     borrowerSSN INTEGER,
     transactionSSN INTEGER NOT NULL,
     PRIMARY KEY (itemSSN, borrowerSSN, transactionSSN),
-    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN),
+    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN) ON DELETE CASCADE,
     FOREIGN KEY (borrowerSSN) REFERENCES Borrowers(borrowerSSN) ON DELETE CASCADE,
     FOREIGN KEY (transactionSSN) REFERENCES Transactions(transactionSSN) ON DELETE CASCADE
 );
@@ -191,19 +191,24 @@ FOR EACH ROW
 EXECUTE PROCEDURE update_payment_propagates_to_transaction();
 
 -- Trigger 4
-CREATE OR REPLACE FUNCTION delete_payment_propagates_to_transaction()
+CREATE OR REPLACE FUNCTION delete_payment_propagates_to_bids()
 RETURNS TRIGGER AS
 $$
+DECLARE
+transactionrow Transactions%ROWTYPE;
 BEGIN
-DELETE FROM Transactions
-WHERE paymentssn = OLD.paymentssn;
-RETURN NEW;
+SELECT * INTO transactionrow
+FROM Transactions
+WHERE OLD.paymentssn = Transactions.paymentssn;
+DELETE FROM Bids
+WHERE itemssn = transactionrow.itemssn AND placedbyssn = OLD.madebyuserssn;
+RETURN OLD;
 END;
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER delete_payment_propagates_to_transaction
-AFTER DELETE
+CREATE TRIGGER delete_payment_propagates_to_bids
+BEFORE DELETE
 ON Payments
 FOR EACH ROW
-EXECUTE PROCEDURE delete_payment_propagates_to_transaction();
+EXECUTE PROCEDURE delete_payment_propagates_to_bids();

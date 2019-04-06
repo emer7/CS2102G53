@@ -554,7 +554,7 @@ const createBid = (request, response) => {
 const deleteBid = (request, response) => {
   const { itemssn, userssn } = request.body;
 
-  const query = 'DELETE FROM Bids WHERE itemSSN = $1 and placedBySSN = $2';
+  const query = 'DELETE FROM Bids WHERE itemSSN = $1 AND placedBySSN = $2';
   const values = [itemssn, userssn];
 
   pool.query(query, values, (error) => {

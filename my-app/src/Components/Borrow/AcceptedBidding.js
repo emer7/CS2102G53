@@ -91,6 +91,8 @@ class AcceptedBidding extends Component {
         handleItemClick={this.handleItemClick}
         acceptButton
         handleAccept={this.handleAccept}
+        deleteButton
+        handleDelete={this.handleDelete}
       />
     );
   }
