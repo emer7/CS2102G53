@@ -146,7 +146,8 @@ WHERE NEW.borrowerssn = Borrowers.borrowerssn;
 IF count > 0 THEN
 RETURN NEW;
 ELSE
-INSERT INTO Borrowers VALUES (NEW.borrowerssn); RETURN NEW;
+INSERT INTO Borrowers VALUES (NEW.borrowerssn);
+RETURN NEW;
 END IF;
 END;
 $$
@@ -212,3 +213,30 @@ BEFORE DELETE
 ON Payments
 FOR EACH ROW
 EXECUTE PROCEDURE delete_payment_propagates_to_bids();
+
+-- Trigger 5
+CREATE OR REPLACE FUNCTION duplicate_item_after_return()
+RETURNS TRIGGER AS
+$$
+DECLARE
+itemrow Items%ROWTYPE;
+BEGIN
+IF NEW.returnedStatus = TRUE THEN
+SELECT * INTO itemrow
+FROM Items
+WHERE NEW.itemssn = Items.itemssn;
+INSERT INTO Items (loanedbyuserssn, name , description , minBidPrice , loanDurationInDays)
+VALUES (itemrow.loanedbyuserssn, itemrow.name, itemrow.description, itemrow.minBidPrice, itemrow.loanDurationInDays);
+RETURN NULL;
+ELSE
+RETURN NULL;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER duplicate_item_after_return
+AFTER UPDATE
+ON Transactions
+FOR EACH ROW
+EXECUTE PROCEDURE duplicate_item_after_return();
