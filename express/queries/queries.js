@@ -131,7 +131,7 @@ const viewAllAvailableExceptMyItems = (request, response) => {
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
-  const where = 'WHERE I.loanedByUserSSN <> $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
+  const where = 'WHERE I.loanedByUserSSN <> $1 AND T.transactionSSN IS NULL';
   const values = [loanedByUserSSN];
 
   const query = select + from + where;
@@ -215,7 +215,7 @@ const searchAvailableItemsOfLoaner = (request, response) => {
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
-  const where = 'WHERE I.loanedByUserSSN = $1 AND (T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN))';
+  const where = 'WHERE I.loanedByUserSSN = $1 AND T.transactionSSN IS NULL';
   const values = [loanedByUserSSN];
 
   const query = select + from + where;
@@ -604,9 +604,9 @@ const viewAllMyBid = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
   const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.NAME, I.minbidprice ';
-  const from = 'FROM Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn ';
+  const from = 'FROM (Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn) LEFT OUTER JOIN Transactions T ON I.itemssn = T.itemssn ';
   const where = 'WHERE B1.placedbyssn = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) ';
-  const and = 'AND NOT EXISTS (SELECT 1 FROM Transactions T INNER JOIN Payments P ON T.paymentssn = P.paymentssn WHERE (T.returnedStatus = FALSE OR P.paidstatus = FALSE) AND T.itemssn = B1.itemssn)';
+  const and = 'AND T.transactionssn IS NULL';
   const values = [placedBySSN];
 
   const query = select + from + where + and;
