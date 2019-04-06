@@ -18,6 +18,9 @@ router.get('/view/:itemSSN', queries.viewItem);
 // // Route to view all items
 // router.get('/view/all', queries.viewAllAvailableItems);
 
+// Route to view all items under specific search query
+router.get('/view/all/except/:loanedByUserSSN/with/:searchQuery', queries.viewAllWithSearchQuery);
+
 // Route to view all items except one self item
 router.get('/view/all/except/:loanedByUserSSN', queries.viewAllAvailableExceptMyItems);
 
