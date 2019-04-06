@@ -126,7 +126,6 @@ const viewItem = (request, response) => {
 };
 
 // View all available items except mine
-// T.transactionSSN = NULL union is not in T.returnedStatus = FALSE
 const viewAllAvailableExceptMyItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
@@ -197,7 +196,7 @@ const viewAllItemsIAmBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
   const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn ';
-  const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) LEFT OUTER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
+  const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) INNER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
   const where = 'WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
 
