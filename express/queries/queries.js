@@ -58,7 +58,7 @@ const updateUser = (request, response) => {
 };
 
 // Creates new item
-const createItem = (request, response) => {
+const itemCreate = (request, response) => {
   const {
     userssn, name, description, minbidprice, loandurationindays,
   } = request.body;
@@ -76,7 +76,7 @@ const createItem = (request, response) => {
 };
 
 // Updates an existing item
-const updateItem = (request, response) => {
+const itemUpdate = (request, response) => {
   const {
     itemssn, userssn, name, description, minbidprice, loandurationindays,
   } = request.body;
@@ -93,7 +93,7 @@ const updateItem = (request, response) => {
 };
 
 // View all available items
-const viewAllAvailableItems = (request, response) => {
+const itemViewAll = (request, response) => {
   const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
   const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
@@ -108,7 +108,7 @@ const viewAllAvailableItems = (request, response) => {
 };
 
 // Views attributes of an item
-const viewItem = (request, response) => {
+const itemView = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
   const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
@@ -126,7 +126,7 @@ const viewItem = (request, response) => {
 };
 
 // View all available items except mine
-const viewAllAvailableExceptMyItems = (request, response) => {
+const viewAllExcept = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
@@ -144,7 +144,7 @@ const viewAllAvailableExceptMyItems = (request, response) => {
 };
 
 // Deletes an exisiting item
-const deleteItem = (request, response) => {
+const itemDelete = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
   const query = 'DELETE FROM Items WHERE itemSSN = $1';
@@ -159,7 +159,7 @@ const deleteItem = (request, response) => {
 };
 
 // Loaner wants to search for all the items under specific userSSN
-const searchAllItems = (request, response) => {
+const viewAllItems = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const query = 'SELECT * FROM Items WHERE loanedByUserSSN = $1';
@@ -174,7 +174,7 @@ const searchAllItems = (request, response) => {
 };
 
 // View all your items that are currently lent out
-const viewLentOutItems = (request, response) => {
+const viewAllLoaned = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
@@ -192,7 +192,7 @@ const viewLentOutItems = (request, response) => {
 };
 
 // Borrower wants to view all items that are currently borrowed by him/her
-const viewAllItemsIAmBorrowing = (request, response) => {
+const viewAllBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
   const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn ';
@@ -210,7 +210,7 @@ const viewAllItemsIAmBorrowing = (request, response) => {
 };
 
 // Loaner wants to search for items that are not loaned yet
-const searchAvailableItemsOfLoaner = (request, response) => {
+const viewAllLoanedNot = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
@@ -473,7 +473,7 @@ const viewAllTransactionStatus = (request, response) => {
 };
 
 // View the most borrowed item and its user
-const viewMostBorrowedItem = (request, response) => {
+const viewMostBorrowed = (request, response) => {
   const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed desc';
 
   pool.query(query, (error, results) => {
@@ -521,7 +521,7 @@ const viewMostPositiveUser = (request, response) => {
 };
 
 // Change loan status of item when item has been returned
-const returnedItem = (request, response) => {
+const itemReturn = (request, response) => {
   const transactionSSN = parseInt(request.params.transactionSSN, 10);
 
   const query = 'UPDATE Transactions SET returnedStatus = TRUE WHERE transactionSSN = $1';
@@ -536,7 +536,7 @@ const returnedItem = (request, response) => {
 };
 
 // Create a new bid
-const createBid = (request, response) => {
+const bidCreate = (request, response) => {
   const { userssn, itemssn, bidamt } = request.body;
 
   const query = 'INSERT INTO Bids (placedBySSN, itemSSN, bidAmt, bidDateTime) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)';
@@ -551,7 +551,7 @@ const createBid = (request, response) => {
 };
 
 // Delete an existing bid
-const deleteBid = (request, response) => {
+const bidDelete = (request, response) => {
   const { itemssn, userssn } = request.body;
 
   const query = 'DELETE FROM Bids WHERE itemSSN = $1 AND placedBySSN = $2';
@@ -582,7 +582,7 @@ const updateBid = (request, response) => {
 };
 
 // View all bids of an item
-const viewAllItemBid = (request, response) => {
+const bidViewAllItem = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
   const select = 'SELECT B1.bidSSN, B1.placedBySSN, B1.itemSSN, B1.bidAmt, B1.bidDateTime, U.username ';
@@ -600,7 +600,7 @@ const viewAllItemBid = (request, response) => {
 };
 
 // View all my bids that I have placed that has not been accepted as a winning bid
-const viewAllMyBid = (request, response) => {
+const bidViewAllUser = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
   const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.NAME, I.minbidprice ';
@@ -666,7 +666,7 @@ const getAllUserExceptSelf = (request, response) => {
   });
 };
 
-const viewAllBidAcceptedItem = (request, response) => {
+const viewAllAccepted = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
 
   const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, P.paymentssn, T.transactionssn ';
@@ -697,7 +697,7 @@ const deletePayment = (request, response) => {
   });
 };
 
-const viewAllWaitingPaymentItem = (request, response) => {
+const viewAllWaiting = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
@@ -714,7 +714,7 @@ const viewAllWaitingPaymentItem = (request, response) => {
   });
 };
 
-const viewAllWithSearchQuery = (request, response) => {
+const viewAllExceptWith = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
   const { searchQuery } = request.params;
 
@@ -736,15 +736,15 @@ module.exports = {
   deletePayment,
   deleteUser,
   updateUser,
-  createItem,
-  viewAllAvailableItems,
-  deleteItem,
-  updateItem,
-  viewItem,
-  viewAllItemsIAmBorrowing,
-  searchAllItems,
-  searchAvailableItemsOfLoaner,
-  viewLentOutItems,
+  itemCreate,
+  itemViewAll,
+  itemDelete,
+  itemUpdate,
+  itemView,
+  viewAllBorrowing,
+  viewAllItems,
+  viewAllLoanedNot,
+  viewAllLoaned,
   searchBorrower,
   searchTransactions,
   acceptWinningBid,
@@ -756,24 +756,24 @@ module.exports = {
   viewGoodFeedbacks,
   viewBadFeedbacks,
   viewAllTransactionStatus,
-  viewMostBorrowedItem,
+  viewMostBorrowed,
   viewMostExpensiveMinBid,
   viewMostActiveBorrower,
   viewMostPositiveUser,
-  returnedItem,
-  createBid,
-  deleteBid,
+  itemReturn,
+  bidCreate,
+  bidDelete,
   updateBid,
   viewWinningBid,
   createPayment,
-  viewAllItemBid,
-  viewAllMyBid,
+  bidViewAllItem,
+  bidViewAllUser,
   getAllUserExceptSelf,
   updatePassword,
   viewAllGivenFeedback,
-  viewAllAvailableExceptMyItems,
-  viewAllBidAcceptedItem,
+  viewAllExcept,
+  viewAllAccepted,
   updatePaymentToPaid,
-  viewAllWaitingPaymentItem,
-  viewAllWithSearchQuery,
+  viewAllWaiting,
+  viewAllExceptWith,
 };
