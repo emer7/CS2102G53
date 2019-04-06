@@ -71,7 +71,7 @@ class AcceptBid extends Component {
   };
 
   handleEditItem = () => {
-    const { user, item } = this.props;
+    const { user, item, updateItemDetail } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
 
@@ -83,7 +83,7 @@ class AcceptBid extends Component {
       body: JSON.stringify({ ...this.state, itemssn, userssn })
     })
       .then(res => res.json())
-      .then(console.log);
+      .then(() => updateItemDetail());
   };
 
   handleSubmit = () => {
