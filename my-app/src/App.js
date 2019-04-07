@@ -133,55 +133,59 @@ class App extends Component {
             </Right>
           )}
         </Navbar>
-
-        {this.state.isAuthenticated && (
-          <Divider>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Most Active Borrower</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mostActiveRows.map(row => (
-                  <TableRow key={row.username} hover>
-                    <TableCell align="center">{row.username}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Most Popular Loaner</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mostPopularRows.map(row => (
-                  <TableRow key={row.username} hover>
-                    <TableCell align="center">{row.username}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Most Positive Feedback User</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mostFeedbackRows.map(row => (
-                  <TableRow key={row.username} hover>
-                    <TableCell align="center">{row.username}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Divider>
-        )}
-
         <Switch>
+          <Route
+            exact
+            path="/"
+            render={() =>
+              this.state.isAuthenticated && (
+                <Divider>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Most Active Borrower</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {mostActiveRows.map(row => (
+                        <TableRow key={row.username} hover>
+                          <TableCell align="center">{row.username}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Most Popular Loaner</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {mostPopularRows.map(row => (
+                        <TableRow key={row.username} hover>
+                          <TableCell align="center">{row.username}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Most Positive Feedback User</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {mostFeedbackRows.map(row => (
+                        <TableRow key={row.username} hover>
+                          <TableCell align="center">{row.username}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Divider>
+              )
+            }
+          />
           <Route
             path="/lend"
             render={props =>
