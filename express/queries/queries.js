@@ -243,17 +243,32 @@ const searchBorrower = (request, response) => {
 };
 
 // Loaner wants to check all transactions for all his items
-const searchTransactions = (request, response) => {
+const transactionViewAllLoaned = (request, response) => {
   const loanerSSN = parseInt(request.params.loanerSSN, 10);
 
-  const query = 'SELECT itemSSN, transactionSSN FROM Borrows WHERE itemSSN IN (SELECT itemSSN FROM Items WHERE loanerSSN = $1';
+  const query = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description FROM ((Borrows B INNER JOIN Transactions T ON B.transactionssn = T.transactionssn) INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON B.borrowerssn = U.userssn WHERE B.itemSSN IN (SELECT itemSSN FROM Items WHERE loanedByUserSSN = $1)';
   const values = [loanerSSN];
 
   pool.query(query, values, (error, results) => {
     if (error) {
       throw error;
     }
-    response.status(200).json(results.rows);
+    response.send(results.rows);
+  });
+};
+
+// View all transactions status of all items he/she has borrowed
+const transactionViewAllBorrowed = (request, response) => {
+  const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
+
+  const query = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description FROM ((Borrows B NATURAL JOIN Transactions T) INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn WHERE B.borrowerSSN = $1';
+  const values = [borrowerSSN];
+
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.send(results.rows);
   });
 };
 
@@ -295,7 +310,7 @@ const acceptWinningBid = (request, response) => {
 };
 
 // Update a payment to pay
-const updatePaymentToPaid = (request, response) => {
+const paymentUpdateToPaid = (request, response) => {
   const { paymentssn } = request.body;
 
   const query = 'UPDATE Payments SET paidstatus = TRUE WHERE paymentssn = $1';
@@ -457,20 +472,7 @@ const viewBadFeedbacks = (request, response) => {
   });
 };
 
-// View all transactions status of all items he/she has borrowed
-const viewAllTransactionStatus = (request, response) => {
-  const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
-  const query = 'SELECT B.itemSSN, T.returnedStatus FROM Borrows NATURAL JOIN Transactions WHERE borrowerSSN = $1';
-  const values = [borrowerSSN];
-
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
-};
 
 // View the most borrowed item and its user
 const viewMostBorrowed = (request, response) => {
@@ -683,7 +685,7 @@ const viewAllAccepted = (request, response) => {
   });
 };
 
-const deletePayment = (request, response) => {
+const paymentDelete = (request, response) => {
   const paymentssn = parseInt(request.params.paymentSSN, 10);
 
   const query = 'DELETE FROM Payments WHERE paymentssn = $1';
@@ -733,7 +735,7 @@ const viewAllExceptWith = (request, response) => {
 };
 
 module.exports = {
-  deletePayment,
+  paymentDelete,
   deleteUser,
   updateUser,
   itemCreate,
@@ -746,7 +748,8 @@ module.exports = {
   viewAllLoanedNot,
   viewAllLoaned,
   searchBorrower,
-  searchTransactions,
+  transactionViewAllLoaned,
+  transactionViewAllBorrowed,
   acceptWinningBid,
   addTransactionAndBorrows,
   createFeedback,
@@ -755,7 +758,6 @@ module.exports = {
   viewAllFeedback,
   viewGoodFeedbacks,
   viewBadFeedbacks,
-  viewAllTransactionStatus,
   viewMostBorrowed,
   viewMostExpensiveMinBid,
   viewMostActiveBorrower,
@@ -773,7 +775,7 @@ module.exports = {
   viewAllGivenFeedback,
   viewAllExcept,
   viewAllAccepted,
-  updatePaymentToPaid,
+  paymentUpdateToPaid,
   viewAllWaiting,
   viewAllExceptWith,
 };

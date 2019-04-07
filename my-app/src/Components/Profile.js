@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import UpdateProfile from "./Profile/UpdateProfile";
 import UpdateSecurity from "./Profile/UpdateSecurity";
+import History from "./Profile/History";
 
 const Navbar = styled.div`
   padding: 10px;
@@ -33,13 +34,20 @@ class Profile extends Component {
         <Navbar>
           <Navlink to="/profile/update">Update Profile</Navlink>
           <Navlink to="/profile/security">Update Security</Navlink>
+          <Navlink to="/profile/history">Transaction History</Navlink>
         </Navbar>
 
-        <Route path="/profile/update" render={props => <UpdateProfile user={user} fetchUserDetail={fetchUserDetail} {...props} />} />
+        <Route
+          path="/profile/update"
+          render={props => (
+            <UpdateProfile user={user} fetchUserDetail={fetchUserDetail} {...props} />
+          )}
+        />
         <Route
           path="/profile/security"
           render={props => <UpdateSecurity user={user} handleLogin={handleLogin} {...props} />}
         />
+        <Route path="/profile/history" render={props => <History user={user} {...props} />} />
       </div>
     );
   }
