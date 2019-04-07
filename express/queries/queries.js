@@ -46,29 +46,29 @@ const acceptWinningBid = (request, response) => {
   pool.query(queryWinningBid, valuesWinningBid, (errorWinningBids) => {
     if (errorWinningBids) {
       response.send({ message: errorWinningBids.message });
-    }
+    } else {
+      const queryPayment = 'INSERT INTO Payments (paymentType, paidStatus, paymentAmount, madeByUserSSN, receivedByUserSSN) VALUES ($1, FALSE, $2, $3, $4) RETURNING *';
+      const valuesPayment = ['AUTOMATIC', bidamt, placedbyssn, userssn];
 
-    const queryPayment = 'INSERT INTO Payments (paymentType, paidStatus, paymentAmount, madeByUserSSN, receivedByUserSSN) VALUES ($1, FALSE, $2, $3, $4) RETURNING *';
-    const valuesPayment = ['AUTOMATIC', bidamt, placedbyssn, userssn];
-
-    pool.query(queryPayment, valuesPayment, (errorPayments, resultsPayments) => {
-      if (errorPayments) {
-        response.send({ message: errorPayments.message });
-      }
-
-      const { paymentssn } = resultsPayments.rows[0];
-
-      const queryTransactions = 'INSERT INTO Transactions (itemSSN, paymentSSN, returnedStatus) VALUES ($1, $2, FALSE)';
-      const valuesTransactions = [itemssn, paymentssn];
-
-      pool.query(queryTransactions, valuesTransactions, (errorTransactions) => {
-        if (errorTransactions) {
-          response.send({ message: errorTransactions.message });
+      pool.query(queryPayment, valuesPayment, (errorPayments, resultsPayments) => {
+        if (errorPayments) {
+          response.send({ message: errorPayments.message });
         } else {
-          response.send(true);
+          const { paymentssn } = resultsPayments.rows[0];
+
+          const queryTransactions = 'INSERT INTO Transactions (itemSSN, paymentSSN, returnedStatus) VALUES ($1, $2, FALSE)';
+          const valuesTransactions = [itemssn, paymentssn];
+
+          pool.query(queryTransactions, valuesTransactions, (errorTransactions) => {
+            if (errorTransactions) {
+              response.send({ message: errorTransactions.message });
+            } else {
+              response.send(true);
+            }
+          });
         }
       });
-    });
+    }
   });
 };
 
