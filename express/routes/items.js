@@ -22,28 +22,28 @@ router.delete('/delete/:itemSSN', queries.itemDelete);
 // router.get('/view/all', queries.viewAll);
 
 // // Route to search for all items under specific UserSSN
-// router.get('/view/all/:loanedByUserSSN', queries.viewAllBy);
+// router.get('/view/all/:loanedBySSN', queries.viewAllBy);
 
 // Route to view all items under specific search query
-router.get('/view/all/except/:loanedByUserSSN/with/:searchQuery', queries.viewAllExceptWith);
+router.get('/view/all/except/:loanedBySSN/with/:searchQuery', queries.viewAllExceptWith);
 
 // Route to view all items except one self item
-router.get('/view/all/except/:loanedByUserSSN', queries.viewAllExcept);
+router.get('/view/all/except/:loanedBySSN', queries.viewAllExcept);
 
 // Route to search for items that are not loaned of loaner
-router.get('/view/all/loaned/not/:loanedByUserSSN', queries.viewAllLoanedNot);
+router.get('/view/all/loaned/not/:loanedBySSN', queries.viewAllLoanedNot);
 
 // Route to view all items that I am currently borrowing
 router.get('/view/all/borrowing/:borrowerSSN', queries.viewAllBorrowing);
 
 // Route to view all a loaner's items that are borrowed
-router.get('/view/all/loaned/:loanedByUserSSN', queries.viewAllLoaned);
+router.get('/view/all/loaned/:loanedBySSN', queries.viewAllLoaned);
 
 // Route to get all items where the bid is accepted but not borrowed yet
 router.get('/view/all/accepted/:userSSN', queries.viewAllAccepted);
 
 // Route to get all items where the loaner is waiting for payment
-router.get('/view/all/waiting/:loanedByUserSSN', queries.viewAllWaiting);
+router.get('/view/all/waiting/:loanedBySSN', queries.viewAllWaiting);
 
 // // Route to view the most borrowed item
 // router.get('/view/mostBorrowed', queries.viewMostBorrowed);

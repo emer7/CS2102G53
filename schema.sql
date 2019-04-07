@@ -60,13 +60,13 @@ CREATE TABLE Payments (
 
 CREATE TABLE Items (
     itemSSN SERIAL,
-    loanedByUserSSN INTEGER NOT NULL,
+    loanedBySSN INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     minBidPrice INTEGER NOT NULL,
     loanDurationInDays INTEGER,
     PRIMARY KEY (itemSSN),
-    FOREIGN KEY (loanedByUserSSN ) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE
+    FOREIGN KEY (loanedBySSN ) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE
 );
 
 CREATE TABLE Bids (
@@ -118,11 +118,11 @@ DECLARE count NUMERIC;
 BEGIN
 SELECT COUNT(*) INTO count
 FROM Loaners
-WHERE NEW.loanedbyuserssn = Loaners.loanerssn;
+WHERE NEW.loanedbyssn = Loaners.loanerssn;
 IF count > 0 THEN
 RETURN NEW;
 ELSE
-INSERT INTO Loaners VALUES (NEW.loanedbyuserssn);
+INSERT INTO Loaners VALUES (NEW.loanedbyssn);
 RETURN NEW;
 END IF;
 END;
@@ -226,8 +226,8 @@ IF NEW.returnedStatus = TRUE THEN
 SELECT * INTO itemrow
 FROM Items
 WHERE NEW.itemssn = Items.itemssn;
-INSERT INTO Items (loanedbyuserssn, name , description , minBidPrice , loanDurationInDays)
-VALUES (itemrow.loanedbyuserssn, itemrow.name, itemrow.description, itemrow.minBidPrice, itemrow.loanDurationInDays);
+INSERT INTO Items (loanedbyssn, name , description , minBidPrice , loanDurationInDays)
+VALUES (itemrow.loanedbyssn, itemrow.name, itemrow.description, itemrow.minBidPrice, itemrow.loanDurationInDays);
 RETURN NULL;
 ELSE
 RETURN NULL;

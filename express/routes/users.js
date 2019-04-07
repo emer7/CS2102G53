@@ -19,7 +19,7 @@ router.put('/update', queries.updateUser);
 router.put('/update/password', queries.updatePassword);
 
 // Route to find all current borrowers of his/her item
-router.get('/search/borrowers/:loanedByUserSSN', queries.searchBorrower);
+router.get('/search/borrowers/:loanedBySSN', queries.searchBorrower);
 
 // Route to find the most active borrower
 router.get('/search/most_active', queries.viewMostActiveBorrower);
