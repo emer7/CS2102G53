@@ -35,7 +35,7 @@ class Borrow extends Component {
         <Navbar>
           <Navlink to="/borrow/available">Available to Borrow</Navlink>
           <Navlink to="/borrow/bidding">Currently Bidding</Navlink>
-          <Navlink to="/borrow/accepted">Payment Pending</Navlink>
+          <Navlink to="/borrow/accepted">Waiting For Payment</Navlink>
           <Navlink to="/borrow/current">Currently Borrowed</Navlink>
         </Navbar>
 

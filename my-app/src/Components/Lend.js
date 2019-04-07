@@ -34,7 +34,7 @@ class Lend extends Component {
       <div>
         <Navbar>
           <Navlink to="/lend/form">Lend an Item</Navlink>
-          <Navlink to="/lend/available">Currently Not Lent</Navlink>
+          <Navlink to="/lend/available">Available to Lent</Navlink>
           <Navlink to="/lend/waiting">Waiting For Payment</Navlink>
           <Navlink to="/lend/current">Currently Lent</Navlink>
         </Navbar>
