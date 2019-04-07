@@ -48,6 +48,9 @@ router.get('/feedback/view/all/:receivedByUserSSN', queries.viewAllFeedback);
 // USED - // Route to view all feedbacks given by a user
 router.get('/feedback/view/all/given/:givenByUserSSN', queries.viewAllGivenFeedback);
 
+// Route to get most popular loaner
+router.get('/view/loaner/most_popular', queries.viewMostPopularLoaner);
+
 // USED - 
 router.get('/detail/:userSSN', (request, response) => {
   const { userSSN } = request.params;
