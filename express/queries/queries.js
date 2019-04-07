@@ -352,8 +352,8 @@ const viewAllBorrowing = (request, response) => {
 const viewAllLoaned = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM ((Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn ';
+  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
+  const from = 'FROM ((((Items I INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn ) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
   const where = 'WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE AND P.paidStatus = TRUE';
   const values = [loanedByUserSSN];
 
