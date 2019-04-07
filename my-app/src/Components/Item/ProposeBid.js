@@ -3,12 +3,6 @@ import React, { Component } from "react";
 import { FormField, FormButton, Form } from "../Constants";
 
 class ProposeBid extends Component {
-  // read bid on mount
-  // if there is bid, then update not post
-  // if there is no bid, then post
-  // can delete bid
-  // get the minimum bid
-
   constructor(props) {
     super(props);
     this.state = {};

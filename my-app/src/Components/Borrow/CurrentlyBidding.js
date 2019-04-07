@@ -5,11 +5,8 @@ import { Button } from "@material-ui/core";
 
 class CurrentlyBidding extends Component {
   constructor(props) {
-    const rows = [
-      { bidssn: 0, bidamt: 212, biddatetime: "a", itemssn: 0, name: 1, minbidprice: 3 },
-      { bidssn: 2, bidamt: 152, biddatetime: "c", itemssn: 0, name: 1, minbidprice: 3 },
-      { bidssn: 1, bidamt: 123, biddatetime: "b", itemssn: 0, name: 1, minbidprice: 3 }
-    ];
+    const rows = [];
+    
     super(props);
     this.state = { rows };
   }

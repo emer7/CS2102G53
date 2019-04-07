@@ -20,16 +20,8 @@ const Half = styled.div`
 `;
 
 class AcceptBid extends Component {
-  // read bid on mount
-  // if there is bid, then accept or not accept
-  // if accept, do queries
-
   constructor(props) {
-    const rows = [
-      { bidssn: 0, username: "ab", placedbyssn: 1, bidamt: 10, biddatetime: "01" },
-      { bidssn: 1, username: "asdf", placedbyssn: 2, bidamt: 20, biddatetime: "02" },
-      { bidssn: 2, username: "ewqr", placedbyssn: 3, bidamt: 30, biddatetime: "03" }
-    ];
+    const rows = [];
     const { item } = props;
     const { name, description, minbidprice, loandurationindays } = item;
 

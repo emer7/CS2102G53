@@ -18,11 +18,8 @@ const Form = styled(BaseForm)`
 
 class GiveFeedback extends Component {
   constructor(props) {
-    const rows = [
-      { userssn: 0, username: "ab", name: "orig name" },
-      { userssn: 1, username: "cd", name: "orig2 name" },
-      { userssn: 2, username: "ef", name: "orig3 name" }
-    ];
+    const rows = [];
+    
     super(props);
     this.state = { rows };
   }

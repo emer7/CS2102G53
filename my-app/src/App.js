@@ -36,12 +36,12 @@ const Right = styled.div``;
 
 class App extends Component {
   constructor(props) {
-    const user = { userssn: 1, username: "a" };
+    const user = {};
 
     super(props);
     this.state = {
       isAuthenticated: false,
-      user,
+      user
     };
   }
 

@@ -19,19 +19,10 @@ const Form = styled(BaseForm)`
 
 class ViewFeedback extends Component {
   constructor(props) {
-    const rows = [
-      {
-        feedbackssn: 0,
-        username: "abc",
-        commenttype: "ab",
-        commentbody:
-          "orig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig nameorig name"
-      },
-      { feedbackssn: 1, username: "abe", commenttype: "cd", commentbody: "orig2 name" },
-      { feedbackssn: 2, username: "abd", commenttype: "ef", commentbody: "orig3 name" }
-    ];
+    const rows = [];
+    
     super(props);
-    this.state = { rows: rows, row: {} };
+    this.state = { rows, row: {} };
   }
 
   componentDidMount() {

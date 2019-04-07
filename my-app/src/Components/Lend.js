@@ -22,11 +22,6 @@ const Navlink = styled(Link)`
 `;
 
 class Lend extends Component {
-  // Lent items
-  // To lend item
-  // if Lent, click will show the winning bid and time
-  // if not lent, then see the current bid
-
   constructor(props) {
     super(props);
     this.state = {};

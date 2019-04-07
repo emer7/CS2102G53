@@ -5,35 +5,8 @@ import { FormField, FormButton, Form } from "../Constants";
 
 class AvailableBorrow extends Component {
   constructor(props) {
-    const rows = [
-      {
-        itemssn: 0,
-        name: 1,
-        description: 2,
-        minbidprice: 3,
-        loandurationindays: 4,
-        loanedbyuserssn: 2,
-        loanedByUsername: "avc"
-      },
-      {
-        itemssn: 1,
-        name: 2,
-        description: 2,
-        minbidprice: 3,
-        loandurationindays: 4,
-        loanedbyuserssn: 1,
-        loanedByUsername: "safd"
-      },
-      {
-        itemssn: 2,
-        name: 3,
-        description: 2,
-        minbidprice: 3,
-        loandurationindays: 4,
-        loanedbyuserssn: 0,
-        loanedByUsername: "zx"
-      }
-    ];
+    const rows = [];
+    
     super(props);
     this.state = { rows };
   }
