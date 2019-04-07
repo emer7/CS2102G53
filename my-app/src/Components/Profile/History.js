@@ -53,7 +53,7 @@ class History extends Component {
                 </TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.returnedstatus}</TableCell>
+                <TableCell align="right">{row.returnedstatus ? 'Yes' : 'No'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -75,7 +75,7 @@ class History extends Component {
                 </TableCell>
                 <TableCell align="right">{row.name}</TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.returnedstatus}</TableCell>
+                <TableCell align="right">{row.returnedstatus ? 'Yes' : 'No'}</TableCell>
               </TableRow>
             ))}
           </TableBody>

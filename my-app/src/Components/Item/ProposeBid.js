@@ -11,7 +11,7 @@ class ProposeBid extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { bidamt: 0 };
+    this.state = {};
   }
 
   handleBidChange = event => {
@@ -38,6 +38,8 @@ class ProposeBid extends Component {
 
   render() {
     const { bidamt } = this.state;
+    const { item } = this.props;
+    const { minbidprice } = item;
 
     return (
       <Form>
@@ -45,6 +47,8 @@ class ProposeBid extends Component {
           name="bidamt"
           label="Bid Amount"
           type="number"
+          placeholder={minbidprice}
+          InputProps={{ inputProps: { min: minbidprice } }}
           value={bidamt}
           onChange={this.handleBidChange}
         />

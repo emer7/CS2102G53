@@ -78,7 +78,7 @@ class App extends Component {
     const transformedDob = new Date(dobDate - dobDate.getTimezoneOffset() * 60000)
       .toISOString()
       .slice(0, 10);
-    const transformedUser = { ...user, dob: transformedDob };
+    const transformedUser = { ...user, dob: dob ? transformedDob : undefined };
 
     this.setState({ user: transformedUser });
   };
