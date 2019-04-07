@@ -122,7 +122,8 @@ WHERE NEW.loanedbyuserssn = Loaners.loanerssn;
 IF count > 0 THEN
 RETURN NEW;
 ELSE
-INSERT INTO Loaners VALUES (NEW.loanedbyuserssn); RETURN NEW;
+INSERT INTO Loaners VALUES (NEW.loanedbyuserssn);
+RETURN NEW;
 END IF;
 END;
 $$
@@ -240,3 +241,29 @@ AFTER UPDATE
 ON Transactions
 FOR EACH ROW
 EXECUTE PROCEDURE duplicate_item_after_return();
+
+-- Trigger 6
+CREATE OR REPLACE FUNCTION check_bidamt_according_to_minbidprice()
+RETURNS TRIGGER AS
+$$
+DECLARE
+itemrow Items%ROWTYPE;
+BEGIN
+SELECT * INTO itemrow
+FROM Items
+WHERE NEW.itemssn = Items.itemssn;
+IF NEW.bidamt >= itemrow.minbidprice THEN
+RETURN NEW;
+ELSE
+RAISE EXCEPTION 'Bid amount cannot be lower than minimum bid price';
+RETURN NULL;
+END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_bidamt_according_to_minbidprice
+BEFORE INSERT
+ON Bids
+FOR EACH ROW
+EXECUTE PROCEDURE check_bidamt_according_to_minbidprice();
