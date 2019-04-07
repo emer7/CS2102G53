@@ -20,7 +20,7 @@ const Form = styled(BaseForm)`
 class ViewFeedback extends Component {
   constructor(props) {
     const rows = [];
-    
+
     super(props);
     this.state = { rows, row: {} };
   }
@@ -56,7 +56,9 @@ class ViewFeedback extends Component {
     this.setState({ commentbody: event.target.value });
   };
 
-  handleDeleteFeedback = ({ feedbackssn }) => {
+  handleDeleteFeedback = (event, { feedbackssn }) => {
+    event.stopPropagation();
+
     fetch(`/users/feedback/delete/${feedbackssn}`, {
       method: "DELETE"
     })
@@ -111,7 +113,7 @@ class ViewFeedback extends Component {
                     <Button
                       variant="contained"
                       fullWidth
-                      onClick={() => this.handleDeleteFeedback(row)}
+                      onClick={event => this.handleDeleteFeedback(event, row)}
                     >
                       Delete
                     </Button>

@@ -19,7 +19,7 @@ const Form = styled(BaseForm)`
 class GiveFeedback extends Component {
   constructor(props) {
     const rows = [];
-    
+
     super(props);
     this.state = { rows };
   }
@@ -51,7 +51,8 @@ class GiveFeedback extends Component {
   };
 
   handleSubmit = () => {
-    const { userssn } = this.props.user;
+    const { user, history } = this.props;
+    const { userssn } = user;
     const { commenttype, commentbody, receivedbyuserssn } = this.state;
     const feedbackObject = { userssn, commenttype, commentbody, receivedbyuserssn };
 
@@ -63,7 +64,7 @@ class GiveFeedback extends Component {
       body: JSON.stringify(feedbackObject)
     })
       .then(res => res.json())
-      .then(console.log);
+      .then(() => history.push("/feedback/view/given"));
   };
 
   render() {
