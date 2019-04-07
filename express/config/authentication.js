@@ -26,11 +26,11 @@ passport.use(
             if (resultBcrypt) {
               done(null, firstRow);
             } else {
-              done(null, false, { message: 'Incorrect password' });
+              done(null, false, { errorMessage: 'Incorrect password' });
             }
           });
         } else {
-          done(null, false, { message: 'User not  found' });
+          done(null, false, { errorMessage: 'User not  found' });
         }
       });
     },

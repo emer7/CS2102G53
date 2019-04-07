@@ -11,7 +11,7 @@ const transactionViewAllLoaned = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -27,7 +27,7 @@ const transactionViewAllBorrowed = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -81,7 +81,7 @@ const paymentUpdateToPaid = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -96,7 +96,7 @@ const paymentDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -109,7 +109,7 @@ const viewMostExpensiveMinBid = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -133,7 +133,7 @@ const addTransactionAndBorrows = (request, response) => {
 
   pool.query(queryTransactions, valuesTransactions, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(`Transaction added with transactionSSN: ${transactionSSN}`);
     }
@@ -144,7 +144,7 @@ const addTransactionAndBorrows = (request, response) => {
 
   pool.query(queryBorrows, valuesBorrows, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(
         `Borrow record added for item: ${itemSSN}, borrower: ${borrowerSSN} with transaction: ${transactionSSN}`,
@@ -164,9 +164,9 @@ const itemCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ error, message: 'User not created' });
+      response.send({ errorMessage: 'User not created' });
     } else {
-      response.send({ message: 'Item created' });
+      response.send(true);
     }
   });
 };
@@ -183,7 +183,7 @@ const itemView = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows[0]);
     }
@@ -201,7 +201,7 @@ const itemUpdate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -217,7 +217,7 @@ const itemReturn = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -233,7 +233,7 @@ const itemDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -249,7 +249,7 @@ const viewAll = (request, response) => {
   const query = select + from + where;
   pool.query(query, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -265,7 +265,7 @@ const viewAllBy = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -284,7 +284,7 @@ const viewAllExceptWith = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -303,7 +303,7 @@ const viewAllExcept = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -322,7 +322,7 @@ const viewAllLoanedNot = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -341,7 +341,7 @@ const viewAllBorrowing = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -360,7 +360,7 @@ const viewAllLoaned = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -378,7 +378,7 @@ const viewAllAccepted = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -396,7 +396,7 @@ const viewAllWaiting = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -409,7 +409,7 @@ const viewMostBorrowed = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -425,7 +425,7 @@ const bidCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -444,7 +444,7 @@ const bidViewAllItem = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -464,7 +464,7 @@ const bidViewAllUser = (request, response) => {
   const query = select + from + where + and;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -480,7 +480,7 @@ const bidDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -498,7 +498,7 @@ const deleteUser = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -511,7 +511,7 @@ const updatePassword = (request, response) => {
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
     if (errorHash) {
-      response.send({ message: 'Password cannot be empty' });
+      response.send({ errorMessage: 'Password cannot be empty' });
     } else {
       const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
       const values = [hash, userssn];
@@ -552,7 +552,7 @@ const searchBorrower = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -570,7 +570,7 @@ const createFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -586,7 +586,7 @@ const deleteFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -602,7 +602,7 @@ const updateFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
@@ -621,7 +621,7 @@ const viewAllGivenFeedback = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -640,7 +640,7 @@ const viewAllFeedback = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -656,7 +656,7 @@ const viewGoodFeedbacks = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -672,7 +672,7 @@ const viewBadFeedbacks = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -685,7 +685,7 @@ const viewMostActiveBorrower = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -698,7 +698,7 @@ const viewMostPositiveUser = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -715,7 +715,7 @@ const updateBid = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(`Bid with bidSSN ${bidSSN} updated to new amount of ${bidAmt}`);
     }
@@ -731,7 +731,7 @@ const viewWinningBid = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }
@@ -749,7 +749,7 @@ const createPayment = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
     }
@@ -764,7 +764,7 @@ const getAllUserExceptSelf = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      response.send({ message: error.message });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(results.rows);
     }

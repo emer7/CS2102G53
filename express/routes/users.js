@@ -80,7 +80,7 @@ router.post('/register', (request, response) => {
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
     if (errorHash) {
-      response.send({ message: 'Password cannot be empty' });
+      response.send({ errorMessage: 'Password cannot be empty' });
     } else {
       const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
       const values = [username, hash, name, age, email, dob, phoneNum, address, nationality];
