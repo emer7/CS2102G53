@@ -101,7 +101,6 @@ class ViewFeedback extends Component {
                 hover={given}
                 onClick={() => given && this.handleItemClick(row)}
               >
-                {" "}
                 <TableCell component="th" scope="row">
                   {row.username}
                 </TableCell>

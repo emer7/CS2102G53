@@ -681,7 +681,7 @@ const viewBadFeedbacks = (request, response) => {
 
 // View most active borrower
 const viewMostActiveBorrower = (request, response) => {
-  const query = 'SELECT borrowerSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY borrowerSSN ORDER BY numOfTimesBorrowed desc';
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed desc';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -694,7 +694,7 @@ const viewMostActiveBorrower = (request, response) => {
 
 // View user with most number of positive feedback
 const viewMostPositiveUser = (request, response) => {
-  const query = 'SELECT receivedByUserSSN, COUNT(*) as numOfTimesPraised FROM Feedbacks WHERE type = GOOD GROUP BY receivedByUserSSN ORDER BY numOfTimesPraised desc';
+  const query = "SELECT U.username, COUNT(*) as numOfTimesPraised FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn WHERE commentType = 'Good' GROUP BY U.username ORDER BY numOfTimesPraised DESC";
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -772,7 +772,7 @@ const getAllUserExceptSelf = (request, response) => {
 };
 
 const viewMostPopularLoaner = (request, response) => {
-  const query = 'SELECT I.loanedBySSN, COUNT(*) as numOfTimesLoaned FROM Borrows B LEFT INNER JOIN Items I GROUP BY itemSSN ORDER BY numOfTimesLoaned desc';
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned desc';
 
   pool.query(query, (error, results) => {
     if (error) {
