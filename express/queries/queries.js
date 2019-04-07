@@ -93,7 +93,7 @@ const itemUpdate = (request, response) => {
 };
 
 // View all available items
-const itemViewAll = (request, response) => {
+const viewAll = (request, response) => {
   const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
   const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
@@ -159,7 +159,7 @@ const itemDelete = (request, response) => {
 };
 
 // Loaner wants to search for all the items under specific userSSN
-const viewAllItems = (request, response) => {
+const viewAllBy = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
   const query = 'SELECT * FROM Items WHERE loanedByUserSSN = $1';
@@ -472,8 +472,6 @@ const viewBadFeedbacks = (request, response) => {
   });
 };
 
-
-
 // View the most borrowed item and its user
 const viewMostBorrowed = (request, response) => {
   const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed desc';
@@ -735,22 +733,33 @@ const viewAllExceptWith = (request, response) => {
 };
 
 module.exports = {
-  paymentDelete,
-  deleteUser,
-  updateUser,
-  itemCreate,
-  itemViewAll,
-  itemDelete,
-  itemUpdate,
-  itemView,
-  viewAllBorrowing,
-  viewAllItems,
-  viewAllLoanedNot,
-  viewAllLoaned,
-  searchBorrower,
   transactionViewAllLoaned,
   transactionViewAllBorrowed,
   acceptWinningBid,
+  paymentUpdateToPaid,
+  paymentDelete,
+  itemCreate,
+  itemView,
+  itemUpdate,
+  itemReturn,
+  itemDelete,
+  viewAll,
+  viewAllBy,
+  viewAllExceptWith,
+  viewAllExcept,
+  viewAllLoanedNot,
+  viewAllBorrowing,
+  viewAllLoaned,
+  viewAllAccepted,
+  viewAllWaiting,
+  viewMostBorrowed,
+  bidCreate,
+  bidViewAllItem,
+  bidViewAllUser,
+  bidDelete,
+  deleteUser,
+  updateUser,
+  searchBorrower,
   addTransactionAndBorrows,
   createFeedback,
   deleteFeedback,
@@ -758,24 +767,13 @@ module.exports = {
   viewAllFeedback,
   viewGoodFeedbacks,
   viewBadFeedbacks,
-  viewMostBorrowed,
   viewMostExpensiveMinBid,
   viewMostActiveBorrower,
   viewMostPositiveUser,
-  itemReturn,
-  bidCreate,
-  bidDelete,
   updateBid,
   viewWinningBid,
   createPayment,
-  bidViewAllItem,
-  bidViewAllUser,
   getAllUserExceptSelf,
   updatePassword,
   viewAllGivenFeedback,
-  viewAllExcept,
-  viewAllAccepted,
-  paymentUpdateToPaid,
-  viewAllWaiting,
-  viewAllExceptWith,
 };

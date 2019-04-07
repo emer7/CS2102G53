@@ -9,14 +9,20 @@ router.post('/create', queries.itemCreate);
 // Route to view item attributes
 router.get('/view/:itemSSN', queries.itemView);
 
-// // Route to search for all items under specific UserSSN
-// router.get('/view/all/:loanedByUserSSN', queries.viewAllItems);
+// Route to update an existing item
+router.put('/update', queries.itemUpdate);
 
-// // Route to view the most borrowed item
-// router.get('/view/most_borrowed', queries.viewMostBorrowed);
+// Route to return item
+router.put('/return/:transactionSSN', queries.itemReturn);
+
+// Route to delete items
+router.delete('/delete/:itemSSN', queries.itemDelete);
 
 // // Route to view all items
-// router.get('/view/all', queries.itemViewAll);
+// router.get('/view/all', queries.viewAll);
+
+// // Route to search for all items under specific UserSSN
+// router.get('/view/all/:loanedByUserSSN', queries.viewAllBy);
 
 // Route to view all items under specific search query
 router.get('/view/all/except/:loanedByUserSSN/with/:searchQuery', queries.viewAllExceptWith);
@@ -39,14 +45,8 @@ router.get('/view/all/accepted/:userSSN', queries.viewAllAccepted);
 // Route to get all items where the loaner is waiting for payment
 router.get('/view/all/waiting/:loanedByUserSSN', queries.viewAllWaiting);
 
-// Route to update an existing item
-router.put('/update', queries.itemUpdate);
-
-// Route to return item
-router.put('/return/:transactionSSN', queries.itemReturn);
-
-// Route to delete items
-router.delete('/delete/:itemSSN', queries.itemDelete);
+// // Route to view the most borrowed item
+// router.get('/view/mostBorrowed', queries.viewMostBorrowed);
 
 // Route to create bid
 router.post('/bid/create', queries.bidCreate);

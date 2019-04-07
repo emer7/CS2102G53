@@ -9,19 +9,19 @@ router.get('/transactions/view/all/loan/:loanerSSN', queries.transactionViewAllL
 // Route to view all transaction status of all items he/she has borrowed
 router.get('/transactions/view/all/borrow/:borrowerSSN', queries.transactionViewAllBorrowed);
 
-// USED - // Route to accept winning bid
-router.post('/winning_bid/accept', queries.acceptWinningBid);
+// Route to accept winning bid
+router.post('/winningBid/accept', queries.acceptWinningBid);
 
-// Route to view the most expensive minimum bid
-router.get('/bid/view/most_expensive', queries.viewMostExpensiveMinBid);
-
-// Route to create a new transaction and borrows when a winning bid is accepted
-router.post('/borrow/add', queries.addTransactionAndBorrows);
-
-// USED - // Route to update payment to paid
+// Route to update payment to paid
 router.put('/payment/update/paid', queries.paymentUpdateToPaid);
 
-// USED - // Route to delete payment
+// Route to delete payment
 router.delete('/payment/delete/:paymentSSN', queries.paymentDelete);
+
+// // Route to view the most expensive minimum bid
+// router.get('/bid/view/most_expensive', queries.viewMostExpensiveMinBid);
+
+// // Route to create a new transaction and borrows when a winning bid is accepted
+// router.post('/borrow/add', queries.addTransactionAndBorrows);
 
 module.exports = router;
