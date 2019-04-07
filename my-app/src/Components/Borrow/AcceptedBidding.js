@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 
-import { ItemsTable } from "../ItemsTable";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 class AcceptedBidding extends Component {
   constructor(props) {
     const rows = [];
-    
+
     super(props);
     this.state = { rows };
   }
@@ -21,10 +22,6 @@ class AcceptedBidding extends Component {
     fetch(`/items/view/all/accepted/${userssn}`)
       .then(res => res.json())
       .then(data => this.setState({ rows: data }));
-  };
-
-  handleItemClick = item => {
-    console.log(item);
   };
 
   handleDelete = (event, item) => {
@@ -59,14 +56,52 @@ class AcceptedBidding extends Component {
     const { rows } = this.state;
 
     return (
-      <ItemsTable
-        rows={rows}
-        handleItemClick={this.handleItemClick}
-        acceptButton
-        handleAccept={this.handleAccept}
-        deleteButton
-        handleDelete={this.handleDelete}
-      />
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Item Owner</TableCell>
+            <TableCell align="right">Item Name</TableCell>
+            <TableCell align="right">Item Description</TableCell>
+            <TableCell align="right">Minimum Bid Price</TableCell>
+            <TableCell align="right">Winning Bid</TableCell>
+            <TableCell align="right">Loan Duration in Days</TableCell>
+            <TableCell align="right">Delete</TableCell>
+            <TableCell align="right">Pay</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map(row => (
+            <TableRow key={row.itemssn} hover>
+              <TableCell component="th" scope="row">
+                {row.username}
+              </TableCell>
+              <TableCell align="right">{row.name}</TableCell>
+              <TableCell align="right">{row.description}</TableCell>
+              <TableCell align="right">{row.minbidprice}</TableCell>
+              <TableCell align="right">{row.bidamt}</TableCell>
+              <TableCell align="right">{row.loandurationindays}</TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={event => this.handleDelete(event, row)}
+                >
+                  Delete
+                </Button>
+              </TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={event => this.handleAccept(event, row)}
+                >
+                  Pay
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     );
   }
 }

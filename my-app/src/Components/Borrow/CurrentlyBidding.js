@@ -56,7 +56,9 @@ class CurrentlyBidding extends Component {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Item Name</TableCell>
+            <TableCell>Item Owner</TableCell>
+            <TableCell align="right">Item Name</TableCell>
+            <TableCell align="right">Item Description</TableCell>
             <TableCell align="right">Minimum Bid Price</TableCell>
             <TableCell align="right">Latest Bid Amount</TableCell>
             <TableCell align="right">Bid Date Time</TableCell>
@@ -67,8 +69,10 @@ class CurrentlyBidding extends Component {
           {rows.map(row => (
             <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.username}
               </TableCell>
+              <TableCell align="right">{row.name}</TableCell>
+              <TableCell align="right">{row.description}</TableCell>
               <TableCell align="right">{row.minbidprice}</TableCell>
               <TableCell align="right">{row.bidamt}</TableCell>
               <TableCell align="right">{row.biddatetime}</TableCell>

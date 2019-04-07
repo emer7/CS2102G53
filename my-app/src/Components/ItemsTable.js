@@ -17,10 +17,10 @@ export const ItemsTable = ({
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Owner</TableCell>
-          <TableCell align="right">Name</TableCell>
-          <TableCell align="right">Description</TableCell>
-          <TableCell align="right">Min Bid Price</TableCell>
+          <TableCell>Item Owner</TableCell>
+          <TableCell align="right">Item Name</TableCell>
+          <TableCell align="right">Item Description</TableCell>
+          <TableCell align="right">Minimum Bid Price</TableCell>
           <TableCell align="right">Loan Duration in Days</TableCell>
           {deleteButton && <TableCell align="right">Delete</TableCell>}
           {acceptButton && <TableCell align="right">Pay</TableCell>}

@@ -333,7 +333,7 @@ const viewAllLoanedNot = (request, response) => {
 const viewAllBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
-  const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn ';
+  const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn, T.enddate ';
   const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) INNER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
   const where = 'WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
@@ -352,8 +352,8 @@ const viewAllBorrowing = (request, response) => {
 const viewAllLoaned = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
-  const from = 'FROM ((((Items I INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn ) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
+  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.enddate ';
+  const from = 'FROM ((Items I INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
   const where = 'WHERE I.loanedByUserSSN = $1 AND T.returnedStatus = FALSE AND P.paidStatus = TRUE';
   const values = [loanedByUserSSN];
 
@@ -370,8 +370,8 @@ const viewAllLoaned = (request, response) => {
 const viewAllAccepted = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, P.paymentssn, T.transactionssn ';
-  const from = 'FROM ((Items I INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) INNER JOIN Transactions T ON I.itemssn = T.itemssn) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
+  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, P.paymentssn, T.transactionssn, B.bidamt ';
+  const from = 'FROM ((((Items I INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) INNER JOIN Transactions T ON I.itemssn = T.itemssn) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
   const where = 'WHERE P.madebyuserssn = $1 AND P.paidstatus = false';
   const values = [userSSN];
 
@@ -388,8 +388,8 @@ const viewAllAccepted = (request, response) => {
 const viewAllWaiting = (request, response) => {
   const loanedByUserSSN = parseInt(request.params.loanedByUserSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM ((Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) INNER JOIN Transactions T on I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
+  const select = 'SELECT I.itemssn, I.loanedbyuserssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
+  const from = 'FROM ((((Items I INNER JOIN Users U ON I.loanedByUserSSN = U.userSSN) INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Transactions T on I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
   const where = 'WHERE P.receivedByUserSSN = $1 AND P.paidstatus = false';
   const values = [loanedByUserSSN];
 
@@ -455,8 +455,8 @@ const bidViewAllItem = (request, response) => {
 const bidViewAllUser = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
-  const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.NAME, I.minbidprice ';
-  const from = 'FROM (Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn) LEFT OUTER JOIN Transactions T ON I.itemssn = T.itemssn ';
+  const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.name, I.description, I.minbidprice, U.username ';
+  const from = 'FROM ((Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyuserssn = U.userssn) LEFT OUTER JOIN Transactions T ON I.itemssn = T.itemssn ';
   const where = 'WHERE B1.placedbyssn = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) ';
   const and = 'AND T.transactionssn IS NULL';
   const values = [placedBySSN];
