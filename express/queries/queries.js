@@ -11,9 +11,10 @@ const transactionViewAllLoaned = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -26,9 +27,10 @@ const transactionViewAllBorrowed = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -43,7 +45,7 @@ const acceptWinningBid = (request, response) => {
 
   pool.query(queryWinningBid, valuesWinningBid, (errorWinningBids) => {
     if (errorWinningBids) {
-      throw errorWinningBids;
+      response.send({ message: errorWinningBids.message });
     }
 
     const queryPayment = 'INSERT INTO Payments (paymentType, paidStatus, paymentAmount, madeByUserSSN, receivedByUserSSN) VALUES ($1, FALSE, $2, $3, $4) RETURNING *';
@@ -51,7 +53,7 @@ const acceptWinningBid = (request, response) => {
 
     pool.query(queryPayment, valuesPayment, (errorPayments, resultsPayments) => {
       if (errorPayments) {
-        throw errorPayments;
+        response.send({ message: errorPayments.message });
       }
 
       const { paymentssn } = resultsPayments.rows[0];
@@ -61,9 +63,10 @@ const acceptWinningBid = (request, response) => {
 
       pool.query(queryTransactions, valuesTransactions, (errorTransactions) => {
         if (errorTransactions) {
-          throw errorTransactions;
+          response.send({ message: errorTransactions.message });
+        } else {
+          response.send(true);
         }
-        response.send(true);
       });
     });
   });
@@ -77,8 +80,11 @@ const paymentUpdateToPaid = (request, response) => {
   const values = [paymentssn];
 
   pool.query(query, values, (error) => {
-    if (error) throw error;
-    response.send(true);
+    if (error) {
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
+    }
   });
 };
 
@@ -90,9 +96,10 @@ const paymentDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -102,9 +109,10 @@ const viewMostExpensiveMinBid = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -125,9 +133,10 @@ const addTransactionAndBorrows = (request, response) => {
 
   pool.query(queryTransactions, valuesTransactions, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(`Transaction added with transactionSSN: ${transactionSSN}`);
     }
-    response.status(200).send(`Transaction added with transactionSSN: ${transactionSSN}`);
   });
 
   const queryBorrows = 'INSERT INTO Borrows (itemSSN, borrowerSSN, transactionSSN) VALUES ($1, $2, $3)';
@@ -135,13 +144,12 @@ const addTransactionAndBorrows = (request, response) => {
 
   pool.query(queryBorrows, valuesBorrows, (error) => {
     if (error) {
-      throw error;
-    }
-    response
-      .status(200)
-      .send(
+      response.send({ message: error.message });
+    } else {
+      response.send(
         `Borrow record added for item: ${itemSSN}, borrower: ${borrowerSSN} with transaction: ${transactionSSN}`,
       );
+    }
   });
 };
 
@@ -158,7 +166,7 @@ const itemCreate = (request, response) => {
     if (error) {
       response.send({ error, message: 'User not created' });
     } else {
-      response.send({ message: 'Item created' }); // fix. UPDATE: query result is empty array
+      response.send({ message: 'Item created' });
     }
   });
 };
@@ -175,9 +183,10 @@ const itemView = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows[0]);
     }
-    response.send(results.rows[0]);
   });
 };
 
@@ -192,9 +201,10 @@ const itemUpdate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -207,9 +217,10 @@ const itemReturn = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -222,9 +233,10 @@ const itemDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -237,9 +249,10 @@ const viewAll = (request, response) => {
   const query = select + from + where;
   pool.query(query, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -252,9 +265,10 @@ const viewAllBy = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -270,9 +284,10 @@ const viewAllExceptWith = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -288,9 +303,10 @@ const viewAllExcept = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -306,9 +322,10 @@ const viewAllLoanedNot = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -324,9 +341,10 @@ const viewAllBorrowing = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -342,9 +360,10 @@ const viewAllLoaned = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -359,9 +378,10 @@ const viewAllAccepted = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -376,9 +396,10 @@ const viewAllWaiting = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -388,9 +409,10 @@ const viewMostBorrowed = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -403,9 +425,10 @@ const bidCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -421,9 +444,10 @@ const bidViewAllItem = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.json(results.rows);
   });
 };
 
@@ -440,9 +464,10 @@ const bidViewAllUser = (request, response) => {
   const query = select + from + where + and;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -455,9 +480,10 @@ const bidDelete = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -472,9 +498,10 @@ const deleteUser = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -490,7 +517,7 @@ const updatePassword = (request, response) => {
       const values = [hash, userssn];
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
-          response.send(errorQuery);
+          response.send({ message: errorQuery.message });
         } else {
           response.send(true);
         }
@@ -509,7 +536,7 @@ const updateUser = (request, response) => {
   const values = [name, age, email, dob, phonenum, address, nationality, userssn];
   pool.query(query, values, (errorQuery) => {
     if (errorQuery) {
-      response.send(errorQuery);
+      response.send({ message: errorQuery.message });
     } else {
       response.send(true);
     }
@@ -525,9 +552,10 @@ const searchBorrower = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -542,9 +570,10 @@ const createFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -557,9 +586,10 @@ const deleteFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -572,9 +602,10 @@ const updateFeedback = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(true);
     }
-    response.send(true);
   });
 };
 
@@ -590,9 +621,10 @@ const viewAllGivenFeedback = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -608,9 +640,10 @@ const viewAllFeedback = (request, response) => {
   const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
@@ -623,9 +656,10 @@ const viewGoodFeedbacks = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -638,9 +672,10 @@ const viewBadFeedbacks = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -650,9 +685,10 @@ const viewMostActiveBorrower = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -662,9 +698,10 @@ const viewMostPositiveUser = (request, response) => {
 
   pool.query(query, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -678,9 +715,10 @@ const updateBid = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(`Bid with bidSSN ${bidSSN} updated to new amount of ${bidAmt}`);
     }
-    response.status(200).send(`Bid with bidSSN ${bidSSN} updated to new amount of ${bidAmt}`);
   });
 };
 
@@ -693,9 +731,10 @@ const viewWinningBid = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.status(200).json(results.rows);
   });
 };
 
@@ -710,11 +749,10 @@ const createPayment = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
     }
-    response
-      .status(200)
-      .send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
   });
 };
 
@@ -726,9 +764,10 @@ const getAllUserExceptSelf = (request, response) => {
 
   pool.query(query, values, (error, results) => {
     if (error) {
-      throw error;
+      response.send({ message: error.message });
+    } else {
+      response.send(results.rows);
     }
-    response.send(results.rows);
   });
 };
 
