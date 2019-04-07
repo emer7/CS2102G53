@@ -772,15 +772,15 @@ const getAllUserExceptSelf = (request, response) => {
 };
 
 const viewMostPopularLoaner = (request, response) => {
-    const query = "SELECT I.loanedBySSN, COUNT(*) as numOfTimesLoaned FROM Borrows B LEFT INNER JOIN Items I GROUP BY itemSSN ORDER BY numOfTimesLoaned desc";
+  const query = 'SELECT I.loanedBySSN, COUNT(*) as numOfTimesLoaned FROM Borrows B LEFT INNER JOIN Items I GROUP BY itemSSN ORDER BY numOfTimesLoaned desc';
 
-    pool.query(query, (error, results) => {
-        if (error) {
-            response.send({errorMessage: error.message});
-        } else {
-            response.send(results.rows);
-        }
-    });
+  pool.query(query, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
 };
 
 module.exports = {

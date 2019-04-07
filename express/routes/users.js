@@ -51,7 +51,7 @@ router.get('/feedback/view/all/given/:givenByUserSSN', queries.viewAllGivenFeedb
 // Route to get most popular loaner
 router.get('/view/loaner/most_popular', queries.viewMostPopularLoaner);
 
-// USED - 
+// USED -
 router.get('/detail/:userSSN', (request, response) => {
   const { userSSN } = request.params;
 
@@ -67,7 +67,7 @@ router.get('/detail/:userSSN', (request, response) => {
   });
 });
 
-// USED - 
+// USED -
 router.post('/register', (request, response) => {
   const {
     username,
