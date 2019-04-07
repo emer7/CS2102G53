@@ -85,15 +85,15 @@ class App extends Component {
   };
 
   fetchResources = () => {
-    fetch("/users/search/most_active")
+    fetch("/users/search/most/active/borrower")
       .then(res => res.json())
       .then(data => this.setState({ mostActiveRows: data }));
 
-    fetch("/users/view/loaner/most_popular")
+    fetch("/users/search/most/popular/loaner")
       .then(res => res.json())
       .then(data => this.setState({ mostPopularRows: data }));
 
-    fetch("/users/search/most_positive")
+    fetch("/users/search/most/positive/feedback")
       .then(res => res.json())
       .then(data => this.setState({ mostFeedbackRows: data }));
   };

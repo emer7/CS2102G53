@@ -85,7 +85,7 @@ class AcceptBid extends Component {
     const { userssn } = user;
     const bidObject = { userssn, itemssn, ...bid };
 
-    fetch("/winningBid/accept", {
+    fetch("/bid/winning/accept", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -10,7 +10,7 @@ router.get('/transactions/view/all/loan/:loanerSSN', queries.transactionViewAllL
 router.get('/transactions/view/all/borrow/:borrowerSSN', queries.transactionViewAllBorrowed);
 
 // Route to accept winning bid
-router.post('/winningBid/accept', queries.acceptWinningBid);
+router.post('/bid/winning/accept', queries.acceptWinningBid);
 
 // Route to update payment to paid
 router.put('/payment/update/paid', queries.paymentUpdateToPaid);

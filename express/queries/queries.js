@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-
 const pool = require('../config/db');
 
 // Loaner wants to check all transactions for all his items
@@ -487,18 +486,48 @@ const bidDelete = (request, response) => {
   });
 };
 
-// Deletes an exisiting user
-const deleteUser = (request, response) => {
-  request.logOut();
+const userRegister = (request, response) => {
+  const {
+    username,
+    password,
+    name,
+    age,
+    email,
+    dob,
+    phoneNum,
+    address,
+    nationality,
+  } = request.body;
 
-  const userSSN = parseInt(request.params.userSSN, 10);
+  bcrypt.hash(password, 12, (errorHash, hash) => {
+    if (errorHash) {
+      response.send({ errorMessage: 'Password cannot be empty' });
+    } else {
+      const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+      const values = [username, hash, name, age, email, dob, phoneNum, address, nationality];
 
-  const query = 'DELETE FROM Users WHERE userSSN = $1';
-  const values = [userSSN];
+      pool.query(query, values, (errorQuery) => {
+        if (errorQuery) {
+          response.send(errorQuery);
+        } else {
+          response.send(true);
+        }
+      });
+    }
+  });
+};
 
-  pool.query(query, values, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
+// Updates an exisiting user
+const userUpdate = (request, response) => {
+  const {
+    name, age, email, dob, phonenum, address, nationality, userssn,
+  } = request.body;
+
+  const query = 'UPDATE Users SET name = $1, age = $2, email = $3, dob = $4, phoneNum = $5, address = $6, nationality = $7 WHERE userssn = $8';
+  const values = [name, age, email, dob, phonenum, address, nationality, userssn];
+  pool.query(query, values, (errorQuery) => {
+    if (errorQuery) {
+      response.send({ message: errorQuery.message });
     } else {
       response.send(true);
     }
@@ -506,7 +535,7 @@ const deleteUser = (request, response) => {
 };
 
 // Updates an exisiting user
-const updatePassword = (request, response) => {
+const userUpdatePassword = (request, response) => {
   const { password, userssn } = request.body;
 
   bcrypt.hash(password, 12, (errorHash, hash) => {
@@ -526,25 +555,56 @@ const updatePassword = (request, response) => {
   });
 };
 
-// Updates an exisiting user
-const updateUser = (request, response) => {
-  const {
-    name, age, email, dob, phonenum, address, nationality, userssn,
-  } = request.body;
+// Deletes an exisiting user
+const userDelete = (request, response) => {
+  request.logOut();
 
-  const query = 'UPDATE Users SET name = $1, age = $2, email = $3, dob = $4, phoneNum = $5, address = $6, nationality = $7 WHERE userssn = $8';
-  const values = [name, age, email, dob, phonenum, address, nationality, userssn];
-  pool.query(query, values, (errorQuery) => {
-    if (errorQuery) {
-      response.send({ message: errorQuery.message });
+  const userSSN = parseInt(request.params.userSSN, 10);
+
+  const query = 'DELETE FROM Users WHERE userSSN = $1';
+  const values = [userSSN];
+
+  pool.query(query, values, (error) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }
   });
 };
 
+const userDetail = (request, response) => {
+  const { userSSN } = request.params;
+
+  const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userssn = $1';
+  const values = [userSSN];
+
+  pool.query(query, values, (errorQuery, resultQuery) => {
+    if (errorQuery) {
+      response.send(errorQuery);
+    } else {
+      response.send(resultQuery.rows[0]);
+    }
+  });
+};
+
+const userAllExcept = (request, response) => {
+  const userSSN = parseInt(request.params.userSSN, 10);
+
+  const query = 'SELECT userssn, username, name FROM Users WHERE userssn <> $1';
+  const values = [userSSN];
+
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
+};
+
 // Loaner wants to find all current borrowers of his/her item
-const searchBorrower = (request, response) => {
+const userSearchBorrower = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
   const query = 'SELECT I.itemSSN, B.borrowSSN FROM Items I LEFT OUTER JOIN Borrows B ON I.itemSSN = B.transactionSSN WHERE I.loanedBySSN = $1';
@@ -559,8 +619,46 @@ const searchBorrower = (request, response) => {
   });
 };
 
+// View most active borrower
+const userSearchMostActive = (request, response) => {
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed desc';
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
+};
+
+// View user with most number of positive feedback
+const userSearchMostPositive = (request, response) => {
+  const query = "SELECT U.username, COUNT(*) as numOfTimesPraised FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn WHERE commentType = 'Good' GROUP BY U.username ORDER BY numOfTimesPraised DESC";
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
+};
+
+const userSearchMostPopular = (request, response) => {
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned desc';
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
+};
+
 // Create a feedback
-const createFeedback = (request, response) => {
+const feedbackCreate = (request, response) => {
   const {
     userssn, receivedbyuserssn, commenttype, commentbody,
   } = request.body;
@@ -577,24 +675,8 @@ const createFeedback = (request, response) => {
   });
 };
 
-// Delete a feedback
-const deleteFeedback = (request, response) => {
-  const feedbackSSN = parseInt(request.params.feedbackSSN, 10);
-
-  const query = 'DELETE FROM Feedbacks WHERE feedbackSSN = $1';
-  const values = [feedbackSSN];
-
-  pool.query(query, values, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(true);
-    }
-  });
-};
-
 // Updates an existing feedback
-const updateFeedback = (request, response) => {
+const feedbackUpdate = (request, response) => {
   const { commenttype, commentbody, feedbackssn } = request.body;
 
   const query = 'UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3';
@@ -609,27 +691,24 @@ const updateFeedback = (request, response) => {
   });
 };
 
-// View all feedbacks to a specific user
-const viewAllGivenFeedback = (request, response) => {
-  const givenByUserSSN = parseInt(request.params.givenByUserSSN, 10);
+// Delete a feedback
+const feedbackDelete = (request, response) => {
+  const feedbackSSN = parseInt(request.params.feedbackSSN, 10);
 
-  const select = 'SELECT F.feedbackSSN, F.receivedByUserSSN, F.commenttype, F.commentbody, U.username ';
-  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn ';
-  const where = 'WHERE givenByUserSSN = $1';
-  const values = [givenByUserSSN];
+  const query = 'DELETE FROM Feedbacks WHERE feedbackSSN = $1';
+  const values = [feedbackSSN];
 
-  const query = select + from + where;
-  pool.query(query, values, (error, results) => {
+  pool.query(query, values, (error) => {
     if (error) {
       response.send({ errorMessage: error.message });
     } else {
-      response.send(results.rows);
+      response.send(true);
     }
   });
 };
 
 // View all feedbacks to a specific user
-const viewAllFeedback = (request, response) => {
+const feedbackViewAll = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
   const select = 'SELECT F.feedbackSSN, F.givenByUserSSN, F.commenttype, F.commentbody, U.username ';
@@ -647,8 +726,27 @@ const viewAllFeedback = (request, response) => {
   });
 };
 
+// View all feedbacks to a specific user
+const feedbackViewAllGiven = (request, response) => {
+  const givenByUserSSN = parseInt(request.params.givenByUserSSN, 10);
+
+  const select = 'SELECT F.feedbackSSN, F.receivedByUserSSN, F.commenttype, F.commentbody, U.username ';
+  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn ';
+  const where = 'WHERE givenByUserSSN = $1';
+  const values = [givenByUserSSN];
+
+  const query = select + from + where;
+  pool.query(query, values, (error, results) => {
+    if (error) {
+      response.send({ errorMessage: error.message });
+    } else {
+      response.send(results.rows);
+    }
+  });
+};
+
 // View all of the user's good feedbacks
-const viewGoodFeedbacks = (request, response) => {
+const feedbackViewAllGood = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
   const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = GOOD';
@@ -664,39 +762,13 @@ const viewGoodFeedbacks = (request, response) => {
 };
 
 // View all of the user's bad feedbacks
-const viewBadFeedbacks = (request, response) => {
+const feedbackViewAllBad = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
   const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = BAD';
   const values = [receivedByUserSSN];
 
   pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
-
-// View most active borrower
-const viewMostActiveBorrower = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed desc';
-
-  pool.query(query, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
-
-// View user with most number of positive feedback
-const viewMostPositiveUser = (request, response) => {
-  const query = "SELECT U.username, COUNT(*) as numOfTimesPraised FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn WHERE commentType = 'Good' GROUP BY U.username ORDER BY numOfTimesPraised DESC";
-
-  pool.query(query, (error, results) => {
     if (error) {
       response.send({ errorMessage: error.message });
     } else {
@@ -756,33 +828,6 @@ const createPayment = (request, response) => {
   });
 };
 
-const getAllUserExceptSelf = (request, response) => {
-  const userSSN = parseInt(request.params.userSSN, 10);
-
-  const query = 'SELECT userssn, username, name FROM Users WHERE userssn <> $1';
-  const values = [userSSN];
-
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
-
-const viewMostPopularLoaner = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned desc';
-
-  pool.query(query, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
-
 module.exports = {
   transactionViewAllLoaned,
   transactionViewAllBorrowed,
@@ -810,22 +855,25 @@ module.exports = {
   bidViewAllItem,
   bidViewAllUser,
   bidDelete,
-  deleteUser,
-  updateUser,
-  searchBorrower,
-  createFeedback,
-  deleteFeedback,
-  updateFeedback,
-  viewAllFeedback,
-  viewGoodFeedbacks,
-  viewBadFeedbacks,
-  viewMostActiveBorrower,
-  viewMostPositiveUser,
-  viewMostPopularLoaner,
+  userRegister,
+  userUpdate,
+  userUpdatePassword,
+  userDelete,
+  userDetail,
+  userAllExcept,
+  userSearchBorrower,
+  userSearchMostActive,
+  userSearchMostPositive,
+  userSearchMostPopular,
+  feedbackCreate,
+  feedbackUpdate,
+  feedbackDelete,
+  feedbackViewAll,
+  feedbackViewAllGiven,
+  feedbackViewAllGood,
+  feedbackViewAllBad,
+  // not used below
   updateBid,
   viewWinningBid,
   createPayment,
-  getAllUserExceptSelf,
-  updatePassword,
-  viewAllGivenFeedback,
 };
