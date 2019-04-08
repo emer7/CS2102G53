@@ -104,7 +104,7 @@ const paymentDelete = (request, response) => {
 
 // View most expensive min bid price of an item
 const viewMostExpensiveMinBid = (request, response) => {
-  const query = 'SELECT itemSSN, minBidPrice FROM Items ORDER BY minBidPrice desc';
+  const query = 'SELECT itemSSN, minBidPrice FROM Items ORDER BY minBidPrice DESC';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -242,8 +242,8 @@ const itemDelete = (request, response) => {
 // View all available items
 const viewAll = (request, response) => {
   const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
-  const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (select 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
+  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
+  const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (SELECT 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
   const query = select + from + where;
   pool.query(query, (error, results) => {
@@ -276,7 +276,7 @@ const viewAllExceptWith = (request, response) => {
   const { searchQuery } = request.params;
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
+  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = "WHERE I.loanedBySSN <> $1 AND T.transactionSSN IS NULL AND CONCAT(I.name, ' ', I.description) LIKE $2";
   const values = [loanedBySSN, `%${searchQuery}%`];
 
@@ -295,7 +295,7 @@ const viewAllExcept = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
+  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedBySSN <> $1 AND T.transactionSSN IS NULL';
   const values = [loanedBySSN];
 
@@ -314,7 +314,7 @@ const viewAllLoanedNot = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
   const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T on I.itemSSN = T.itemSSN ';
+  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedBySSN = $1 AND T.transactionSSN IS NULL';
   const values = [loanedBySSN];
 
@@ -352,7 +352,7 @@ const viewAllLoaned = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
   const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.enddate ';
-  const from = 'FROM ((Items I INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P on P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
+  const from = 'FROM ((Items I INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
   const where = 'WHERE I.loanedBySSN = $1 AND T.returnedStatus = FALSE AND P.paidStatus = TRUE';
   const values = [loanedBySSN];
 
@@ -388,7 +388,7 @@ const viewAllWaiting = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
   const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
-  const from = 'FROM ((((Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Transactions T on I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
+  const from = 'FROM ((((Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
   const where = 'WHERE P.receivedByUserSSN = $1 AND P.paidstatus = false';
   const values = [loanedBySSN];
 
@@ -404,7 +404,7 @@ const viewAllWaiting = (request, response) => {
 
 // View the most borrowed item and its user
 const viewMostBorrowed = (request, response) => {
-  const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed desc';
+  const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed DESC';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -437,7 +437,7 @@ const bidViewAllItem = (request, response) => {
 
   const select = 'SELECT B1.bidSSN, B1.placedBySSN, B1.itemSSN, B1.bidAmt, B1.bidDateTime, U.username ';
   const from = 'FROM Bids B1 INNER JOIN Users U ON B1.placedBySSN = U.userSSN ';
-  const where = 'WHERE B1.itemSSN = $1 and (B1.bidDateTime >= all (SELECT B2.bidDateTime FROM Bids B2 WHERE B2.placedBySSN = B1.placedBySSN and B2.itemSSN = B1.itemSSN))';
+  const where = 'WHERE B1.itemSSN = $1 AND (B1.bidDateTime >= all (SELECT B2.bidDateTime FROM Bids B2 WHERE B2.placedBySSN = B1.placedBySSN AND B2.itemSSN = B1.itemSSN))';
   const values = [itemSSN];
 
   const query = select + from + where;
@@ -621,7 +621,7 @@ const userSearchBorrower = (request, response) => {
 
 // View most active borrower
 const userSearchMostActive = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed desc';
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed DESC';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -646,7 +646,7 @@ const userSearchMostPositive = (request, response) => {
 };
 
 const userSearchMostPopular = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned desc';
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned DESC';
 
   pool.query(query, (error, results) => {
     if (error) {
