@@ -494,7 +494,7 @@ const userRegister = (request, response) => {
     age,
     email,
     dob,
-    phoneNum,
+    phonenum,
     address,
     nationality,
   } = request.body;
@@ -504,7 +504,7 @@ const userRegister = (request, response) => {
       response.send({ errorMessage: 'Password cannot be empty' });
     } else {
       const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
-      const values = [username, hash, name, age, email, dob, phoneNum, address, nationality];
+      const values = [username, hash, name, age, email, dob, phonenum, address, nationality];
 
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {

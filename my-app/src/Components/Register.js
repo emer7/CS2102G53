@@ -50,7 +50,7 @@ class Register extends Component {
   };
 
   handlePhonenumChange = event => {
-    this.setState({ phoneNum: event.target.value });
+    this.setState({ phonenum: event.target.value });
   };
 
   handleAddressChange = event => {
@@ -84,7 +84,7 @@ class Register extends Component {
       age,
       email,
       dob,
-      phoneNum,
+      phonenum,
       address,
       nationality
     } = this.state;
@@ -101,7 +101,7 @@ class Register extends Component {
               age={age}
               email={email}
               dob={dob}
-              phoneNum={phoneNum}
+              phonenum={phonenum}
               address={address}
               nationality={nationality}
               handleUsernameChange={this.handleUsernameChange}

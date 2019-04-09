@@ -20,7 +20,7 @@ export const AccountForm = ({
   age,
   email,
   dob,
-  phoneNum,
+  phonenum,
   address,
   nationality,
   handleUsernameChange,
@@ -108,8 +108,8 @@ export const AccountForm = ({
       <FormField
         name="phonenum"
         label="Phone Number"
-        InputLabelProps={{ shrink: !!phoneNum }}
-        value={phoneNum}
+        InputLabelProps={{ shrink: !!phonenum }}
+        value={phonenum}
         onChange={handlePhonenumChange}
       />
     )}
