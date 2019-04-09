@@ -574,7 +574,7 @@ const userDelete = (request, response) => {
 };
 
 const userDetail = (request, response) => {
-  const { userSSN } = request.params;
+  const userSSN = parseInt(request.params.userSSN, 10);
 
   const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userssn = $1';
   const values = [userSSN];
@@ -779,54 +779,54 @@ const feedbackViewAllBad = (request, response) => {
 
 // Update an existing bid
 // Need to edit to add in more fields
-const updateBid = (request, response) => {
-  const { bidSSN, bidAmt } = request.body;
+// const updateBid = (request, response) => {
+//   const { bidSSN, bidAmt } = request.body;
 
-  const query = 'UPDATE Bid SET bidAmt = $1 WHERE bidSSN = $2';
-  const values = [bidAmt, bidSSN];
+//   const query = 'UPDATE Bid SET bidAmt = $1 WHERE bidSSN = $2';
+//   const values = [bidAmt, bidSSN];
 
-  pool.query(query, values, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(`Bid with bidSSN ${bidSSN} updated to new amount of ${bidAmt}`);
-    }
-  });
-};
+//   pool.query(query, values, (error) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(`Bid with bidSSN ${bidSSN} updated to new amount of ${bidAmt}`);
+//     }
+//   });
+// };
 
 // View winning bid of an item
-const viewWinningBid = (request, response) => {
-  const itemSSN = parseInt(request.params.itemSSN, 10);
+// const viewWinningBid = (request, response) => {
+//   const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  const query = 'SELECT * FROM WinningBids WHERE itemSSN = $1';
-  const values = [itemSSN];
+//   const query = 'SELECT * FROM WinningBids WHERE itemSSN = $1';
+//   const values = [itemSSN];
 
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, values, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // Create a new payment once payment has been made
-const createPayment = (request, response) => {
-  const {
-    paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN,
-  } = request.body;
+// const createPayment = (request, response) => {
+//   const {
+//     paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN,
+//   } = request.body;
 
-  const query = 'INSERT INTO Payments (paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN,) VALUES ($1, $2, $3, $4, $5)';
-  const values = [paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN];
+//   const query = 'INSERT INTO Payments (paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN,) VALUES ($1, $2, $3, $4, $5)';
+//   const values = [paymentSSN, paymentType, paymentAmount, madeByUserSSN, receivedByUserSSN];
 
-  pool.query(query, values, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
-    }
-  });
-};
+//   pool.query(query, values, (error) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(`Payment made by ${madeByUserSSN} to ${receivedByUserSSN} is complete`);
+//     }
+//   });
+// };
 
 module.exports = {
   transactionViewAllLoaned,
@@ -873,7 +873,7 @@ module.exports = {
   feedbackViewAllGood,
   feedbackViewAllBad,
   // not used below
-  updateBid,
-  viewWinningBid,
-  createPayment,
+  // updateBid,
+  // viewWinningBid,
+  // createPayment,
 };
