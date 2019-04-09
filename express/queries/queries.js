@@ -103,54 +103,54 @@ const paymentDelete = (request, response) => {
 };
 
 // View most expensive min bid price of an item
-const viewMostExpensiveMinBid = (request, response) => {
-  const query = 'SELECT itemSSN, minBidPrice FROM Items ORDER BY minBidPrice DESC';
+// const viewMostExpensiveMinBid = (request, response) => {
+//   const query = 'SELECT itemSSN, minBidPrice FROM Items ORDER BY minBidPrice DESC';
 
-  pool.query(query, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // Create an new transaction and borrows upon accepting a winning bid
-const addTransactionAndBorrows = (request, response) => {
-  const {
-    transactionSSN,
-    itemSSN,
-    paymentSSN,
-    paidStatus,
-    startDate,
-    endDate,
-    borrowerSSN,
-  } = request.body;
+// const addTransactionAndBorrows = (request, response) => {
+//   const {
+//     transactionSSN,
+//     itemSSN,
+//     paymentSSN,
+//     paidStatus,
+//     startDate,
+//     endDate,
+//     borrowerSSN,
+//   } = request.body;
 
-  const queryTransactions = 'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)';
-  const valuesTransactions = [transactionSSN, paidStatus, startDate, endDate];
+//   const queryTransactions = 'INSERT INTO Transactions (transactionSSN, paidStatus, startDate, endDate, returnedStatus) VALUES ($1, TRUE, $2, $3, FALSE)';
+//   const valuesTransactions = [transactionSSN, paidStatus, startDate, endDate];
 
-  pool.query(queryTransactions, valuesTransactions, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(`Transaction added with transactionSSN: ${transactionSSN}`);
-    }
-  });
+//   pool.query(queryTransactions, valuesTransactions, (error) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(`Transaction added with transactionSSN: ${transactionSSN}`);
+//     }
+//   });
 
-  const queryBorrows = 'INSERT INTO Borrows (itemSSN, borrowerSSN, transactionSSN) VALUES ($1, $2, $3)';
-  const valuesBorrows = [itemSSN, borrowerSSN, transactionSSN];
+//   const queryBorrows = 'INSERT INTO Borrows (itemSSN, borrowerSSN, transactionSSN) VALUES ($1, $2, $3)';
+//   const valuesBorrows = [itemSSN, borrowerSSN, transactionSSN];
 
-  pool.query(queryBorrows, valuesBorrows, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(
-        `Borrow record added for item: ${itemSSN}, borrower: ${borrowerSSN} with transaction: ${transactionSSN}`,
-      );
-    }
-  });
-};
+//   pool.query(queryBorrows, valuesBorrows, (error) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(
+//         `Borrow record added for item: ${itemSSN}, borrower: ${borrowerSSN} with transaction: ${transactionSSN}`,
+//       );
+//     }
+//   });
+// };
 
 // Creates new item
 const itemCreate = (request, response) => {
@@ -240,36 +240,36 @@ const itemDelete = (request, response) => {
 };
 
 // View all available items
-const viewAll = (request, response) => {
-  const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
-  const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (SELECT 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
+// const viewAll = (request, response) => {
+//   const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+//   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
+//   const where = 'WHERE T.transactionSSN = NULL OR NOT EXISTS (SELECT 1 FROM Transactions WHERE returnedStatus = FALSE AND itemSSN = T.itemSSN)';
 
-  const query = select + from + where;
-  pool.query(query, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   const query = select + from + where;
+//   pool.query(query, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // Loaner wants to search for all the items under specific userSSN
-const viewAllBy = (request, response) => {
-  const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
+// const viewAllBy = (request, response) => {
+//   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const query = 'SELECT * FROM Items WHERE loanedBySSN = $1';
-  const values = [loanedBySSN];
+//   const query = 'SELECT * FROM Items WHERE loanedBySSN = $1';
+//   const values = [loanedBySSN];
 
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, values, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 const viewAllExceptWith = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
@@ -403,17 +403,17 @@ const viewAllWaiting = (request, response) => {
 };
 
 // View the most borrowed item and its user
-const viewMostBorrowed = (request, response) => {
-  const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed DESC';
+// const viewMostBorrowed = (request, response) => {
+//   const query = 'SELECT itemSSN, COUNT(*) as numOfTimesBorrowed FROM Borrows GROUP BY itemSSN ORDER BY numOfTimesBorrowed DESC';
 
-  pool.query(query, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // Create a new bid
 const bidCreate = (request, response) => {
@@ -604,20 +604,20 @@ const userAllExcept = (request, response) => {
 };
 
 // Loaner wants to find all current borrowers of his/her item
-const userSearchBorrower = (request, response) => {
-  const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
+// const userSearchBorrower = (request, response) => {
+//   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const query = 'SELECT I.itemSSN, B.borrowSSN FROM Items I LEFT OUTER JOIN Borrows B ON I.itemSSN = B.transactionSSN WHERE I.loanedBySSN = $1';
-  const values = [loanedBySSN];
+//   const query = 'SELECT I.itemSSN, B.borrowSSN FROM Items I LEFT OUTER JOIN Borrows B ON I.itemSSN = B.transactionSSN WHERE I.loanedBySSN = $1';
+//   const values = [loanedBySSN];
 
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, values, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // View most active borrower
 const userSearchMostActive = (request, response) => {
@@ -746,36 +746,36 @@ const feedbackViewAllGiven = (request, response) => {
 };
 
 // View all of the user's good feedbacks
-const feedbackViewAllGood = (request, response) => {
-  const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
+// const feedbackViewAllGood = (request, response) => {
+//   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = GOOD';
-  const values = [receivedByUserSSN];
+//   const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = GOOD';
+//   const values = [receivedByUserSSN];
 
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, values, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // View all of the user's bad feedbacks
-const feedbackViewAllBad = (request, response) => {
-  const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
+// const feedbackViewAllBad = (request, response) => {
+//   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
-  const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = BAD';
-  const values = [receivedByUserSSN];
+//   const query = 'SELECT * FROM Feedbacks WHERE receivedByUserSSN = $1 AND commentType = BAD';
+//   const values = [receivedByUserSSN];
 
-  pool.query(query, values, (error, results) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(results.rows);
-    }
-  });
-};
+//   pool.query(query, values, (error, results) => {
+//     if (error) {
+//       response.send({ errorMessage: error.message });
+//     } else {
+//       response.send(results.rows);
+//     }
+//   });
+// };
 
 // Update an existing bid
 // Need to edit to add in more fields
