@@ -18,12 +18,6 @@ router.put('/return/:transactionSSN', queries.itemReturn);
 // Route to delete items
 router.delete('/delete/:itemSSN', queries.itemDelete);
 
-// // Route to view all items
-// router.get('/view/all', queries.viewAll);
-
-// // Route to search for all items under specific UserSSN
-// router.get('/view/all/:loanedBySSN', queries.viewAllBy);
-
 // Route to view all items under specific search query
 router.get('/view/all/except/:loanedBySSN/with/:searchQuery', queries.viewAllExceptWith);
 
@@ -44,9 +38,6 @@ router.get('/view/all/accepted/:userSSN', queries.viewAllAccepted);
 
 // Route to get all items where the loaner is waiting for payment
 router.get('/view/all/waiting/:loanedBySSN', queries.viewAllWaiting);
-
-// // Route to view the most borrowed item
-// router.get('/view/mostBorrowed', queries.viewMostBorrowed);
 
 // Route to create bid
 router.post('/bid/create', queries.bidCreate);

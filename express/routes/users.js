@@ -21,9 +21,6 @@ router.get('/detail/:userSSN', queries.userDetail);
 // Route to get all users except oneself
 router.get('/all/except/:userSSN', queries.userAllExcept);
 
-// // Route to find all current borrowers of his/her item
-// router.get('/search/borrowers/:loanedBySSN', queries.userSearchBorrower);
-
 // Route to find the most active borrower
 router.get('/search/most/active/borrower', queries.userSearchMostActive);
 
@@ -47,11 +44,5 @@ router.get('/feedback/view/all/:receivedByUserSSN', queries.feedbackViewAll);
 
 // Route to view all feedbacks given by a user
 router.get('/feedback/view/all/given/:givenByUserSSN', queries.feedbackViewAllGiven);
-
-// // Route to view user's good feedbacks
-// router.get('/feedback/view/all/good/:receivedByUserSSN', queries.feedbackViewAllGood);
-
-// // Route to view user's bad feedbacks
-// router.get('/feedback/view/all/bad/:receivedByUserSSN', queries.feedbackViewAllBad);
 
 module.exports = router;
