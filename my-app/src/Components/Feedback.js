@@ -36,16 +36,34 @@ class Feedback extends Component {
         <Route
           path="/feedback/give"
           render={props => (
-            <GiveFeedback user={user} handleShowDialog={handleShowDialog} {...props} />
+            <GiveFeedback
+              user={user}
+              handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
+              {...props}
+            />
           )}
         />
         <Route
           path="/feedback/view/given"
-          render={() => <ViewFeedback user={user} handleShowDialog={handleShowDialog} given />}
+          render={() => (
+            <ViewFeedback
+              user={user}
+              handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
+              given
+            />
+          )}
         />
         <Route
           path="/feedback/view/received"
-          render={() => <ViewFeedback user={user} handleShowDialog={handleShowDialog} />}
+          render={() => (
+            <ViewFeedback
+              user={user}
+              handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
+            />
+          )}
         />
       </div>
     );

@@ -42,6 +42,7 @@ class Profile extends Component {
               user={user}
               fetchUserDetail={fetchUserDetail}
               handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
               {...props}
             />
           )}
@@ -53,11 +54,17 @@ class Profile extends Component {
               user={user}
               handleLogin={handleLogin}
               handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
               {...props}
             />
           )}
         />
-        <Route path="/profile/history" render={props => <History user={user} {...props} />} />
+        <Route
+          path="/profile/history"
+          render={props => (
+            <History user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
+        />
       </div>
     );
   }

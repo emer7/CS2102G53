@@ -38,11 +38,33 @@ class Lend extends Component {
         </Tabs>
         <Route
           path="/lend/form"
-          render={props => <LendForm user={user} handleShowDialog={handleShowDialog} {...props} />}
+          render={props => (
+            <LendForm
+              user={user}
+              handleShowDialog={handleShowDialog}
+              handleTabChange={this.handleTabChange}
+              {...props}
+            />
+          )}
         />
-        <Route path="/lend/available" render={props => <AvailableLend user={user} {...props} />} />
-        <Route path="/lend/waiting" render={props => <WaitingLend user={user} {...props} />} />
-        <Route path="/lend/current" render={props => <CurrentlyLend user={user} {...props} />} />
+        <Route
+          path="/lend/available"
+          render={props => (
+            <AvailableLend user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
+        />
+        <Route
+          path="/lend/waiting"
+          render={props => (
+            <WaitingLend user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
+        />
+        <Route
+          path="/lend/current"
+          render={props => (
+            <CurrentlyLend user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
+        />
       </div>
     );
   }

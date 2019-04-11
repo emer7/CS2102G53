@@ -39,19 +39,27 @@ class Borrow extends Component {
 
         <Route
           path="/borrow/available"
-          render={props => <AvailableBorrow user={user} {...props} />}
+          render={props => (
+            <AvailableBorrow user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
         />
         <Route
           path="/borrow/bidding"
-          render={props => <CurrentlyBidding user={user} {...props} />}
+          render={props => (
+            <CurrentlyBidding user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
         />
         <Route
           path="/borrow/accepted"
-          render={props => <AcceptedBidding user={user} {...props} />}
+          render={props => (
+            <AcceptedBidding user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
         />
         <Route
           path="/borrow/current"
-          render={props => <CurrentlyBorrow user={user} {...props} />}
+          render={props => (
+            <CurrentlyBorrow user={user} handleTabChange={this.handleTabChange} {...props} />
+          )}
         />
       </div>
     );
