@@ -1,13 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-
-const Divider = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-`;
 
 class History extends Component {
   constructor(props) {
@@ -35,52 +30,56 @@ class History extends Component {
     const { loanRows, borrowRows } = this.state;
 
     return (
-      <Divider>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Borrower Username</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Returned ?</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loanRows.map(row => (
-              <TableRow key={row.itemssn} hover>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.returnedstatus ? 'Yes' : 'No'}</TableCell>
+      <Grid container spacing="8">
+        <Grid item xs sm md lg xl>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Borrower Username</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Returned ?</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Loaner Username</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Description</TableCell>
-              <TableCell align="right">Returned ?</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {borrowRows.map(row => (
-              <TableRow key={row.itemssn} hover>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.returnedstatus ? 'Yes' : 'No'}</TableCell>
+            </TableHead>
+            <TableBody>
+              {loanRows.map(row => (
+                <TableRow key={row.itemssn} hover>
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.returnedstatus ? "Yes" : "No"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+        <Grid item xs sm md lg xl>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Loaner Username</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Returned ?</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Divider>
+            </TableHead>
+            <TableBody>
+              {borrowRows.map(row => (
+                <TableRow key={row.itemssn} hover>
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.returnedstatus ? "Yes" : "No"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+      </Grid>
     );
   }
 }

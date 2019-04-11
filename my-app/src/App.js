@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import styled from "styled-components";
 
+import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { AppBar, Toolbar as DefaultToolbar } from "@material-ui/core";
 import { Drawer, List, ListItem, ListItemText } from "@material-ui/core";
@@ -25,12 +26,6 @@ const Toolbar = styled(DefaultToolbar)`
 
 const AccountCircle = styled(DefaultAccountCircle)`
   margin-right: 3px;
-`;
-
-const Divider = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
 `;
 
 const DrawerList = styled(List)`
@@ -138,7 +133,7 @@ class App extends Component {
             <ListItemText primary={user ? `Hi, ${user.username}!` : "Profile"} />
           </ListItem>
         )}
-        <ListItem button component={Link} to="/home" onClick={this.handleCloseDrawer}>
+        <ListItem button component={Link} to="/" onClick={this.handleCloseDrawer}>
           <ListItemText primary="Home" />
         </ListItem>
         <ListItem button component={Link} to="/lend" onClick={this.handleCloseDrawer}>
@@ -196,50 +191,56 @@ class App extends Component {
             path="/"
             render={() =>
               isAuthenticated && (
-                <Divider>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Most Active Borrower</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {mostActiveRows.map(row => (
-                        <TableRow key={row.username} hover>
-                          <TableCell align="center">{row.username}</TableCell>
+                <Grid container spacing="8">
+                  <Grid item xs sm md lg xl>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">Most Active Borrower</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Most Popular Loaner</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {mostPopularRows.map(row => (
-                        <TableRow key={row.username} hover>
-                          <TableCell align="center">{row.username}</TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {mostActiveRows.map(row => (
+                          <TableRow key={row.username} hover>
+                            <TableCell align="center">{row.username}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid item xs sm md lg xl>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">Most Popular Loaner</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Most Positive Feedback User</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {mostFeedbackRows.map(row => (
-                        <TableRow key={row.username} hover>
-                          <TableCell align="center">{row.username}</TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {mostPopularRows.map(row => (
+                          <TableRow key={row.username} hover>
+                            <TableCell align="center">{row.username}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid item xs sm md lg xl>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">Most Positive Feedback User</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Divider>
+                      </TableHead>
+                      <TableBody>
+                        {mostFeedbackRows.map(row => (
+                          <TableRow key={row.username} hover>
+                            <TableCell align="center">{row.username}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                </Grid>
               )
             }
           />

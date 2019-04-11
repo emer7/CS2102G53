@@ -1,23 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 
-import { FormField, FormButton, Form as BaseForm } from "../Constants";
-
-const Divider = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-`;
-
-const Form = styled(BaseForm)`
-  flex-grow: 1;
-`;
-
-const Half = styled.div`
-  flex-grow: 1;
-`;
+import { FormField, FormButton, Form } from "../Constants";
 
 class AcceptBid extends Component {
   constructor(props) {
@@ -101,8 +88,8 @@ class AcceptBid extends Component {
     const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
-      <Divider>
-        <Half>
+      <Grid container spacing="8">
+        <Grid item xs sm md lg xl>
           <Form>
             <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
             <FormField
@@ -129,14 +116,14 @@ class AcceptBid extends Component {
               Update
             </FormButton>
           </Form>
-        </Half>
-        <Half>
+        </Grid>
+        <Grid item xs sm md lg xl>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Placed By</TableCell>
-                <TableCell align="right">Bid Amount</TableCell>
-                <TableCell align="right">Bid Date Time</TableCell>
+                <TableCell>Bid Amount</TableCell>
+                <TableCell>Bid Date Time</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -145,8 +132,8 @@ class AcceptBid extends Component {
                   <TableCell component="th" scope="row">
                     {row.username}
                   </TableCell>
-                  <TableCell align="right">{row.bidamt}</TableCell>
-                  <TableCell align="right">{row.biddatetime}</TableCell>
+                  <TableCell>{row.bidamt}</TableCell>
+                  <TableCell>{row.biddatetime}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -163,8 +150,8 @@ class AcceptBid extends Component {
               Accept
             </FormButton>
           </Form>
-        </Half>
-      </Divider>
+        </Grid>
+      </Grid>
     );
   }
 }

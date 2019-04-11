@@ -1,21 +1,12 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 
-import { FormField, FormButton, Form as BaseForm } from "../Constants";
-
-const Divider = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-`;
-
-const Form = styled(BaseForm)`
-  width: 100%;
-`;
+import { FormField, FormButton, Form } from "../Constants";
 
 class ViewFeedback extends Component {
   constructor(props) {
@@ -86,76 +77,81 @@ class ViewFeedback extends Component {
     const { rows, username, commenttype, commentbody } = this.state;
 
     return (
-      <Divider>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>{given ? "Given to" : "Given by"}</TableCell>
-              <TableCell align="right">Comment Type</TableCell>
-              <TableCell align="right">Comment Body</TableCell>
-              {given && <TableCell align="right">Delete</TableCell>}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow
-                key={row.feedbackssn}
-                hover={given}
-                onClick={() => given && this.handleItemClick(row)}
-              >
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="right">{row.commenttype}</TableCell>
-                <TableCell align="right">{row.commentbody}</TableCell>
-                {given && (
-                  <TableCell align="right">
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      onClick={event => this.handleDeleteFeedback(event, row)}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-                )}
+      <Grid container spacing="8">
+        <Grid item xs sm md lg xl>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>{given ? "Given to" : "Given by"}</TableCell>
+                <TableCell>Comment Type</TableCell>
+                <TableCell>Comment Body</TableCell>
+                {given && <TableCell>Delete</TableCell>}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow
+                  key={row.feedbackssn}
+                  hover={given}
+                  onClick={() => given && this.handleItemClick(row)}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell>{row.commenttype}</TableCell>
+                  <TableCell>{row.commentbody}</TableCell>
+                  {given && (
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={event => this.handleDeleteFeedback(event, row)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+
         {given && (
-          <Form>
-            <FormField
-              name="receivedByUsername"
-              label="To"
-              InputLabelProps={{ shrink: !!username }}
-              disabled
-              value={username}
-            />
-            <FormField
-              select
-              label="Comment Type"
-              InputLabelProps={{ shrink: !!commenttype }}
-              value={commenttype}
-              onChange={this.handleCommentType}
-              margin="normal"
-            >
-              <MenuItem value="Good">Good</MenuItem>
-              <MenuItem value="Bad">Bad</MenuItem>
-            </FormField>
-            <FormField
-              name="commentbody"
-              label="Body"
-              InputLabelProps={{ shrink: !!commentbody }}
-              value={commentbody}
-              onChange={this.handleCommentBody}
-            />
-            <FormButton variant="contained" onClick={this.handleSubmit}>
-              Update
-            </FormButton>
-          </Form>
+          <Grid item xs sm md lg xl>
+            <Form>
+              <FormField
+                name="receivedByUsername"
+                label="To"
+                InputLabelProps={{ shrink: !!username }}
+                disabled
+                value={username}
+              />
+              <FormField
+                select
+                label="Comment Type"
+                InputLabelProps={{ shrink: !!commenttype }}
+                value={commenttype}
+                onChange={this.handleCommentType}
+                margin="normal"
+              >
+                <MenuItem value="Good">Good</MenuItem>
+                <MenuItem value="Bad">Bad</MenuItem>
+              </FormField>
+              <FormField
+                name="commentbody"
+                label="Body"
+                InputLabelProps={{ shrink: !!commentbody }}
+                value={commentbody}
+                onChange={this.handleCommentBody}
+              />
+              <FormButton variant="contained" onClick={this.handleSubmit}>
+                Update
+              </FormButton>
+            </Form>
+          </Grid>
         )}
-      </Divider>
+      </Grid>
     );
   }
 }

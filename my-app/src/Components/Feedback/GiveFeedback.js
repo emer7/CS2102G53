@@ -1,20 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
+import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { MenuItem } from "@material-ui/core";
 
-import { FormField, FormButton, Form as BaseForm } from "../Constants";
-
-const Divider = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-`;
-
-const Form = styled(BaseForm)`
-  width: 100%;
-`;
+import { FormField, FormButton, Form } from "../Constants";
 
 class GiveFeedback extends Component {
   constructor(props) {
@@ -71,56 +62,60 @@ class GiveFeedback extends Component {
     const { rows, receivedByUsername, commenttype, commentbody } = this.state;
 
     return (
-      <Divider>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell align="right">Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.userssn} hover onClick={() => this.handleItemClick(row)}>
-                <TableCell component="th" scope="row">
-                  {row.username}
-                </TableCell>
-                <TableCell align="right">{row.name}</TableCell>
+      <Grid container spacing="8">
+        <Grid item xs sm md lg xl>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Username</TableCell>
+                <TableCell>Name</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Form>
-          <FormField
-            name="receivedByUsername"
-            label="To"
-            InputLabelProps={{ shrink: !!receivedByUsername }}
-            disabled
-            value={receivedByUsername}
-          />
-          <FormField
-            select
-            label="Comment Type"
-            InputLabelProps={{ shrink: !!commenttype }}
-            value={commenttype}
-            onChange={this.handleCommentType}
-            margin="normal"
-          >
-            <MenuItem value="Good">Good</MenuItem>
-            <MenuItem value="Bad">Bad</MenuItem>
-          </FormField>
-          <FormField
-            name="commentbody"
-            label="Body"
-            InputLabelProps={{ shrink: !!commentbody }}
-            value={commentbody}
-            onChange={this.handleCommentBody}
-          />
-          <FormButton variant="contained" onClick={this.handleSubmit}>
-            Submit
-          </FormButton>
-        </Form>
-      </Divider>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow key={row.userssn} hover onClick={() => this.handleItemClick(row)}>
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+        <Grid item xs sm md lg xl>
+          <Form>
+            <FormField
+              name="receivedByUsername"
+              label="To"
+              InputLabelProps={{ shrink: !!receivedByUsername }}
+              disabled
+              value={receivedByUsername}
+            />
+            <FormField
+              select
+              label="Comment Type"
+              InputLabelProps={{ shrink: !!commenttype }}
+              value={commenttype}
+              onChange={this.handleCommentType}
+              margin="normal"
+            >
+              <MenuItem value="Good">Good</MenuItem>
+              <MenuItem value="Bad">Bad</MenuItem>
+            </FormField>
+            <FormField
+              name="commentbody"
+              label="Body"
+              InputLabelProps={{ shrink: !!commentbody }}
+              value={commentbody}
+              onChange={this.handleCommentBody}
+            />
+            <FormButton variant="contained" onClick={this.handleSubmit}>
+              Submit
+            </FormButton>
+          </Form>
+        </Grid>
+      </Grid>
     );
   }
 }
