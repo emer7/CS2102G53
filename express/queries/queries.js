@@ -44,14 +44,14 @@ const acceptWinningBid = (request, response) => {
 
   pool.query(queryWinningBid, valuesWinningBid, (errorWinningBids) => {
     if (errorWinningBids) {
-      response.send({ message: errorWinningBids.message });
+      response.send({ errorMessage: errorWinningBids.message });
     } else {
       const queryPayment = 'INSERT INTO Payments (paymentType, paidStatus, paymentAmount, madeByUserSSN, receivedByUserSSN) VALUES ($1, FALSE, $2, $3, $4) RETURNING *';
       const valuesPayment = ['AUTOMATIC', bidamt, placedbyssn, userssn];
 
       pool.query(queryPayment, valuesPayment, (errorPayments, resultsPayments) => {
         if (errorPayments) {
-          response.send({ message: errorPayments.message });
+          response.send({ errorMessage: errorPayments.message });
         } else {
           const { paymentssn } = resultsPayments.rows[0];
 
@@ -60,7 +60,7 @@ const acceptWinningBid = (request, response) => {
 
           pool.query(queryTransactions, valuesTransactions, (errorTransactions) => {
             if (errorTransactions) {
-              response.send({ message: errorTransactions.message });
+              response.send({ errorMessage: errorTransactions.message });
             } else {
               response.send(true);
             }
@@ -432,7 +432,7 @@ const userUpdate = (request, response) => {
   const values = [name, age, email, dob, phonenum, address, nationality, userssn];
   pool.query(query, values, (errorQuery) => {
     if (errorQuery) {
-      response.send({ message: errorQuery.message });
+      response.send({ errorMessage: errorQuery.message });
     } else {
       response.send(true);
     }
@@ -451,7 +451,7 @@ const userUpdatePassword = (request, response) => {
       const values = [hash, userssn];
       pool.query(query, values, (errorQuery) => {
         if (errorQuery) {
-          response.send({ message: errorQuery.message });
+          response.send({ errorMessage: errorQuery.message });
         } else {
           response.send(true);
         }
