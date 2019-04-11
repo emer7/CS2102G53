@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import { AppBar, Toolbar as DefaultToolbar } from "@material-ui/core";
+import { AppBar, Toolbar as BaseToolbar } from "@material-ui/core";
 import { Drawer, List, ListItem, ListItemText } from "@material-ui/core";
 import { Button, IconButton } from "@material-ui/core";
 
@@ -20,7 +20,7 @@ import Profile from "./Components/Profile";
 import Feedback from "./Components/Feedback";
 import Dialog from "./Components/Dialog";
 
-const Toolbar = styled(DefaultToolbar)`
+const Toolbar = styled(BaseToolbar)`
   display: flex;
   justify-content: space-between;
 `;

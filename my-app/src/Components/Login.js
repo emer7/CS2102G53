@@ -2,21 +2,16 @@ import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 import styled from "styled-components";
 
+import { Paper } from "@material-ui/core";
+
 import { AccountForm } from "./AccountForm";
 
-const Box = styled.div`
-  box-shadow: 0 2px 16px 0 rgba(198, 198, 198, 0.5);
-  border-width: 5px;
-  border-radius: 30px;
-  width: 400px;
-
+const Box = styled(Paper)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
-  display: flex;
-  flex-direction: column;
+  width: 400px;
 `;
 
 class Login extends Component {

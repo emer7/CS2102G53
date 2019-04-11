@@ -1,8 +1,17 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 
-import { Button } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
 import { AccountForm } from "../AccountForm";
+
+const Box = styled(Paper)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+`;
 
 class UpdateSecurity extends Component {
   constructor(props) {
@@ -54,7 +63,7 @@ class UpdateSecurity extends Component {
     const { password } = this.state;
 
     return (
-      <div>
+      <Box>
         <AccountForm
           hideUsername
           password={password}
@@ -65,6 +74,7 @@ class UpdateSecurity extends Component {
           Delete Account
         </Button>
       </div>
+      </Box>
     );
   }
 }

@@ -1,6 +1,17 @@
 import React, { Component } from "react";
+import styled from "styled-components";
+
+import { Paper } from "@material-ui/core";
 
 import { AccountForm } from "../AccountForm";
+
+const Box = styled(Paper)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+`;
 
 class UpdateProfile extends Component {
   constructor(props) {
@@ -62,27 +73,29 @@ class UpdateProfile extends Component {
     const { userssn, username, name, age, email, dob, phonenum, address, nationality } = this.state;
 
     return (
-      <AccountForm
-        userssn={userssn}
-        disableUsername
-        username={username}
-        name={name}
-        age={age}
-        email={email}
-        dob={dob}
-        phoneNum={phonenum}
-        address={address}
-        nationality={nationality}
-        handleUsernameChange={this.handleUsernameChange}
-        handleNameChange={this.handleNameChange}
-        handleAgeChange={this.handleAgeChange}
-        handleEmailChange={this.handleEmailChange}
-        handleDobChange={this.handleDobChange}
-        handlePhonenumChange={this.handlePhonenumChange}
-        handleAddressChange={this.handleAddressChange}
-        handleNationalityChange={this.handleNationalityChange}
-        handleSubmit={this.handleSubmit}
-      />
+      <Box>
+        <AccountForm
+          userssn={userssn}
+          disableUsername
+          username={username}
+          name={name}
+          age={age}
+          email={email}
+          dob={dob}
+          phoneNum={phonenum}
+          address={address}
+          nationality={nationality}
+          handleUsernameChange={this.handleUsernameChange}
+          handleNameChange={this.handleNameChange}
+          handleAgeChange={this.handleAgeChange}
+          handleEmailChange={this.handleEmailChange}
+          handleDobChange={this.handleDobChange}
+          handlePhonenumChange={this.handlePhonenumChange}
+          handleAddressChange={this.handleAddressChange}
+          handleNationalityChange={this.handleNationalityChange}
+          handleSubmit={this.handleSubmit}
+        />
+      </Box>
     );
   }
 }
