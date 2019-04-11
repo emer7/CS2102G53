@@ -1,6 +1,14 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 
-import { FormField, FormButton, Form } from "../Constants";
+import { Grid } from "@material-ui/core";
+
+import { Box as BaseBox, Form } from "../Constants";
+import { TextField, Button } from "@material-ui/core";
+
+const Box = styled(BaseBox)`
+  width: 500px;
+`;
 
 class LendForm extends Component {
   constructor(props) {
@@ -49,35 +57,56 @@ class LendForm extends Component {
     const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
-      <div>
+      <Box>
         <Form>
-          <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
-          <FormField
-            name="description"
-            label="Description"
-            multiline
-            value={description}
-            onChange={this.handleDescriptionChange}
-          />
-          <FormField
-            name="minBidPrice"
-            type="number"
-            label="Minimum bid price"
-            value={minbidprice}
-            onChange={this.handleMinBidPriceChange}
-          />
-          <FormField
-            name="loanDuration"
-            type="number"
-            label="Loan Duration in Days"
-            value={loandurationindays}
-            onChange={this.handleLoandDurationChange}
-          />
-          <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
-            Submit
-          </FormButton>
+          <Grid container direction="column" spacing="16">
+            <Grid item>
+              <TextField
+                name="name"
+                label="Name"
+                fullWidth
+                value={name}
+                onChange={this.handleNameChange}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                name="description"
+                label="Description"
+                multiline
+                fullWidth
+                value={description}
+                onChange={this.handleDescriptionChange}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                name="minBidPrice"
+                type="number"
+                label="Minimum bid price"
+                fullWidth
+                value={minbidprice}
+                onChange={this.handleMinBidPriceChange}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                name="loanDuration"
+                type="number"
+                label="Loan Duration in Days"
+                fullWidth
+                value={loandurationindays}
+                onChange={this.handleLoandDurationChange}
+              />
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="primary" fullWidth onClick={this.handleSubmit}>
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
         </Form>
-      </div>
+      </Box>
     );
   }
 }

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 
-import { FormField, FormButton, Form } from "../Constants";
+import { Grid } from "@material-ui/core";
+import { TextField, Button } from "@material-ui/core";
+
+import { Form } from "../Constants";
 
 class ProposeBid extends Component {
   constructor(props) {
@@ -43,19 +46,24 @@ class ProposeBid extends Component {
 
     return (
       <Form>
-        <FormField
-          name="bidamt"
-          label="Bid Amount"
-          type="number"
-          placeholder={minbidprice}
-          InputProps={{ inputProps: { min: minbidprice } }}
-          value={bidamt}
-          onChange={this.handleBidChange}
-        />
-
-        <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
-          Submit
-        </FormButton>
+        <Grid container direction="column" alignItems="center" spacing="16">
+          <Grid item>
+            <TextField
+              name="bidamt"
+              label="Bid Amount"
+              type="number"
+              placeholder={minbidprice}
+              InputProps={{ inputProps: { min: minbidprice } }}
+              value={bidamt}
+              onChange={this.handleBidChange}
+            />
+          </Grid>
+          <Grid item>
+            <Button variant="contained" color="primary" onClick={this.handleSubmit}>
+              Submit
+            </Button>
+          </Grid>
+        </Grid>
       </Form>
     );
   }

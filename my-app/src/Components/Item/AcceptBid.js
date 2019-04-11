@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 
 import { Grid } from "@material-ui/core";
+import { TextField, Button } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 
-import { FormField, FormButton, Form } from "../Constants";
+import { Form } from "../Constants";
 
 class AcceptBid extends Component {
   constructor(props) {
@@ -103,66 +103,99 @@ class AcceptBid extends Component {
       <Grid container spacing="8">
         <Grid item xs sm md lg xl>
           <Form>
-            <FormField name="name" label="Name" value={name} onChange={this.handleNameChange} />
-            <FormField
-              name="description"
-              label="Description"
-              multiline
-              value={description}
-              onChange={this.handleDescriptionChange}
-            />
-            <FormField
-              name="minBidPrice"
-              type="number"
-              label="Minimum bid price"
-              value={minbidprice}
-              onChange={this.handleMinBidPriceChange}
-            />
-            <FormField
-              name="loanDuration"
-              type="number"
-              label="Loan Duration in Days"
-              value={loandurationindays}
-              onChange={this.handleLoandDurationChange}
-            />
-            <FormButton variant="contained" color="primary" onClick={this.handleEditItem}>
-              Update
-            </FormButton>
+            <Grid container direction="column" spacing="16">
+              <Grid item xs sm md lg xl>
+                <TextField
+                  name="name"
+                  label="Name"
+                  value={name}
+                  fullWidth
+                  onChange={this.handleNameChange}
+                />
+              </Grid>
+              <Grid item xs sm md lg xl>
+                <TextField
+                  name="description"
+                  label="Description"
+                  multiline
+                  value={description}
+                  fullWidth
+                  onChange={this.handleDescriptionChange}
+                />
+              </Grid>
+              <Grid item xs sm md lg xl>
+                <TextField
+                  name="minBidPrice"
+                  type="number"
+                  label="Minimum bid price"
+                  value={minbidprice}
+                  fullWidth
+                  onChange={this.handleMinBidPriceChange}
+                />
+              </Grid>
+              <Grid item xs sm md lg xl>
+                <TextField
+                  name="loanDuration"
+                  type="number"
+                  label="Loan Duration in Days"
+                  value={loandurationindays}
+                  fullWidth
+                  onChange={this.handleLoandDurationChange}
+                />
+              </Grid>
+              <Grid item xs sm md lg xl>
+                <Button variant="contained" color="primary" fullWidth onClick={this.handleEditItem}>
+                  Update
+                </Button>
+              </Grid>
+            </Grid>
           </Form>
         </Grid>
         <Grid item xs sm md lg xl>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Placed By</TableCell>
-                <TableCell>Bid Amount</TableCell>
-                <TableCell>Bid Date Time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
-                  <TableCell component="th" scope="row">
-                    {row.username}
-                  </TableCell>
-                  <TableCell>{row.bidamt}</TableCell>
-                  <TableCell>{row.biddatetime}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Form>
-            <FormField
-              name="username"
-              label="Placed By"
-              InputLabelProps={{ shrink: !!bid.username }}
-              disabled
-              value={bid.username}
-            />
-            <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
-              Accept
-            </FormButton>
-          </Form>
+          <Grid container direction="column" spacing="8">
+            <Grid item xs sm md lg xl>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Placed By</TableCell>
+                    <TableCell>Bid Amount</TableCell>
+                    <TableCell>Bid Date Time</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map(row => (
+                    <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
+                      <TableCell component="th" scope="row">
+                        {row.username}
+                      </TableCell>
+                      <TableCell>{row.bidamt}</TableCell>
+                      <TableCell>{row.biddatetime}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+            <Grid item xs sm md lg xl>
+              <Form>
+                <Grid container direction="column" alignItems="center" spacing="16">
+                  <Grid item>
+                    <TextField
+                      name="username"
+                      label="Placed By"
+                      InputLabelProps={{ shrink: !!bid.username }}
+                      disabled
+                      value={bid.username}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button variant="contained" color="primary" onClick={this.handleSubmit}>
+                      Accept
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Form>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
