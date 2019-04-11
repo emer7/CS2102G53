@@ -18,10 +18,4 @@ router.put('/payment/update/paid', queries.paymentUpdateToPaid);
 // Route to delete payment
 router.delete('/payment/delete/:paymentSSN', queries.paymentDelete);
 
-// // Route to view the most expensive minimum bid
-// router.get('/bid/view/most_expensive', queries.viewMostExpensiveMinBid);
-
-// // Route to create a new transaction and borrows when a winning bid is accepted
-// router.post('/borrow/add', queries.addTransactionAndBorrows);
-
 module.exports = router;
