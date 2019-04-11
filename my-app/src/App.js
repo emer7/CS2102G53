@@ -95,7 +95,7 @@ class App extends Component {
 
   setUserDetail = user => {
     const { dob } = user;
-    const dobDate = new Date(dob);
+    const dobDate = new Date(dob || null);
     const transformedDob = new Date(dobDate - dobDate.getTimezoneOffset() * 60000)
       .toISOString()
       .slice(0, 10);

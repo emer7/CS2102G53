@@ -500,7 +500,16 @@ const userDetail = (request, response) => {
     if (errorQuery) {
       response.send({ errorMessage: errorQuery.message });
     } else {
-      response.send(resultQuery.rows[0]);
+      const keys = Object.keys(resultQuery.rows[0]);
+      const filteredResult = {};
+
+      keys.forEach((key) => {
+        if (resultQuery.rows[0][key] !== null) {
+          filteredResult[key] = resultQuery.rows[0][key];
+        }
+      });
+
+      response.send(filteredResult);
     }
   });
 };
