@@ -2,6 +2,14 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import styled from "styled-components";
 
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { AppBar, Toolbar as DefaultToolbar } from "@material-ui/core";
+import { Drawer, List, ListItem, ListItemText } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+
+import MenuIcon from "@material-ui/icons/Menu";
+import DefaultAccountCircle from "@material-ui/icons/AccountCircle";
+
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Borrow from "./Components/Borrow";
@@ -10,26 +18,13 @@ import Item from "./Components/Item";
 import Profile from "./Components/Profile";
 import Feedback from "./Components/Feedback";
 
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-
-const Navbar = styled.div`
-  background-color: black;
-  padding: 10px;
+const Toolbar = styled(DefaultToolbar)`
   display: flex;
   justify-content: space-between;
 `;
 
-const Navlink = styled(Link)`
-  color: white;
-  text-decoration: none;
-  & + * {
-    margin-left: 10px;
-  }
-`;
-
-const LogoutLink = styled.span`
-  color: white;
-  cursor: pointer;
+const AccountCircle = styled(DefaultAccountCircle)`
+  margin-right: 3px;
 `;
 
 const Divider = styled.div`
@@ -38,7 +33,9 @@ const Divider = styled.div`
   align-items: stretch;
 `;
 
-const Left = styled.div``;
+const DrawerList = styled(List)`
+  width: 250px;
+`;
 
 const Right = styled.div``;
 
@@ -69,6 +66,7 @@ class App extends Component {
   };
 
   handleLogout = () => {
+    this.handleCloseDrawer();
     fetch("/authenticate/logout", {
       method: "POST"
     })
@@ -109,36 +107,95 @@ class App extends Component {
     this.setState({ user: transformedUser });
   };
 
+  handleCloseDrawer = () => {
+    this.setState({ openDrawer: false });
+  };
+
+  handleOpenDrawer = () => {
+    this.setState({ openDrawer: true });
+  };
+
   render() {
-    const { user, mostActiveRows, mostPopularRows, mostFeedbackRows } = this.state;
+    const {
+      isAuthenticated,
+      user,
+      mostActiveRows,
+      mostPopularRows,
+      mostFeedbackRows,
+      openDrawer
+    } = this.state;
+
+    const drawerList = (
+      <DrawerList>
+        {!isAuthenticated && (
+          <ListItem button component={Link} to="/profile" onClick={this.handleCloseDrawer}>
+            <AccountCircle />
+          </ListItem>
+        )}
+        {isAuthenticated && (
+          <ListItem button component={Link} to="/profile" onClick={this.handleCloseDrawer}>
+            <AccountCircle />
+            <ListItemText primary={user ? `Hi, ${user.username}!` : "Profile"} />
+          </ListItem>
+        )}
+        <ListItem button component={Link} to="/home" onClick={this.handleCloseDrawer}>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem button component={Link} to="/lend" onClick={this.handleCloseDrawer}>
+          <ListItemText primary="Lend" />
+        </ListItem>
+        <ListItem button component={Link} to="/borrow" onClick={this.handleCloseDrawer}>
+          <ListItemText primary="Borrow" />
+        </ListItem>
+        <ListItem button component={Link} to="/feedback" onClick={this.handleCloseDrawer}>
+          <ListItemText primary="Feedback" />
+        </ListItem>
+      </DrawerList>
+    );
 
     return (
       <Router>
-        <Navbar>
-          <Left>
-            <Navlink to="/">Home</Navlink>
-            <Navlink to="/lend">Lend</Navlink>
-            <Navlink to="/borrow">Borrow</Navlink>
-            <Navlink to="/feedback">Feedback</Navlink>
-          </Left>
-          {this.state.isAuthenticated ? (
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton color="inherit" onClick={this.handleOpenDrawer}>
+              <MenuIcon />
+            </IconButton>
             <Right>
-              <Navlink to="/profile">{user ? `Hi, ${user.username}!` : "Profile"}</Navlink>
-              <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
+              {isAuthenticated && (
+                <Button component={Link} to="/profile" color="inherit">
+                  <AccountCircle />
+                  {user ? user.username : "Profile"}
+                </Button>
+              )}
+              {isAuthenticated && (
+                <Button onClick={this.handleLogout} color="inherit">
+                  Logout
+                </Button>
+              )}
+              {!isAuthenticated && (
+                <Button component={Link} to="/login" color="inherit">
+                  Login
+                </Button>
+              )}
+              {!isAuthenticated && (
+                <Button component={Link} to="/register" color="inherit">
+                  Register
+                </Button>
+              )}
             </Right>
-          ) : (
-            <Right>
-              <Navlink to="/login">Login</Navlink>
-              <Navlink to="/register">Register</Navlink>
-            </Right>
-          )}
-        </Navbar>
+          </Toolbar>
+        </AppBar>
+
+        <Drawer open={openDrawer} onClose={this.handleCloseDrawer}>
+          {drawerList}
+        </Drawer>
+
         <Switch>
           <Route
             exact
             path="/"
             render={() =>
-              this.state.isAuthenticated && (
+              isAuthenticated && (
                 <Divider>
                   <Table>
                     <TableHead>
@@ -189,47 +246,31 @@ class App extends Component {
           <Route
             path="/lend"
             render={props =>
-              this.state.isAuthenticated ? (
-                <Lend user={user} {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              isAuthenticated ? <Lend user={user} {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
             path="/borrow"
             render={props =>
-              this.state.isAuthenticated ? (
-                <Borrow user={user} {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              isAuthenticated ? <Borrow user={user} {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
             path="/feedback"
             render={props =>
-              this.state.isAuthenticated ? (
-                <Feedback user={user} {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              isAuthenticated ? <Feedback user={user} {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
             path="/item/:itemssn"
             render={props =>
-              this.state.isAuthenticated ? (
-                <Item user={user} {...props} />
-              ) : (
-                <Redirect to="/login" />
-              )
+              isAuthenticated ? <Item user={user} {...props} /> : <Redirect to="/login" />
             }
           />
           <Route
             path="/profile"
             render={props =>
-              this.state.isAuthenticated ? (
+              isAuthenticated ? (
                 <Profile
                   user={user}
                   handleLogin={this.handleLogin}
@@ -244,11 +285,7 @@ class App extends Component {
           <Route
             path="/login"
             render={props => (
-              <Login
-                handleLogin={this.handleLogin}
-                isAuthenticated={this.state.isAuthenticated}
-                {...props}
-              />
+              <Login handleLogin={this.handleLogin} isAuthenticated={isAuthenticated} {...props} />
             )}
           />
           <Route path="/register" render={props => <Register {...props} />} />
