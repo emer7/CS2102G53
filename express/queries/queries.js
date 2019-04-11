@@ -113,7 +113,7 @@ const itemCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ errorMessage: 'User not created' });
+      response.send({ errorMessage: error.message });
     } else {
       response.send(true);
     }

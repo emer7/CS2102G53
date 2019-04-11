@@ -66,7 +66,7 @@ class AcceptBid extends Component {
   };
 
   handleSubmit = () => {
-    const { user, item, history } = this.props;
+    const { user, item, history, handleShowDialog } = this.props;
     const { bid } = this.state;
     const { itemssn } = item;
     const { userssn } = user;
@@ -80,7 +80,13 @@ class AcceptBid extends Component {
       body: JSON.stringify(bidObject)
     })
       .then(res => res.json())
-      .then(() => history.push("/lend/available"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/lend/available");
+        }
+      });
   };
 
   render() {

@@ -25,7 +25,7 @@ class LendForm extends Component {
   };
 
   handleSubmit = () => {
-    const { user, history } = this.props;
+    const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
 
     fetch("/items/create", {
@@ -36,7 +36,13 @@ class LendForm extends Component {
       body: JSON.stringify({ ...this.state, userssn })
     })
       .then(res => res.json())
-      .then(() => history.push("/lend/available"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/lend/available");
+        }
+      });
   };
 
   render() {

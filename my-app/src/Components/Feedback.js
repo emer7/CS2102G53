@@ -22,7 +22,7 @@ class Feedback extends Component {
 
   render() {
     const { value } = this.state;
-    const { user } = this.props;
+    const { user, handleShowDialog } = this.props;
 
     return (
       <div>
@@ -37,7 +37,12 @@ class Feedback extends Component {
           <Tab label="View Given Feedback" component={Link} to="/feedback/view/given" />
           <Tab label="View Received Feedback" component={Link} to="/feedback/view/received" />
         </Tabs>
-        <Route path="/feedback/give" render={props => <GiveFeedback user={user} {...props} />} />
+        <Route
+          path="/feedback/give"
+          render={props => (
+            <GiveFeedback user={user} handleShowDialog={handleShowDialog} {...props} />
+          )}
+        />
         <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given />} />
         <Route path="/feedback/view/received" render={() => <ViewFeedback user={user} />} />
       </div>

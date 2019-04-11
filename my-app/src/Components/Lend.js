@@ -24,7 +24,7 @@ class Lend extends Component {
 
   render() {
     const { value } = this.state;
-    const { user } = this.props;
+    const { user, handleShowDialog } = this.props;
 
     return (
       <div>
@@ -40,7 +40,10 @@ class Lend extends Component {
           <Tab label="Waiting For Payment" component={Link} to="/lend/waiting" />
           <Tab label="Currently Lent" component={Link} to="/lend/current" />
         </Tabs>
-        <Route path="/lend/form" render={props => <LendForm user={user} {...props} />} />
+        <Route
+          path="/lend/form"
+          render={props => <LendForm user={user} handleShowDialog={handleShowDialog} {...props} />}
+        />
         <Route path="/lend/available" render={props => <AvailableLend user={user} {...props} />} />
         <Route path="/lend/waiting" render={props => <WaitingLend user={user} {...props} />} />
         <Route path="/lend/current" render={props => <CurrentlyLend user={user} {...props} />} />

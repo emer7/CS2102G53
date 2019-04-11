@@ -42,7 +42,7 @@ class GiveFeedback extends Component {
   };
 
   handleSubmit = () => {
-    const { user, history } = this.props;
+    const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
     const { commenttype, commentbody, receivedbyuserssn } = this.state;
     const feedbackObject = { userssn, commenttype, commentbody, receivedbyuserssn };
@@ -55,7 +55,13 @@ class GiveFeedback extends Component {
       body: JSON.stringify(feedbackObject)
     })
       .then(res => res.json())
-      .then(() => history.push("/feedback/view/given"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/feedback/view/given");
+        }
+      });
   };
 
   render() {

@@ -264,7 +264,11 @@ class App extends Component {
           <Route
             path="/lend"
             render={props =>
-              isAuthenticated ? <Lend user={user} {...props} /> : <Redirect to="/login" />
+              isAuthenticated ? (
+                <Lend user={user} handleShowDialog={this.handleShowDialog} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
@@ -276,7 +280,11 @@ class App extends Component {
           <Route
             path="/feedback"
             render={props =>
-              isAuthenticated ? <Feedback user={user} {...props} /> : <Redirect to="/login" />
+              isAuthenticated ? (
+                <Feedback user={user} handleShowDialog={this.handleShowDialog} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route

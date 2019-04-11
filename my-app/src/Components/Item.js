@@ -59,6 +59,7 @@ class Item extends Component {
             user={user}
             history={history}
             updateItemDetail={this.fetchResources}
+            handleShowDialog={handleShowDialog}
           />
         ) : (
           <ProposeBid
