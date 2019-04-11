@@ -2,15 +2,10 @@ import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import styled from "styled-components";
 
-import { Paper } from "@material-ui/core";
-
 import { AccountForm } from "./AccountForm";
+import { Box as BaseBox } from "./Constants";
 
-const Box = styled(Paper)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+const Box = styled(BaseBox)`
   width: 500px;
 `;
 
