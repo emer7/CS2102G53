@@ -23,7 +23,7 @@ class Profile extends Component {
 
   render() {
     const { value } = this.state;
-    const { user, handleLogin, fetchUserDetail } = this.props;
+    const { user, handleLogin, fetchUserDetail, handleShowDialog } = this.props;
 
     return (
       <div>
@@ -47,7 +47,14 @@ class Profile extends Component {
         />
         <Route
           path="/profile/security"
-          render={props => <UpdateSecurity user={user} handleLogin={handleLogin} {...props} />}
+          render={props => (
+            <UpdateSecurity
+              user={user}
+              handleLogin={handleLogin}
+              handleShowDialog={handleShowDialog}
+              {...props}
+            />
+          )}
         />
         <Route path="/profile/history" render={props => <History user={user} {...props} />} />
       </div>

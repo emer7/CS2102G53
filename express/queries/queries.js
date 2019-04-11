@@ -451,21 +451,25 @@ const userUpdate = (request, response) => {
 const userUpdatePassword = (request, response) => {
   const { password, userssn } = request.body;
 
-  bcrypt.hash(password, 12, (errorHash, hash) => {
-    if (errorHash) {
-      response.send({ errorMessage: 'Password cannot be empty' });
-    } else {
-      const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
-      const values = [hash, userssn];
-      pool.query(query, values, (errorQuery) => {
-        if (errorQuery) {
-          response.send({ errorMessage: errorQuery.message });
-        } else {
-          response.send(true);
-        }
-      });
-    }
-  });
+  if (!password || password.length === 0) {
+    response.send({ errorMessage: 'Password cannot be empty' });
+  } else {
+    bcrypt.hash(password, 12, (errorHash, hash) => {
+      if (errorHash) {
+        response.send({ errorMessage: 'Password cannot be empty' });
+      } else {
+        const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
+        const values = [hash, userssn];
+        pool.query(query, values, (errorQuery) => {
+          if (errorQuery) {
+            response.send({ errorMessage: errorQuery.message });
+          } else {
+            response.send(true);
+          }
+        });
+      }
+    });
+  }
 };
 
 // Deletes an exisiting user

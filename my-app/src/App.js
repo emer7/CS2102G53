@@ -297,6 +297,7 @@ class App extends Component {
                   user={user}
                   handleLogin={this.handleLogin}
                   fetchUserDetail={this.fetchUserDetail}
+                  handleShowDialog={this.handleShowDialog}
                   {...props}
                 />
               ) : (

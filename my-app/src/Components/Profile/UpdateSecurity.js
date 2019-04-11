@@ -17,7 +17,7 @@ class UpdateSecurity extends Component {
   };
 
   handleSubmit = () => {
-    const { history } = this.props;
+    const { history, handleShowDialog } = this.props;
 
     fetch("/users/update/password", {
       method: "PUT",
@@ -27,7 +27,13 @@ class UpdateSecurity extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(() => history.push("/"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/");
+        }
+      });
   };
 
   handleDeleteAccount = () => {

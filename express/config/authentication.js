@@ -30,7 +30,7 @@ passport.use(
             }
           });
         } else {
-          done(null, false, { errorMessage: 'User not  found' });
+          done(null, false, { errorMessage: 'User not found' });
         }
       });
     },
