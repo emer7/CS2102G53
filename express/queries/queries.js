@@ -498,7 +498,7 @@ const userDetail = (request, response) => {
 
   pool.query(query, values, (errorQuery, resultQuery) => {
     if (errorQuery) {
-      response.send(errorQuery);
+      response.send({ errorMessage: errorQuery.message });
     } else {
       response.send(resultQuery.rows[0]);
     }
