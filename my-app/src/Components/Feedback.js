@@ -1,23 +1,10 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import styled from "styled-components";
+
+import { Tabs, Tab } from "@material-ui/core";
 
 import GiveFeedback from "./Feedback/GiveFeedback";
 import ViewFeedback from "./Feedback/ViewFeedback";
-
-const Navbar = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-`;
-
-const Navlink = styled(Link)`
-  color: black;
-  text-decoration: none;
-  & + * {
-    margin-left: 10px;
-  }
-`;
 
 class Feedback extends Component {
   constructor(props) {
@@ -25,17 +12,31 @@ class Feedback extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this.setState({ value: false });
+  }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
   render() {
+    const { value } = this.state;
     const { user } = this.props;
 
     return (
       <div>
-        <Navbar>
-          <Navlink to="/feedback/give">Give Feedback</Navlink>
-          <Navlink to="/feedback/view/given">View Given Feedback</Navlink>
-          <Navlink to="/feedback/view/received">View Received Feedback</Navlink>
-        </Navbar>
-
+        <Tabs
+          value={value}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={this.handleChange}
+          centered
+        >
+          <Tab label="Give Feedback" component={Link} to="/feedback/give" />
+          <Tab label="View Given Feedback" component={Link} to="/feedback/view/given" />
+          <Tab label="View Received Feedback" component={Link} to="/feedback/view/received" />
+        </Tabs>
         <Route path="/feedback/give" render={props => <GiveFeedback user={user} {...props} />} />
         <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given />} />
         <Route path="/feedback/view/received" render={() => <ViewFeedback user={user} />} />

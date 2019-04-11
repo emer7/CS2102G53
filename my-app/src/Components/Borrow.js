@@ -1,25 +1,12 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import styled from "styled-components";
+
+import { Tabs, Tab } from "@material-ui/core";
 
 import AvailableBorrow from "./Borrow/AvailableBorrow";
 import CurrentlyBorrow from "./Borrow/CurrentlyBorrow";
 import CurrentlyBidding from "./Borrow/CurrentlyBidding";
 import AcceptedBidding from "./Borrow/AcceptedBidding";
-
-const Navbar = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-`;
-
-const Navlink = styled(Link)`
-  color: black;
-  text-decoration: none;
-  & + * {
-    margin-left: 10px;
-  }
-`;
 
 class Borrow extends Component {
   constructor(props) {
@@ -27,17 +14,32 @@ class Borrow extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this.setState({ value: false });
+  }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
   render() {
+    const { value } = this.state;
     const { user } = this.props;
 
     return (
       <div>
-        <Navbar>
-          <Navlink to="/borrow/available">Available to Borrow</Navlink>
-          <Navlink to="/borrow/bidding">Currently Bidding</Navlink>
-          <Navlink to="/borrow/accepted">Waiting For Payment</Navlink>
-          <Navlink to="/borrow/current">Currently Borrowed</Navlink>
-        </Navbar>
+        <Tabs
+          value={value}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={this.handleChange}
+          centered
+        >
+          <Tab label="Available to Borrow" component={Link} to="/borrow/available" />
+          <Tab label="Currently Bidding" component={Link} to="/borrow/bidding" />
+          <Tab label="Waiting For Payment" component={Link} to="/borrow/accepted" />
+          <Tab label="Currently Borrowed" component={Link} to="/borrow/current" />
+        </Tabs>
 
         <Route
           path="/borrow/available"

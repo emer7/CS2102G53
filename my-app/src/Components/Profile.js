@@ -1,24 +1,11 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import styled from "styled-components";
+
+import { Tabs, Tab } from "@material-ui/core";
 
 import UpdateProfile from "./Profile/UpdateProfile";
 import UpdateSecurity from "./Profile/UpdateSecurity";
 import History from "./Profile/History";
-
-const Navbar = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-`;
-
-const Navlink = styled(Link)`
-  color: black;
-  text-decoration: none;
-  & + * {
-    margin-left: 10px;
-  }
-`;
 
 class Profile extends Component {
   constructor(props) {
@@ -26,16 +13,31 @@ class Profile extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this.setState({ value: false });
+  }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
   render() {
+    const { value } = this.state;
     const { user, handleLogin, fetchUserDetail } = this.props;
 
     return (
       <div>
-        <Navbar>
-          <Navlink to="/profile/update">Update Profile</Navlink>
-          <Navlink to="/profile/security">Update Security</Navlink>
-          <Navlink to="/profile/history">Transaction History</Navlink>
-        </Navbar>
+        <Tabs
+          value={value}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={this.handleChange}
+          centered
+        >
+          <Tab label="Update Profile" component={Link} to="/profile/update" />
+          <Tab label="Update Security" component={Link} to="/profile/security" />
+          <Tab label="Transaction History" component={Link} to="/profile/history" />
+        </Tabs>
 
         <Route
           path="/profile/update"

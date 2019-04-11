@@ -1,25 +1,12 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import styled from "styled-components";
+
+import { Tabs, Tab } from "@material-ui/core";
 
 import LendForm from "./Lend/LendForm";
 import AvailableLend from "./Lend/AvailableLend";
 import WaitingLend from "./Lend/WaitingLend.js";
 import CurrentlyLend from "./Lend/CurrentlyLend";
-
-const Navbar = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-`;
-
-const Navlink = styled(Link)`
-  color: black;
-  text-decoration: none;
-  & + * {
-    margin-left: 10px;
-  }
-`;
 
 class Lend extends Component {
   constructor(props) {
@@ -27,18 +14,32 @@ class Lend extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this.setState({ value: false });
+  }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
   render() {
+    const { value } = this.state;
     const { user } = this.props;
 
     return (
       <div>
-        <Navbar>
-          <Navlink to="/lend/form">Lend an Item</Navlink>
-          <Navlink to="/lend/available">Available to Lent</Navlink>
-          <Navlink to="/lend/waiting">Waiting For Payment</Navlink>
-          <Navlink to="/lend/current">Currently Lent</Navlink>
-        </Navbar>
-
+        <Tabs
+          value={value}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={this.handleChange}
+          centered
+        >
+          <Tab label="Lend an Item" component={Link} to="/lend/form" />
+          <Tab label="Available to Lent" component={Link} to="/lend/available" />
+          <Tab label="Waiting For Payment" component={Link} to="/lend/waiting" />
+          <Tab label="Currently Lent" component={Link} to="/lend/current" />
+        </Tabs>
         <Route path="/lend/form" render={props => <LendForm user={user} {...props} />} />
         <Route path="/lend/available" render={props => <AvailableLend user={user} {...props} />} />
         <Route path="/lend/waiting" render={props => <WaitingLend user={user} {...props} />} />
