@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 
 import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { Button } from "@material-ui/core";
-import { MenuItem } from "@material-ui/core";
 
-import { FormField, FormButton, Form } from "../Constants";
+import { FeedbackForm } from "./FeedbackForm";
 
 class ViewFeedback extends Component {
   constructor(props) {
@@ -124,40 +122,17 @@ class ViewFeedback extends Component {
             </TableBody>
           </Table>
         </Grid>
-
         {given && (
           <Grid item xs sm md lg xl>
-            <Form>
-              <FormField
-                name="receivedByUsername"
-                label="To"
-                InputLabelProps={{ shrink: !!username }}
-                disabled
-                value={username}
-              />
-              <FormField
-                select
-                label="Comment Type"
-                InputLabelProps={{ shrink: !!commenttype }}
-                value={commenttype}
-                onChange={this.handleCommentType}
-                margin="normal"
-              >
-                <MenuItem value="Good">Good</MenuItem>
-                <MenuItem value="Bad">Bad</MenuItem>
-              </FormField>
-              <FormField
-                name="commentbody"
-                label="Body"
-                InputLabelProps={{ shrink: !!commentbody }}
-                multiline
-                value={commentbody}
-                onChange={this.handleCommentBody}
-              />
-              <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
-                Update
-              </FormButton>
-            </Form>
+            <FeedbackForm
+              receivedByUsername={username}
+              commenttype={commenttype}
+              commentbody={commentbody}
+              handleCommentType={this.handleCommentType}
+              handleCommentBody={this.handleCommentBody}
+              handleSubmit={this.handleSubmit}
+              buttonText="Update"
+            />
           </Grid>
         )}
       </Grid>

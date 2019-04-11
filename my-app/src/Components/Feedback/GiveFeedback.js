@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 
 import { Grid } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import { MenuItem } from "@material-ui/core";
 
-import { FormField, FormButton, Form } from "../Constants";
+import { FeedbackForm } from "./FeedbackForm";
 
 class GiveFeedback extends Component {
   constructor(props) {
@@ -90,37 +88,15 @@ class GiveFeedback extends Component {
           </Table>
         </Grid>
         <Grid item xs sm md lg xl>
-          <Form>
-            <FormField
-              name="receivedByUsername"
-              label="To"
-              InputLabelProps={{ shrink: !!receivedByUsername }}
-              disabled
-              value={receivedByUsername}
-            />
-            <FormField
-              select
-              label="Comment Type"
-              InputLabelProps={{ shrink: !!commenttype }}
-              value={commenttype}
-              onChange={this.handleCommentType}
-              margin="normal"
-            >
-              <MenuItem value="Good">Good</MenuItem>
-              <MenuItem value="Bad">Bad</MenuItem>
-            </FormField>
-            <FormField
-              name="commentbody"
-              label="Body"
-              InputLabelProps={{ shrink: !!commentbody }}
-              multiline
-              value={commentbody}
-              onChange={this.handleCommentBody}
-            />
-            <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
-              Submit
-            </FormButton>
-          </Form>
+          <FeedbackForm
+            receivedByUsername={receivedByUsername}
+            commenttype={commenttype}
+            commentbody={commentbody}
+            handleCommentType={this.handleCommentType}
+            handleCommentBody={this.handleCommentBody}
+            handleSubmit={this.handleSubmit}
+            buttonText="Submit"
+          />
         </Grid>
       </Grid>
     );
