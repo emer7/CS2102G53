@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/c
 class WaitingLend extends Component {
   constructor(props) {
     const rows = [];
-    
+
     super(props);
     this.state = { rows };
   }
@@ -31,11 +31,11 @@ class WaitingLend extends Component {
         <TableHead>
           <TableRow>
             <TableCell>Item Owner</TableCell>
-            <TableCell align="right">Item Name</TableCell>
-            <TableCell align="right">Item Description</TableCell>
-            <TableCell align="right">Minimum Bid Price</TableCell>
-            <TableCell align="right">Winning Bid</TableCell>
-            <TableCell align="right">Loan Duration in Days</TableCell>
+            <TableCell>Item Name</TableCell>
+            <TableCell>Item Description</TableCell>
+            <TableCell>Minimum Bid Price</TableCell>
+            <TableCell>Winning Bid</TableCell>
+            <TableCell>Loan Duration in Days</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -44,11 +44,11 @@ class WaitingLend extends Component {
               <TableCell component="th" scope="row">
                 {row.username}
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">{row.minbidprice}</TableCell>
-              <TableCell align="right">{row.bidamt}</TableCell>
-              <TableCell align="right">{row.loandurationindays}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.description}</TableCell>
+              <TableCell>{row.minbidprice}</TableCell>
+              <TableCell>{row.bidamt}</TableCell>
+              <TableCell>{row.loandurationindays}</TableCell>
             </TableRow>
           ))}
         </TableBody>

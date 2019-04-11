@@ -18,13 +18,13 @@ export const ItemsTable = ({
       <TableHead>
         <TableRow>
           <TableCell>Item Owner</TableCell>
-          <TableCell align="right">Item Name</TableCell>
-          <TableCell align="right">Item Description</TableCell>
-          <TableCell align="right">Minimum Bid Price</TableCell>
-          <TableCell align="right">Loan Duration in Days</TableCell>
-          {deleteButton && <TableCell align="right">Delete</TableCell>}
-          {acceptButton && <TableCell align="right">Pay</TableCell>}
-          {returnButton && <TableCell align="right">Return</TableCell>}
+          <TableCell>Item Name</TableCell>
+          <TableCell>Item Description</TableCell>
+          <TableCell>Minimum Bid Price</TableCell>
+          <TableCell>Loan Duration in Days</TableCell>
+          {deleteButton && <TableCell>Delete</TableCell>}
+          {acceptButton && <TableCell>Pay</TableCell>}
+          {returnButton && <TableCell>Return</TableCell>}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -33,26 +33,26 @@ export const ItemsTable = ({
             <TableCell component="th" scope="row">
               {row.username}
             </TableCell>
-            <TableCell align="right">{row.name}</TableCell>
-            <TableCell align="right">{row.description}</TableCell>
-            <TableCell align="right">{row.minbidprice}</TableCell>
-            <TableCell align="right">{row.loandurationindays}</TableCell>
+            <TableCell>{row.name}</TableCell>
+            <TableCell>{row.description}</TableCell>
+            <TableCell>{row.minbidprice}</TableCell>
+            <TableCell>{row.loandurationindays}</TableCell>
             {deleteButton && (
-              <TableCell align="right">
+              <TableCell>
                 <Button variant="contained" fullWidth onClick={event => handleDelete(event, row)}>
                   Delete
                 </Button>
               </TableCell>
             )}
             {acceptButton && (
-              <TableCell align="right">
+              <TableCell>
                 <Button variant="contained" fullWidth onClick={event => handleAccept(event, row)}>
                   Pay
                 </Button>
               </TableCell>
             )}
             {returnButton && (
-              <TableCell align="right">
+              <TableCell>
                 <Button variant="contained" fullWidth onClick={event => handleReturn(event, row)}>
                   Return
                 </Button>

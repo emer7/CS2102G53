@@ -6,7 +6,7 @@ import { Button } from "@material-ui/core";
 class CurrentlyBidding extends Component {
   constructor(props) {
     const rows = [];
-    
+
     super(props);
     this.state = { rows };
   }
@@ -57,12 +57,12 @@ class CurrentlyBidding extends Component {
         <TableHead>
           <TableRow>
             <TableCell>Item Owner</TableCell>
-            <TableCell align="right">Item Name</TableCell>
-            <TableCell align="right">Item Description</TableCell>
-            <TableCell align="right">Minimum Bid Price</TableCell>
-            <TableCell align="right">Latest Bid Amount</TableCell>
-            <TableCell align="right">Bid Date Time</TableCell>
-            <TableCell align="right">Delete</TableCell>
+            <TableCell>Item Name</TableCell>
+            <TableCell>Item Description</TableCell>
+            <TableCell>Minimum Bid Price</TableCell>
+            <TableCell>Latest Bid Amount</TableCell>
+            <TableCell>Bid Date Time</TableCell>
+            <TableCell>Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -71,12 +71,12 @@ class CurrentlyBidding extends Component {
               <TableCell component="th" scope="row">
                 {row.username}
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">{row.minbidprice}</TableCell>
-              <TableCell align="right">{row.bidamt}</TableCell>
-              <TableCell align="right">{row.biddatetime}</TableCell>
-              <TableCell align="right">
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.description}</TableCell>
+              <TableCell>{row.minbidprice}</TableCell>
+              <TableCell>{row.bidamt}</TableCell>
+              <TableCell>{row.biddatetime}</TableCell>
+              <TableCell>
                 <Button
                   variant="contained"
                   fullWidth

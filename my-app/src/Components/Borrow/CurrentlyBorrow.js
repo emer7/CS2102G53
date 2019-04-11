@@ -41,12 +41,12 @@ class CurrentlyBorrow extends Component {
         <TableHead>
           <TableRow>
             <TableCell>Item Owner</TableCell>
-            <TableCell align="right">Item Name</TableCell>
-            <TableCell align="right">Item Description</TableCell>
-            <TableCell align="right">Minimum Bid Price</TableCell>
-            <TableCell align="right">Loan Duration in Days</TableCell>
-            <TableCell align="right">End Date</TableCell>
-            <TableCell align="right">Return</TableCell>
+            <TableCell>Item Name</TableCell>
+            <TableCell>Item Description</TableCell>
+            <TableCell>Minimum Bid Price</TableCell>
+            <TableCell>Loan Duration in Days</TableCell>
+            <TableCell>End Date</TableCell>
+            <TableCell>Return</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,16 +55,16 @@ class CurrentlyBorrow extends Component {
               <TableCell component="th" scope="row">
                 {row.username}
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.description}</TableCell>
-              <TableCell align="right">{row.minbidprice}</TableCell>
-              <TableCell align="right">{row.loandurationindays}</TableCell>
-              <TableCell align="right">
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.description}</TableCell>
+              <TableCell>{row.minbidprice}</TableCell>
+              <TableCell>{row.loandurationindays}</TableCell>
+              <TableCell>
                 {new Date(new Date(row.enddate) - new Date(row.enddate).getTimezoneOffset() * 60000)
                   .toISOString()
                   .slice(0, 10)}
               </TableCell>
-              <TableCell align="right">
+              <TableCell>
                 <Button
                   variant="contained"
                   fullWidth
