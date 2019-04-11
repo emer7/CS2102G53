@@ -34,7 +34,7 @@ class Login extends Component {
   };
 
   handleSubmit = () => {
-    const { handleLogin } = this.props;
+    const { handleLogin, handleShowDialog } = this.props;
 
     fetch("/authenticate/login", {
       method: "POST",
@@ -44,7 +44,13 @@ class Login extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(data => data && handleLogin(data));
+      .then(data => {
+        if (data.errorMessage || data.message === "Missing credentials") {
+          handleShowDialog(data.errorMessage || data.message);
+        } else {
+          handleLogin(data);
+        }
+      });
   };
 
   render() {
