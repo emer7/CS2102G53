@@ -218,7 +218,7 @@ class App extends Component {
                       </TableHead>
                       <TableBody>
                         {mostActiveRows.map(row => (
-                          <TableRow key={row.username} hover>
+                          <TableRow key={row.username}>
                             <TableCell align="center">{row.username}</TableCell>
                           </TableRow>
                         ))}
@@ -234,7 +234,7 @@ class App extends Component {
                       </TableHead>
                       <TableBody>
                         {mostPopularRows.map(row => (
-                          <TableRow key={row.username} hover>
+                          <TableRow key={row.username}>
                             <TableCell align="center">{row.username}</TableCell>
                           </TableRow>
                         ))}
@@ -250,7 +250,7 @@ class App extends Component {
                       </TableHead>
                       <TableBody>
                         {mostFeedbackRows.map(row => (
-                          <TableRow key={row.username} hover>
+                          <TableRow key={row.username}>
                             <TableCell align="center">{row.username}</TableCell>
                           </TableRow>
                         ))}
