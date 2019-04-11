@@ -28,6 +28,7 @@ class CurrentlyBorrow extends Component {
 
   handleReturn = (event, { transactionssn }) => {
     event.stopPropagation();
+    
     fetch(`/items/return/${transactionssn}`, {
       method: "PUT"
     })

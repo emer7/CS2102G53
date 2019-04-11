@@ -31,6 +31,7 @@ class AvailableLend extends Component {
 
   handleDelete = (event, { itemssn }) => {
     event.stopPropagation();
+    
     fetch(`/items/delete/${itemssn}`, {
       method: "DELETE"
     })
