@@ -10,28 +10,24 @@ import History from "./Profile/History";
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { tabValue: false };
   }
 
-  componentDidMount() {
-    this.setState({ value: false });
-  }
-
-  handleChange = (event, value) => {
-    this.setState({ value });
+  handleTabChange = (event, value) => {
+    this.setState({ tabValue: value });
   };
 
   render() {
-    const { value } = this.state;
+    const { tabValue } = this.state;
     const { user, handleLogin, fetchUserDetail, handleShowDialog } = this.props;
 
     return (
       <div>
         <Tabs
-          value={value}
+          value={tabValue}
           indicatorColor="primary"
           textColor="primary"
-          onChange={this.handleChange}
+          onChange={this.handleTabChange}
           centered
         >
           <Tab label="Update Profile" component={Link} to="/profile/update" />
