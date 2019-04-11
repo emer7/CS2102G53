@@ -107,6 +107,7 @@ class AcceptBid extends Component {
             <FormField
               name="description"
               label="Description"
+              multiline
               value={description}
               onChange={this.handleDescriptionChange}
             />

@@ -150,6 +150,7 @@ class ViewFeedback extends Component {
                 name="commentbody"
                 label="Body"
                 InputLabelProps={{ shrink: !!commentbody }}
+                multiline
                 value={commentbody}
                 onChange={this.handleCommentBody}
               />
