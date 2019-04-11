@@ -43,8 +43,14 @@ class Feedback extends Component {
             <GiveFeedback user={user} handleShowDialog={handleShowDialog} {...props} />
           )}
         />
-        <Route path="/feedback/view/given" render={() => <ViewFeedback user={user} given />} />
-        <Route path="/feedback/view/received" render={() => <ViewFeedback user={user} />} />
+        <Route
+          path="/feedback/view/given"
+          render={() => <ViewFeedback user={user} handleShowDialog={handleShowDialog} given />}
+        />
+        <Route
+          path="/feedback/view/received"
+          render={() => <ViewFeedback user={user} handleShowDialog={handleShowDialog} />}
+        />
       </div>
     );
   }

@@ -39,7 +39,7 @@ class UpdateProfile extends Component {
   };
 
   handleSubmit = () => {
-    const { fetchUserDetail, user } = this.props;
+    const { fetchUserDetail, user, handleShowDialog } = this.props;
 
     fetch("/users/update", {
       method: "PUT",
@@ -49,7 +49,13 @@ class UpdateProfile extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(() => fetchUserDetail(user));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          fetchUserDetail(user);
+        }
+      });
   };
 
   render() {

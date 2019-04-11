@@ -274,7 +274,11 @@ class App extends Component {
           <Route
             path="/borrow"
             render={props =>
-              isAuthenticated ? <Borrow user={user} {...props} /> : <Redirect to="/login" />
+              isAuthenticated ? (
+                <Borrow user={user} handleShowDialog={this.handleShowDialog} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route

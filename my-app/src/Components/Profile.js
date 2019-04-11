@@ -42,7 +42,12 @@ class Profile extends Component {
         <Route
           path="/profile/update"
           render={props => (
-            <UpdateProfile user={user} fetchUserDetail={fetchUserDetail} {...props} />
+            <UpdateProfile
+              user={user}
+              fetchUserDetail={fetchUserDetail}
+              handleShowDialog={handleShowDialog}
+              {...props}
+            />
           )}
         />
         <Route

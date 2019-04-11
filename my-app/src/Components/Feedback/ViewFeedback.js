@@ -58,6 +58,7 @@ class ViewFeedback extends Component {
   };
 
   handleSubmit = () => {
+    const { handleShowDialog } = this.props;
     const { commenttype, commentbody, feedbackssn } = this.state;
     const feedbackObject = { commenttype, commentbody, feedbackssn };
 
@@ -69,7 +70,13 @@ class ViewFeedback extends Component {
       body: JSON.stringify(feedbackObject)
     })
       .then(res => res.json())
-      .then(() => this.fetchResources());
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          this.fetchResources();
+        }
+      });
   };
 
   render() {
