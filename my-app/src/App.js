@@ -48,7 +48,8 @@ class App extends Component {
       user,
       mostActiveRows,
       mostPopularRows,
-      mostFeedbackRows
+      mostFeedbackRows,
+      showDialog: false
     };
   }
 
