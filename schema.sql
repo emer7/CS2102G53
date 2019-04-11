@@ -72,8 +72,8 @@ CREATE TABLE Items (
     FOREIGN KEY (loanedBySSN) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE,
     CHECK (name <> ''),
     CHECK (description <> ''),
-    CHECK (minBidPrice > 0),
-    CHECK (loanDurationInDays > 0)
+    CHECK (minBidPrice >= 0),
+    CHECK (loanDurationInDays >= 0)
 );
 
 CREATE TABLE Bids (
@@ -85,7 +85,7 @@ CREATE TABLE Bids (
     PRIMARY KEY (bidSSN),
     FOREIGN KEY (placedBySSN) REFERENCES Users(userSSN) ON DELETE CASCADE,
     FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN) ON DELETE CASCADE,
-    CHECK (minBidPrice > 0),
+    CHECK (bidAmt >= 0)
 );
 
 CREATE TABLE Transactions (
