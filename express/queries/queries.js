@@ -404,22 +404,30 @@ const userRegister = (request, response) => {
     nationality,
   } = request.body;
 
-  bcrypt.hash(password, 12, (errorHash, hash) => {
-    if (errorHash) {
-      response.send({ errorMessage: 'Password cannot be empty' });
-    } else {
-      const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
-      const values = [username, hash, name, age, email, dob, phonenum, address, nationality];
+  if (!password || password.length === 0) {
+    response.send({ errorMessage: 'Password cannot be empty' });
+  } else {
+    bcrypt.hash(password, 12, (errorHash, hash) => {
+      if (errorHash) {
+        response.send({ errorMessage: 'Password cannot be empty' });
+      } else {
+        const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        const values = [username, hash, name, age, email, dob, phonenum, address, nationality];
 
-      pool.query(query, values, (errorQuery) => {
-        if (errorQuery) {
-          response.send(errorQuery);
-        } else {
-          response.send(true);
-        }
-      });
-    }
-  });
+        pool.query(query, values, (errorQuery) => {
+          if (errorQuery) {
+            if (errorQuery.message.includes('unique')) {
+              response.send({ errorMessage: 'Username is taken' });
+            } else {
+              response.send({ errorMessage: errorQuery.message });
+            }
+          } else {
+            response.send(true);
+          }
+        });
+      }
+    });
+  }
 };
 
 // Updates an exisiting user

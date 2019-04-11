@@ -62,7 +62,7 @@ class Register extends Component {
   };
 
   handleSubmit = () => {
-    const { history } = this.props;
+    const { history, handleShowDialog } = this.props;
 
     fetch("/users/register", {
       method: "POST",
@@ -72,7 +72,13 @@ class Register extends Component {
       body: JSON.stringify(this.state)
     })
       .then(res => res.json())
-      .then(data => history.push("/login"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/login");
+        }
+      });
   };
 
   render() {

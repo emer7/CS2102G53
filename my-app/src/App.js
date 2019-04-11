@@ -315,7 +315,10 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/register" render={props => <Register {...props} />} />
+          <Route
+            path="/register"
+            render={props => <Register handleShowDialog={this.handleShowDialog} {...props} />}
+          />
         </Switch>
       </Router>
     );
