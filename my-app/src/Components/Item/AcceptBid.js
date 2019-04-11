@@ -54,7 +54,7 @@ class AcceptBid extends Component {
     const { user, item, updateItemDetail, handleShowDialog } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
-    const itemObject = { name, description, minbidprice, loandurationindays, itemssn, userssn };
+    const itemObject = { userssn, name, description, minbidprice, loandurationindays, itemssn };
 
     fetch("/items/update", {
       method: "PUT",
@@ -79,7 +79,7 @@ class AcceptBid extends Component {
     const { itemssn } = item;
     const { userssn } = user;
     const { bidssn, bidamt, placedbyssn } = bid;
-    const bidObject = { userssn, itemssn, bidssn, bidamt, placedbyssn };
+    const bidObject = { bidssn, itemssn, bidamt, placedbyssn, userssn };
 
     fetch("/bid/winning/accept", {
       method: "POST",

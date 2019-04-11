@@ -20,7 +20,7 @@ class ProposeBid extends Component {
     const { itemssn } = item;
     const { userssn } = user;
     const { bidamt } = this.state;
-    const bidObject = { itemssn, bidamt, userssn };
+    const bidObject = { userssn, itemssn, bidamt };
 
     fetch("/items/bid/create", {
       method: "POST",

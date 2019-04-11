@@ -32,7 +32,7 @@ class CurrentlyBidding extends Component {
     const { itemssn } = item;
     const { user } = this.props;
     const { userssn } = user;
-    const bidDeleteObject = { userssn, itemssn };
+    const bidDeleteObject = { itemssn, userssn };
 
     fetch(`/items/bid/delete`, {
       method: "DELETE",

@@ -45,7 +45,7 @@ class GiveFeedback extends Component {
     const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
     const { commenttype, commentbody, receivedbyuserssn } = this.state;
-    const feedbackObject = { userssn, commenttype, commentbody, receivedbyuserssn };
+    const feedbackObject = { userssn, receivedbyuserssn, commenttype, commentbody };
 
     fetch("/users/feedback/create", {
       method: "POST",

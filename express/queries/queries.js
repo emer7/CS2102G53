@@ -142,7 +142,7 @@ const itemView = (request, response) => {
 // Updates an existing item
 const itemUpdate = (request, response) => {
   const {
-    itemssn, userssn, name, description, minbidprice, loandurationindays,
+    userssn, name, description, minbidprice, loandurationindays, itemssn,
   } = request.body;
 
   const query = 'UPDATE Items SET loanedBySSN = $1, name = $2, description = $3, minBidPrice = $4, loanDurationInDays = $5 WHERE itemSSN = $6';

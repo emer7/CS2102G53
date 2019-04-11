@@ -39,7 +39,7 @@ class LendForm extends Component {
     const { name, description, minbidprice, loandurationindays } = this.state;
     const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
-    const itemObject = { name, description, minbidprice, loandurationindays, userssn };
+    const itemObject = { userssn, name, description, minbidprice, loandurationindays };
 
     fetch("/items/create", {
       method: "POST",
