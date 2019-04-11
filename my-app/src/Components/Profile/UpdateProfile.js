@@ -10,10 +10,11 @@ const Box = styled(BaseBox)`
 
 class UpdateProfile extends Component {
   constructor(props) {
-    const { user } = props;
+    const { user, handleTabChange } = props;
 
     super(props);
     this.state = { ...user };
+    handleTabChange(undefined, 0);
   }
 
   handleNameChange = event => {

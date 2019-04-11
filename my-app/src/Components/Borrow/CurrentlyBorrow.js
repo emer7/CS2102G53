@@ -5,10 +5,12 @@ import { Button } from "@material-ui/core";
 
 class CurrentlyBorrow extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
     const rows = [];
 
     super(props);
     this.state = { rows };
+    handleTabChange(undefined, 3);
   }
 
   componentDidMount() {

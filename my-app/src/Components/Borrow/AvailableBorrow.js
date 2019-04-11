@@ -8,10 +8,12 @@ import { Form } from "../Constants";
 
 class AvailableBorrow extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
     const rows = [];
 
     super(props);
     this.state = { rows };
+    handleTabChange(undefined, 0);
   }
 
   componentDidMount() {
@@ -57,7 +59,7 @@ class AvailableBorrow extends Component {
     return (
       <React.Fragment>
         <Grid container direction="column" alignItems="center">
-        <Grid item xs sm md lg xl>
+          <Grid item xs sm md lg xl>
             <Form>
               <Grid container alignItems="center" spacing={16}>
                 <Grid item>

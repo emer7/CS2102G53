@@ -4,10 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/c
 
 class CurrentlyLend extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
     const rows = [];
 
     super(props);
     this.state = { rows };
+    handleTabChange(undefined, 3);
   }
 
   componentDidMount() {

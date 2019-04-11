@@ -7,10 +7,12 @@ import { FeedbackForm } from "./FeedbackForm";
 
 class GiveFeedback extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
     const rows = [];
 
     super(props);
     this.state = { rows };
+    handleTabChange(undefined, 0);
   }
 
   componentDidMount() {

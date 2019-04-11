@@ -12,8 +12,11 @@ const Box = styled(BaseBox)`
 
 class LendForm extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
+    
     super(props);
     this.state = {};
+    handleTabChange(undefined, 0);
   }
 
   handleNameChange = event => {

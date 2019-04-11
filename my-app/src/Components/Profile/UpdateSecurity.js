@@ -10,10 +10,11 @@ const Box = styled(BaseBox)`
 
 class UpdateSecurity extends Component {
   constructor(props) {
-    const { user } = props;
+    const { user, handleTabChange } = props;
 
     super(props);
     this.state = { ...user };
+    handleTabChange(undefined, 1);
   }
 
   handlePasswordChange = event => {
@@ -55,7 +56,7 @@ class UpdateSecurity extends Component {
   };
 
   render() {
-    const { password } = this.state;  
+    const { password } = this.state;
 
     return (
       <Box>

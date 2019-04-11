@@ -8,10 +8,12 @@ import { FeedbackForm } from "./FeedbackForm";
 
 class ViewFeedback extends Component {
   constructor(props) {
+    const { handleTabChange, given } = props;
     const rows = [];
 
     super(props);
     this.state = { rows, row: {} };
+    handleTabChange(undefined, given ? 1 : 2);
   }
 
   componentDidMount() {

@@ -4,10 +4,12 @@ import { ItemsTable } from "../ItemsTable";
 
 class AvailableLend extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
     const rows = [];
 
     super(props);
     this.state = { rows };
+    handleTabChange(undefined, 1);
   }
 
   componentDidMount() {

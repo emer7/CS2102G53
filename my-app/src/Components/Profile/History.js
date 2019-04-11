@@ -5,8 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/c
 
 class History extends Component {
   constructor(props) {
+    const { handleTabChange } = props;
+
     super(props);
     this.state = { loanRows: [], borrowRows: [] };
+    handleTabChange(undefined, 2);
   }
 
   componentDidMount() {
