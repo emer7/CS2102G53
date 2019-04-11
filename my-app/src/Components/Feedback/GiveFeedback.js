@@ -68,7 +68,7 @@ class GiveFeedback extends Component {
     const { rows, receivedByUsername, commenttype, commentbody } = this.state;
 
     return (
-      <Grid container spacing={8}>
+      <Grid container>
         <Grid item xs sm md lg xl>
           <Table>
             <TableHead>
