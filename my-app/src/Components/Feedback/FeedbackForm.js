@@ -15,7 +15,7 @@ export const FeedbackForm = ({
   buttonText
 }) => (
   <Form>
-    <Grid container direction="column" spacing="16">
+    <Grid container direction="column" spacing={16}>
       <Grid item xs sm md lg xl>
         <TextField
           name="receivedByUsername"

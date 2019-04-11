@@ -208,7 +208,7 @@ class App extends Component {
             path="/"
             render={() =>
               isAuthenticated && (
-                <Grid container spacing="8">
+                <Grid container spacing={8}>
                   <Grid item xs sm md lg xl>
                     <Table>
                       <TableHead>

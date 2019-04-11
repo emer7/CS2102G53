@@ -30,7 +30,7 @@ class History extends Component {
     const { loanRows, borrowRows } = this.state;
 
     return (
-      <Grid container spacing="8">
+      <Grid container spacing={8}>
         <Grid item xs sm md lg xl>
           <Table>
             <TableHead>

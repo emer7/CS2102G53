@@ -59,8 +59,8 @@ class LendForm extends Component {
     return (
       <Box>
         <Form>
-          <Grid container direction="column" spacing="16">
-            <Grid item>
+          <Grid container direction="column" spacing={16}>
+            <Grid item xs sm md lg xl>
               <TextField
                 name="name"
                 label="Name"
@@ -69,7 +69,7 @@ class LendForm extends Component {
                 onChange={this.handleNameChange}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs sm md lg xl>
               <TextField
                 name="description"
                 label="Description"
@@ -79,7 +79,7 @@ class LendForm extends Component {
                 onChange={this.handleDescriptionChange}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs sm md lg xl>
               <TextField
                 name="minBidPrice"
                 type="number"
@@ -89,7 +89,7 @@ class LendForm extends Component {
                 onChange={this.handleMinBidPriceChange}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs sm md lg xl>
               <TextField
                 name="loanDuration"
                 type="number"
@@ -99,7 +99,7 @@ class LendForm extends Component {
                 onChange={this.handleLoandDurationChange}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs sm md lg xl>
               <Button variant="contained" color="primary" fullWidth onClick={this.handleSubmit}>
                 Submit
               </Button>

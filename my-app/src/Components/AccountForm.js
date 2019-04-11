@@ -39,7 +39,7 @@ export const AccountForm = ({
   handleDeleteAccount
 }) => (
   <Form>
-    <Grid container direction="column" spacing="16">
+    <Grid container direction="column" spacing={16}>
       {type && (
         <Grid item xs sm md lg xl>
           <Title>{type}</Title>
@@ -47,7 +47,7 @@ export const AccountForm = ({
       )}
       {(userssn || !hideUsername || handlePasswordChange) && (
         <Grid item xs sm md lg xl>
-          <Grid container spacing="16" direction="column">
+          <Grid container spacing={16} direction="column">
             {userssn && (
               <Grid item xs sm md lg xl>
                 <TextField
@@ -96,7 +96,7 @@ export const AccountForm = ({
       )}
       {(handleNameChange || handleEmailChange) && (
         <Grid item xs sm md lg xl>
-          <Grid container spacing="8">
+          <Grid container spacing={8}>
             {handleNameChange && (
               <Grid item xs sm md lg xl>
                 <TextField
@@ -129,7 +129,7 @@ export const AccountForm = ({
       )}
       {(handleDobChange || handleAgeChange) && (
         <Grid item xs sm md lg xl>
-          <Grid container spacing="8">
+          <Grid container spacing={8}>
             {handleDobChange && (
               <Grid item xs sm md lg xl>
                 <TextField
@@ -163,7 +163,7 @@ export const AccountForm = ({
       )}
       {(handlePhonenumChange || handleAddressChange || handleNationalityChange) && (
         <Grid item xs sm md lg xl>
-          <Grid container spacing="8">
+          <Grid container spacing={8}>
             {handlePhonenumChange && (
               <Grid item xs sm md lg xl>
                 <TextField

@@ -100,10 +100,10 @@ class AcceptBid extends Component {
     const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
-      <Grid container spacing="8">
+      <Grid container spacing={8}>
         <Grid item xs sm md lg xl>
           <Form>
-            <Grid container direction="column" spacing="16">
+            <Grid container direction="column" spacing={16}>
               <Grid item xs sm md lg xl>
                 <TextField
                   name="name"
@@ -152,7 +152,7 @@ class AcceptBid extends Component {
           </Form>
         </Grid>
         <Grid item xs sm md lg xl>
-          <Grid container direction="column" spacing="8">
+          <Grid container direction="column" spacing={8}>
             <Grid item xs sm md lg xl>
               <Table>
                 <TableHead>
@@ -177,7 +177,7 @@ class AcceptBid extends Component {
             </Grid>
             <Grid item xs sm md lg xl>
               <Form>
-                <Grid container direction="column" alignItems="center" spacing="16">
+                <Grid container direction="column" alignItems="center" spacing={16}>
                   <Grid item>
                     <TextField
                       name="username"

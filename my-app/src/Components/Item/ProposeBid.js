@@ -46,7 +46,7 @@ class ProposeBid extends Component {
 
     return (
       <Form>
-        <Grid container direction="column" alignItems="center" spacing="16">
+        <Grid container direction="column" alignItems="center" spacing={16}>
           <Grid item>
             <TextField
               name="bidamt"

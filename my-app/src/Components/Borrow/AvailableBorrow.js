@@ -57,9 +57,9 @@ class AvailableBorrow extends Component {
     return (
       <React.Fragment>
         <Grid container direction="column" alignItems="center">
-          <Grid item>
+        <Grid item xs sm md lg xl>
             <Form>
-              <Grid container alignItems="center" spacing="16">
+              <Grid container alignItems="center" spacing={16}>
                 <Grid item>
                   <TextField
                     name="searchQuery"

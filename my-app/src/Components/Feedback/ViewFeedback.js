@@ -82,7 +82,7 @@ class ViewFeedback extends Component {
     const { rows, username, commenttype, commentbody } = this.state;
 
     return (
-      <Grid container spacing="8">
+      <Grid container spacing={8}>
         <Grid item xs sm md lg xl>
           <Table>
             <TableHead>
