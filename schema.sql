@@ -25,14 +25,14 @@ CREATE TABLE Users (
 
 CREATE TABLE Loaners (
     loanerSSN INTEGER,
-    PRIMARY KEY (loanerSSN ),
-    FOREIGN KEY (loanerSSN ) REFERENCES Users(userSSN) ON DELETE CASCADE
+    PRIMARY KEY (loanerSSN),
+    FOREIGN KEY (loanerSSN) REFERENCES Users(userSSN) ON DELETE CASCADE
 );
 
 CREATE TABLE Borrowers (
     borrowerSSN INTEGER,
-    PRIMARY KEY (borrowerSSN ),
-    FOREIGN KEY (borrowerSSN ) REFERENCES Users(userSSN) ON DELETE CASCADE
+    PRIMARY KEY (borrowerSSN),
+    FOREIGN KEY (borrowerSSN) REFERENCES Users(userSSN) ON DELETE CASCADE
 );
 
 CREATE TABLE Feedbacks (
@@ -42,8 +42,8 @@ CREATE TABLE Feedbacks (
     commentType TEXT NOT NULL,
     commentBody TEXT NOT NULL,
     PRIMARY KEY (feedbackSSN),
-    FOREIGN KEY (givenByUserSSN ) REFERENCES Users(userSSN) ON DELETE CASCADE, 
-    FOREIGN KEY (receivedByUserSSN ) REFERENCES Users(userSSN) ON DELETE CASCADE
+    FOREIGN KEY (givenByUserSSN) REFERENCES Users(userSSN) ON DELETE CASCADE, 
+    FOREIGN KEY (receivedByUserSSN) REFERENCES Users(userSSN) ON DELETE CASCADE
 );
 
 CREATE TABLE Payments (
@@ -66,7 +66,7 @@ CREATE TABLE Items (
     minBidPrice INTEGER NOT NULL,
     loanDurationInDays INTEGER,
     PRIMARY KEY (itemSSN),
-    FOREIGN KEY (loanedBySSN ) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE
+    FOREIGN KEY (loanedBySSN) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE
 );
 
 CREATE TABLE Bids (
