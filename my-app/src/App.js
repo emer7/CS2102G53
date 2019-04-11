@@ -18,6 +18,7 @@ import Lend from "./Components/Lend";
 import Item from "./Components/Item";
 import Profile from "./Components/Profile";
 import Feedback from "./Components/Feedback";
+import Dialog from "./Components/Dialog";
 
 const Toolbar = styled(DefaultToolbar)`
   display: flex;
@@ -110,6 +111,14 @@ class App extends Component {
     this.setState({ openDrawer: true });
   };
 
+  handleCloseDialog = () => {
+    this.setState({ showDialog: false });
+  };
+
+  handleShowDialog = message => {
+    this.setState({ showDialog: true, dialogMessage: message });
+  };
+
   render() {
     const {
       isAuthenticated,
@@ -117,7 +126,9 @@ class App extends Component {
       mostActiveRows,
       mostPopularRows,
       mostFeedbackRows,
-      openDrawer
+      openDrawer,
+      showDialog,
+      dialogMessage
     } = this.state;
 
     const drawerList = (
@@ -184,6 +195,12 @@ class App extends Component {
         <Drawer open={openDrawer} onClose={this.handleCloseDrawer}>
           {drawerList}
         </Drawer>
+
+        <Dialog
+          showDialog={showDialog}
+          dialogMessage={dialogMessage}
+          handleCloseDialog={this.handleCloseDialog}
+        />
 
         <Switch>
           <Route
@@ -286,7 +303,12 @@ class App extends Component {
           <Route
             path="/login"
             render={props => (
-              <Login handleLogin={this.handleLogin} isAuthenticated={isAuthenticated} {...props} />
+              <Login
+                handleLogin={this.handleLogin}
+                isAuthenticated={isAuthenticated}
+                handleShowDialog={this.handleShowDialog}
+                {...props}
+              />
             )}
           />
           <Route path="/register" render={props => <Register {...props} />} />
