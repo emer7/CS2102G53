@@ -50,16 +50,18 @@ class AcceptBid extends Component {
   };
 
   handleEditItem = () => {
+    const { name, description, minbidprice, loandurationindays } = this.state;
     const { user, item, updateItemDetail, handleShowDialog } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
+    const itemObject = { name, description, minbidprice, loandurationindays, itemssn, userssn };
 
     fetch("/items/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ ...this.state, itemssn, userssn })
+      body: JSON.stringify(itemObject)
     })
       .then(res => res.json())
       .then(data => {
@@ -76,7 +78,8 @@ class AcceptBid extends Component {
     const { bid } = this.state;
     const { itemssn } = item;
     const { userssn } = user;
-    const bidObject = { userssn, itemssn, ...bid };
+    const { bidssn, bidamt, placedbyssn } = bid;
+    const bidObject = { userssn, itemssn, bidssn, bidamt, placedbyssn };
 
     fetch("/bid/winning/accept", {
       method: "POST",

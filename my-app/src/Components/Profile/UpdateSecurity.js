@@ -10,10 +10,10 @@ const Box = styled(BaseBox)`
 
 class UpdateSecurity extends Component {
   constructor(props) {
-    const { user, handleTabChange } = props;
+    const { handleTabChange } = props;
 
     super(props);
-    this.state = { ...user };
+    this.state = {};
     handleTabChange(undefined, 1);
   }
 
@@ -22,14 +22,17 @@ class UpdateSecurity extends Component {
   };
 
   handleSubmit = () => {
-    const { history, handleShowDialog } = this.props;
+    const { user, history, handleShowDialog } = this.props;
+    const { password } = this.state;
+    const { userssn } = user;
+    const passwordObject = { password, userssn };
 
     fetch("/users/update/password", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(passwordObject)
     })
       .then(res => res.json())
       .then(data => {

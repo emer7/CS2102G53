@@ -53,13 +53,35 @@ class Register extends Component {
 
   handleSubmit = () => {
     const { history, handleShowDialog } = this.props;
+    const {
+      username,
+      password,
+      name,
+      age,
+      email,
+      dob,
+      phonenum,
+      address,
+      nationality
+    } = this.state;
+    const userObject = {
+      username,
+      password,
+      name,
+      age,
+      email,
+      dob,
+      phonenum,
+      address,
+      nationality
+    };
 
     fetch("/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(userObject)
     })
       .then(res => res.json())
       .then(data => {

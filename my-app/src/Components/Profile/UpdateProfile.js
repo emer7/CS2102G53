@@ -47,13 +47,15 @@ class UpdateProfile extends Component {
 
   handleSubmit = () => {
     const { fetchUserDetail, user, handleShowDialog } = this.props;
+    const { name, age, email, dob, phonenum, address, nationality, userssn } = this.state;
+    const userObject = { name, age, email, dob, phonenum, address, nationality, userssn };
 
     fetch("/users/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(userObject)
     })
       .then(res => res.json())
       .then(data => {
@@ -78,7 +80,7 @@ class UpdateProfile extends Component {
           age={age}
           email={email}
           dob={dob}
-          phoneNum={phonenum}
+          phonenum={phonenum}
           address={address}
           nationality={nationality}
           handleUsernameChange={this.handleUsernameChange}

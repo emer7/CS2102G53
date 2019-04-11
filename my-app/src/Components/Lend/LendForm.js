@@ -13,7 +13,7 @@ const Box = styled(BaseBox)`
 class LendForm extends Component {
   constructor(props) {
     const { handleTabChange } = props;
-    
+
     super(props);
     this.state = {};
     handleTabChange(undefined, 0);
@@ -36,15 +36,17 @@ class LendForm extends Component {
   };
 
   handleSubmit = () => {
+    const { name, description, minbidprice, loandurationindays } = this.state;
     const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
+    const itemObject = { name, description, minbidprice, loandurationindays, userssn };
 
     fetch("/items/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ ...this.state, userssn })
+      body: JSON.stringify(itemObject)
     })
       .then(res => res.json())
       .then(data => {

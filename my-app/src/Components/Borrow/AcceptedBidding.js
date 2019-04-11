@@ -42,13 +42,14 @@ class AcceptedBidding extends Component {
     event.stopPropagation();
 
     const { paymentssn } = item;
+    const paymentObject = { paymentssn };
 
     fetch("/payment/update/paid", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ paymentssn })
+      body: JSON.stringify(paymentObject)
     })
       .then(res => res.json())
       .then(() => this.fetchResources());
