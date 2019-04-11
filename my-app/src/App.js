@@ -282,7 +282,11 @@ class App extends Component {
           <Route
             path="/item/:itemssn"
             render={props =>
-              isAuthenticated ? <Item user={user} {...props} /> : <Redirect to="/login" />
+              isAuthenticated ? (
+                <Item user={user} handleShowDialog={this.handleShowDialog} {...props} />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route

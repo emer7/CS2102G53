@@ -25,7 +25,7 @@ class Item extends Component {
 
   render() {
     const { row } = this.state;
-    const { user, history } = this.props;
+    const { user, history, handleShowDialog } = this.props;
     const { loanedbyssn } = row;
 
     return (
@@ -61,7 +61,12 @@ class Item extends Component {
             updateItemDetail={this.fetchResources}
           />
         ) : (
-          <ProposeBid item={row} user={user} history={history} />
+          <ProposeBid
+            item={row}
+            user={user}
+            history={history}
+            handleShowDialog={handleShowDialog}
+          />
         )}
       </div>
     );

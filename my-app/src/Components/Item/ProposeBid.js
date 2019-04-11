@@ -13,7 +13,7 @@ class ProposeBid extends Component {
   };
 
   handleSubmit = () => {
-    const { item, user, history } = this.props;
+    const { item, user, history, handleShowDialog } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
     const { bidamt } = this.state;
@@ -27,7 +27,13 @@ class ProposeBid extends Component {
       body: JSON.stringify(bidObject)
     })
       .then(res => res.json())
-      .then(() => history.push("/borrow/bidding"));
+      .then(data => {
+        if (data.errorMessage) {
+          handleShowDialog(data.errorMessage);
+        } else {
+          history.push("/borrow/bidding");
+        }
+      });
   };
 
   render() {
