@@ -41,15 +41,11 @@ class Borrow extends Component {
 
         <Route
           path="/borrow/available"
-          render={props => (
-            <AvailableBorrow user={user} {...props} />
-          )}
+          render={props => <AvailableBorrow user={user} {...props} />}
         />
         <Route
           path="/borrow/bidding"
-          render={props => (
-            <CurrentlyBidding user={user} {...props} />
-          )}
+          render={props => <CurrentlyBidding user={user} {...props} />}
         />
         <Route
           path="/borrow/accepted"
@@ -57,9 +53,7 @@ class Borrow extends Component {
         />
         <Route
           path="/borrow/current"
-          render={props => (
-            <CurrentlyBorrow user={user} {...props} />
-          )}
+          render={props => <CurrentlyBorrow user={user} {...props} />}
         />
       </div>
     );

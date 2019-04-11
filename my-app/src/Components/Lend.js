@@ -40,24 +40,9 @@ class Lend extends Component {
         </Navbar>
 
         <Route path="/lend/form" render={props => <LendForm user={user} {...props} />} />
-        <Route
-          path="/lend/available"
-          render={props => (
-            <AvailableLend user={user} {...props} />
-          )}
-        />
-        <Route
-          path="/lend/waiting"
-          render={props => (
-            <WaitingLend user={user} {...props} />
-          )}
-        />
-        <Route
-          path="/lend/current"
-          render={props => (
-            <CurrentlyLend user={user} {...props} />
-          )}
-        />
+        <Route path="/lend/available" render={props => <AvailableLend user={user} {...props} />} />
+        <Route path="/lend/waiting" render={props => <WaitingLend user={user} {...props} />} />
+        <Route path="/lend/current" render={props => <CurrentlyLend user={user} {...props} />} />
       </div>
     );
   }
