@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
-import { Tabs, Tab } from "@material-ui/core";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import LendForm from "./Lend/LendForm";
 import AvailableLend from "./Lend/AvailableLend";
@@ -23,19 +23,22 @@ class Lend extends Component {
     const { user, handleShowDialog } = this.props;
 
     return (
-      <div>
-        <Tabs
-          value={tabValue}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={this.handleTabChange}
-          centered
-        >
-          <Tab label="Lend an Item" component={Link} to="/lend/form" />
-          <Tab label="Available to Lent" component={Link} to="/lend/available" />
-          <Tab label="Waiting For Payment" component={Link} to="/lend/waiting" />
-          <Tab label="Currently Lent" component={Link} to="/lend/current" />
-        </Tabs>
+      <React.Fragment>
+        <Paper>
+          <Tabs
+            value={tabValue}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.handleTabChange}
+            centered
+          >
+            <Tab label="Lend an Item" component={Link} to="/lend/form" />
+            <Tab label="Available to Lent" component={Link} to="/lend/available" />
+            <Tab label="Waiting For Payment" component={Link} to="/lend/waiting" />
+            <Tab label="Currently Lent" component={Link} to="/lend/current" />
+          </Tabs>
+        </Paper>
+
         <Route
           path="/lend/form"
           render={props => (
@@ -65,7 +68,7 @@ class Lend extends Component {
             <CurrentlyLend user={user} handleTabChange={this.handleTabChange} {...props} />
           )}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

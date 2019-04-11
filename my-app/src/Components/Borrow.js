@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
-import { Tabs, Tab } from "@material-ui/core";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import AvailableBorrow from "./Borrow/AvailableBorrow";
 import CurrentlyBorrow from "./Borrow/CurrentlyBorrow";
@@ -23,19 +23,21 @@ class Borrow extends Component {
     const { user } = this.props;
 
     return (
-      <div>
-        <Tabs
-          value={tabValue}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={this.handleTabChange}
-          centered
-        >
-          <Tab label="Available to Borrow" component={Link} to="/borrow/available" />
-          <Tab label="Currently Bidding" component={Link} to="/borrow/bidding" />
-          <Tab label="Waiting For Payment" component={Link} to="/borrow/accepted" />
-          <Tab label="Currently Borrowed" component={Link} to="/borrow/current" />
-        </Tabs>
+      <React.Fragment>
+        <Paper>
+          <Tabs
+            value={tabValue}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.handleTabChange}
+            centered
+          >
+            <Tab label="Available to Borrow" component={Link} to="/borrow/available" />
+            <Tab label="Currently Bidding" component={Link} to="/borrow/bidding" />
+            <Tab label="Waiting For Payment" component={Link} to="/borrow/accepted" />
+            <Tab label="Currently Borrowed" component={Link} to="/borrow/current" />
+          </Tabs>
+        </Paper>
 
         <Route
           path="/borrow/available"
@@ -61,7 +63,7 @@ class Borrow extends Component {
             <CurrentlyBorrow user={user} handleTabChange={this.handleTabChange} {...props} />
           )}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

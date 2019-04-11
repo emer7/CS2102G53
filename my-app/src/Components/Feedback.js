@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
-import { Tabs, Tab } from "@material-ui/core";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import GiveFeedback from "./Feedback/GiveFeedback";
 import ViewFeedback from "./Feedback/ViewFeedback";
@@ -21,18 +21,21 @@ class Feedback extends Component {
     const { user, handleShowDialog } = this.props;
 
     return (
-      <div>
-        <Tabs
-          value={tabValue}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={this.handleTabChange}
-          centered
-        >
-          <Tab label="Give Feedback" component={Link} to="/feedback/give" />
-          <Tab label="View Given Feedback" component={Link} to="/feedback/view/given" />
-          <Tab label="View Received Feedback" component={Link} to="/feedback/view/received" />
-        </Tabs>
+      <React.Fragment>
+        <Paper>
+          <Tabs
+            value={tabValue}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.handleTabChange}
+            centered
+          >
+            <Tab label="Give Feedback" component={Link} to="/feedback/give" />
+            <Tab label="View Given Feedback" component={Link} to="/feedback/view/given" />
+            <Tab label="View Received Feedback" component={Link} to="/feedback/view/received" />
+          </Tabs>
+        </Paper>
+
         <Route
           path="/feedback/give"
           render={props => (
@@ -65,7 +68,7 @@ class Feedback extends Component {
             />
           )}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

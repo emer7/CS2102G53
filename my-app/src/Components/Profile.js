@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
-import { Tabs, Tab } from "@material-ui/core";
+import { Paper, Tabs, Tab } from "@material-ui/core";
 
 import UpdateProfile from "./Profile/UpdateProfile";
 import UpdateSecurity from "./Profile/UpdateSecurity";
@@ -22,18 +22,20 @@ class Profile extends Component {
     const { user, handleLogin, fetchUserDetail, handleShowDialog } = this.props;
 
     return (
-      <div>
-        <Tabs
-          value={tabValue}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={this.handleTabChange}
-          centered
-        >
-          <Tab label="Update Profile" component={Link} to="/profile/update" />
-          <Tab label="Update Security" component={Link} to="/profile/security" />
-          <Tab label="Transaction History" component={Link} to="/profile/history" />
-        </Tabs>
+      <React.Fragment>
+        <Paper>
+          <Tabs
+            value={tabValue}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={this.handleTabChange}
+            centered
+          >
+            <Tab label="Update Profile" component={Link} to="/profile/update" />
+            <Tab label="Update Security" component={Link} to="/profile/security" />
+            <Tab label="Transaction History" component={Link} to="/profile/history" />
+          </Tabs>
+        </Paper>
 
         <Route
           path="/profile/update"
@@ -65,7 +67,7 @@ class Profile extends Component {
             <History user={user} handleTabChange={this.handleTabChange} {...props} />
           )}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }
