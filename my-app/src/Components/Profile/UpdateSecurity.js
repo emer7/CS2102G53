@@ -60,7 +60,7 @@ class UpdateSecurity extends Component {
   };
 
   render() {
-    const { password } = this.state;
+    const { password } = this.state;  
 
     return (
       <Box>
@@ -69,11 +69,8 @@ class UpdateSecurity extends Component {
           password={password}
           handlePasswordChange={this.handlePasswordChange}
           handleSubmit={this.handleSubmit}
+          handleDeleteAccount={this.handleDeleteAccount}
         />
-        <Button variant="contained" color="secondary" fullWidth onClick={this.handleDeleteAccount}>
-          Delete Account
-        </Button>
-      </div>
       </Box>
     );
   }
