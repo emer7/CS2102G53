@@ -20,7 +20,8 @@ CREATE TABLE Users (
     phoneNum VARCHAR(30),
     address VARCHAR(100),
     nationality VARCHAR(100),
-    PRIMARY KEY (userSSN)
+    PRIMARY KEY (userSSN),
+    CHECK (userName <> '')
 );
 
 CREATE TABLE Loaners (
@@ -43,7 +44,9 @@ CREATE TABLE Feedbacks (
     commentBody TEXT NOT NULL,
     PRIMARY KEY (feedbackSSN),
     FOREIGN KEY (givenByUserSSN) REFERENCES Users(userSSN) ON DELETE CASCADE, 
-    FOREIGN KEY (receivedByUserSSN) REFERENCES Users(userSSN) ON DELETE CASCADE
+    FOREIGN KEY (receivedByUserSSN) REFERENCES Users(userSSN) ON DELETE CASCADE,
+    CHECK (commentType <> ''),
+    CHECK (commentBody <> '')
 );
 
 CREATE TABLE Payments (
@@ -66,7 +69,11 @@ CREATE TABLE Items (
     minBidPrice INTEGER NOT NULL,
     loanDurationInDays INTEGER,
     PRIMARY KEY (itemSSN),
-    FOREIGN KEY (loanedBySSN) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE
+    FOREIGN KEY (loanedBySSN) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE,
+    CHECK (name <> ''),
+    CHECK (description <> ''),
+    CHECK (minBidPrice > 0),
+    CHECK (loanDurationInDays > 0)
 );
 
 CREATE TABLE Bids (
@@ -77,7 +84,8 @@ CREATE TABLE Bids (
     bidDateTime TIMESTAMP,
     PRIMARY KEY (bidSSN),
     FOREIGN KEY (placedBySSN) REFERENCES Users(userSSN) ON DELETE CASCADE,
-    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN) ON DELETE CASCADE
+    FOREIGN KEY (itemSSN) REFERENCES Items(itemSSN) ON DELETE CASCADE,
+    CHECK (minBidPrice > 0),
 );
 
 CREATE TABLE Transactions (
