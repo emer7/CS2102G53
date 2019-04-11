@@ -79,6 +79,7 @@ class CurrentlyBidding extends Component {
               <TableCell>
                 <Button
                   variant="contained"
+                  color="secondary"
                   fullWidth
                   onClick={event => this.handleDelete(event, row)}
                 >

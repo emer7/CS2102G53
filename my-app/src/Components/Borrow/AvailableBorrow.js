@@ -56,7 +56,7 @@ class AvailableBorrow extends Component {
             value={searchQuery}
             onChange={this.handleSearchQuery}
           />
-          <FormButton variant="contained" onClick={this.handleSearch}>
+          <FormButton variant="contained" color="primary" onClick={this.handleSearch}>
             Search
           </FormButton>
         </Form>

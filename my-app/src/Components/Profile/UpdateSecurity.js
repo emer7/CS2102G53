@@ -61,7 +61,7 @@ class UpdateSecurity extends Component {
           handlePasswordChange={this.handlePasswordChange}
           handleSubmit={this.handleSubmit}
         />
-        <Button variant="contained" fullWidth onClick={this.handleDeleteAccount}>
+        <Button variant="contained" color="secondary" fullWidth onClick={this.handleDeleteAccount}>
           Delete Account
         </Button>
       </div>

@@ -67,6 +67,7 @@ class CurrentlyBorrow extends Component {
               <TableCell>
                 <Button
                   variant="contained"
+                  color="primary"
                   fullWidth
                   onClick={event => this.handleReturn(event, row)}
                 >

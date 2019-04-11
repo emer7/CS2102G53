@@ -53,7 +53,7 @@ class ProposeBid extends Component {
           onChange={this.handleBidChange}
         />
 
-        <FormButton variant="contained" onClick={this.handleSubmit}>
+        <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
           Submit
         </FormButton>
       </Form>

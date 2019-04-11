@@ -112,7 +112,7 @@ class AcceptBid extends Component {
               value={loandurationindays}
               onChange={this.handleLoandDurationChange}
             />
-            <FormButton variant="contained" onClick={this.handleEditItem}>
+            <FormButton variant="contained" color="primary" onClick={this.handleEditItem}>
               Update
             </FormButton>
           </Form>
@@ -146,7 +146,7 @@ class AcceptBid extends Component {
               disabled
               value={bid.username}
             />
-            <FormButton variant="contained" onClick={this.handleSubmit}>
+            <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
               Accept
             </FormButton>
           </Form>

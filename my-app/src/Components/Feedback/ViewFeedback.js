@@ -104,6 +104,7 @@ class ViewFeedback extends Component {
                     <TableCell>
                       <Button
                         variant="contained"
+                        color="secondary"
                         fullWidth
                         onClick={event => this.handleDeleteFeedback(event, row)}
                       >
@@ -145,7 +146,7 @@ class ViewFeedback extends Component {
                 value={commentbody}
                 onChange={this.handleCommentBody}
               />
-              <FormButton variant="contained" onClick={this.handleSubmit}>
+              <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
                 Update
               </FormButton>
             </Form>

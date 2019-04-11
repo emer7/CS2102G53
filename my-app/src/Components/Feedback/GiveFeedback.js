@@ -110,7 +110,7 @@ class GiveFeedback extends Component {
               value={commentbody}
               onChange={this.handleCommentBody}
             />
-            <FormButton variant="contained" onClick={this.handleSubmit}>
+            <FormButton variant="contained" color="primary" onClick={this.handleSubmit}>
               Submit
             </FormButton>
           </Form>

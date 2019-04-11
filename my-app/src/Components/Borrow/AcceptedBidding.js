@@ -83,6 +83,7 @@ class AcceptedBidding extends Component {
               <TableCell>
                 <Button
                   variant="contained"
+                  color="secondary"
                   fullWidth
                   onClick={event => this.handleDelete(event, row)}
                 >
@@ -92,6 +93,7 @@ class AcceptedBidding extends Component {
               <TableCell>
                 <Button
                   variant="contained"
+                  color="primary"
                   fullWidth
                   onClick={event => this.handleAccept(event, row)}
                 >

@@ -39,21 +39,36 @@ export const ItemsTable = ({
             <TableCell>{row.loandurationindays}</TableCell>
             {deleteButton && (
               <TableCell>
-                <Button variant="contained" fullWidth onClick={event => handleDelete(event, row)}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  onClick={event => handleDelete(event, row)}
+                >
                   Delete
                 </Button>
               </TableCell>
             )}
             {acceptButton && (
               <TableCell>
-                <Button variant="contained" fullWidth onClick={event => handleAccept(event, row)}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={event => handleAccept(event, row)}
+                >
                   Pay
                 </Button>
               </TableCell>
             )}
             {returnButton && (
               <TableCell>
-                <Button variant="contained" fullWidth onClick={event => handleReturn(event, row)}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={event => handleReturn(event, row)}
+                >
                   Return
                 </Button>
               </TableCell>

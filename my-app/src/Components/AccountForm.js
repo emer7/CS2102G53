@@ -131,7 +131,7 @@ export const AccountForm = ({
         onChange={handleNationalityChange}
       />
     )}
-    <FormButton variant="contained" fullWidth onClick={handleSubmit}>
+    <FormButton variant="contained" color="primary" fullWidth onClick={handleSubmit}>
       Submit
     </FormButton>
   </Form>
