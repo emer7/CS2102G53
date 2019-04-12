@@ -13,13 +13,13 @@ router.put('/update', queries.userUpdate);
 router.put('/update/password', queries.userUpdatePassword);
 
 // Route to delete users
-router.delete('/delete/:userSSN', queries.userDelete);
+router.delete('/delete/:userssn', queries.userDelete);
 
 // Route to get user detail
-router.get('/detail/:userSSN', queries.userDetail);
+router.get('/detail/:userssn', queries.userDetail);
 
 // Route to get all users except oneself
-router.get('/all/except/:userSSN', queries.userAllExcept);
+router.get('/all/except/:userssn', queries.userAllExcept);
 
 // Route to find the most active borrower
 router.get('/search/most/active/borrower', queries.userSearchMostActive);
@@ -37,12 +37,12 @@ router.post('/feedback/create', queries.feedbackCreate);
 router.put('/feedback/update', queries.feedbackUpdate);
 
 // Route to delete feedbacks
-router.delete('/feedback/delete/:feedbackSSN', queries.feedbackDelete);
+router.delete('/feedback/delete/:feedbackssn', queries.feedbackDelete);
 
 // Route to view all feedbacks for a specific user
-router.get('/feedback/view/all/:receivedByUserSSN', queries.feedbackViewAll);
+router.get('/feedback/view/all/:receivedbyuserssn', queries.feedbackViewAll);
 
 // Route to view all feedbacks given by a user
-router.get('/feedback/view/all/given/:givenByUserSSN', queries.feedbackViewAllGiven);
+router.get('/feedback/view/all/given/:givenbyuserssn', queries.feedbackViewAllGiven);
 
 module.exports = router;
