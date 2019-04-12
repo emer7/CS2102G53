@@ -13,7 +13,7 @@ class AcceptBid extends Component {
     const { name, description, minbidprice, loandurationindays } = item;
 
     super(props);
-    this.state = { rows, bid: {}, name, description, minbidprice, loandurationindays };
+    this.state = { rows, name, description, minbidprice, loandurationindays };
   }
 
   componentDidMount() {
@@ -45,17 +45,11 @@ class AcceptBid extends Component {
     this.setState({ loandurationindays: event.target.value });
   };
 
-  handleItemClick = bid => {
-    this.setState({ bid });
-  };
-
   handleEditItem = () => {
     const { name, description, minbidprice, loandurationindays } = this.state;
-    const { user, item, updateItemDetail, handleShowDialog } = this.props;
+    const { item, updateItemDetail, handleShowDialog } = this.props;
     const { itemssn } = item;
-    const { userssn } = user;
     const itemObject = {
-      userssn,
       name,
       description,
       minbidprice: minbidprice || undefined,
@@ -80,12 +74,14 @@ class AcceptBid extends Component {
       });
   };
 
-  handleSubmit = () => {
-    const { item, history, handleShowDialog } = this.props;
-    const { bid } = this.state;
+  handleAcceptBid = (event, bid) => {
+    event.stopPropagation();
+
+    const { user, item, history, handleShowDialog } = this.props;
     const { itemssn } = item;
+    const { userssn } = user;
     const { bidssn, bidamt, placedbyssn } = bid;
-    const bidObject = { bidssn, itemssn, bidamt, placedbyssn };
+    const bidObject = { bidssn, itemssn, bidamt, placedbyssn, userssn };
 
     fetch("/bid/winning/accept", {
       method: "POST",
@@ -105,7 +101,7 @@ class AcceptBid extends Component {
   };
 
   render() {
-    const { rows, bid } = this.state;
+    const { rows } = this.state;
     const { name, description, minbidprice, loandurationindays } = this.state;
 
     return (
@@ -169,40 +165,31 @@ class AcceptBid extends Component {
                     <TableCell>Placed By</TableCell>
                     <TableCell>Bid Amount</TableCell>
                     <TableCell>Bid Date Time</TableCell>
+                    <TableCell>Accept Bid</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {rows.map(row => (
-                    <TableRow key={row.bidssn} hover onClick={() => this.handleItemClick(row)}>
+                    <TableRow key={row.bidssn} hover>
                       <TableCell component="th" scope="row">
                         {row.username}
                       </TableCell>
                       <TableCell>{row.bidamt}</TableCell>
                       <TableCell>{row.biddatetime}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          onClick={event => this.handleAcceptBid(event, row)}
+                        >
+                          Accept
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-            </Grid>
-            <Grid item xs sm md lg xl>
-              <Form>
-                <Grid container direction="column" alignItems="center" spacing={16}>
-                  <Grid item>
-                    <TextField
-                      name="username"
-                      label="Placed By"
-                      InputLabelProps={{ shrink: !!bid.username }}
-                      disabled
-                      value={bid.username}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button variant="contained" color="primary" onClick={this.handleSubmit}>
-                      Accept
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Form>
             </Grid>
           </Grid>
         </Grid>
