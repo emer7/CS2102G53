@@ -648,13 +648,31 @@ const feedbackUpdate = (request, response) => {
   const query = 'UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3';
   const values = [commenttype, commentbody, feedbackssn];
 
-  pool.query(query, values, (error) => {
-    if (error) {
-      response.send({ errorMessage: error.message });
-    } else {
-      response.send(true);
-    }
-  });
+  if (!feedbackssn || feedbackssn.length === 0) {
+    response.send({ errorMessage: 'Feedback to be edited must be selected' });
+  } else {
+    pool.query(query, values, (error) => {
+      if (error) {
+        if (error.message.includes('null value in column "receivedbyuserssn"')) {
+          response.send({ errorMessage: 'User must be selected' });
+        } else if (
+          error.message.includes('feedbacks_commenttype_check')
+          || error.message.includes('null value in column "commenttype"')
+        ) {
+          response.send({ errorMessage: 'Comment Type cannot be empty' });
+        } else if (
+          error.message.includes('feedbacks_commentbody_check')
+          || error.message.includes('null value in column "commentbody"')
+        ) {
+          response.send({ errorMessage: 'Comment Body cannot be empty' });
+        } else {
+          response.send({ errorMessage: error.message });
+        }
+      } else {
+        response.send(true);
+      }
+    });
+  }
 };
 
 // Delete a feedback
