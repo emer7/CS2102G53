@@ -157,41 +157,37 @@ class AcceptBid extends Component {
           </Form>
         </Grid>
         <Grid item xs sm md lg xl>
-          <Grid container direction="column" spacing={16}>
-            <Grid item xs sm md lg xl>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Placed By</TableCell>
-                    <TableCell>Bid Amount</TableCell>
-                    <TableCell>Bid Date Time</TableCell>
-                    <TableCell>Accept Bid</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map(row => (
-                    <TableRow key={row.bidssn} hover>
-                      <TableCell component="th" scope="row">
-                        {row.username}
-                      </TableCell>
-                      <TableCell>{row.bidamt}</TableCell>
-                      <TableCell>{row.biddatetime}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          onClick={event => this.handleAcceptBid(event, row)}
-                        >
-                          Accept
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Grid>
-          </Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Placed By</TableCell>
+                <TableCell>Bid Amount</TableCell>
+                <TableCell>Bid Date Time</TableCell>
+                <TableCell>Accept Bid</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow key={row.bidssn} hover>
+                  <TableCell component="th" scope="row">
+                    {row.username}
+                  </TableCell>
+                  <TableCell>{row.bidamt}</TableCell>
+                  <TableCell>{row.biddatetime}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      onClick={event => this.handleAcceptBid(event, row)}
+                    >
+                      Accept
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Grid>
       </Grid>
     );
