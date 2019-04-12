@@ -275,3 +275,21 @@ BEFORE INSERT
 ON Bids
 FOR EACH ROW
 EXECUTE PROCEDURE check_bidamt_according_to_minbidprice();
+
+-- Trigger 7
+CREATE OR REPLACE FUNCTION delete_bids_less_than_newminbidprice()
+RETURNS TRIGGER AS
+$$
+BEGIN
+DELETE FROM Bids
+WHERE Bids.itemssn = NEW.itemssn AND Bids.bidamt < NEW.minbidprice;
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_bids_less_than_newminbidprice
+AFTER UPDATE
+ON Items
+FOR EACH ROW
+EXECUTE PROCEDURE delete_bids_less_than_newminbidprice();
