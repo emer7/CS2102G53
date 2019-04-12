@@ -37,7 +37,7 @@ CREATE TABLE Borrowers (
 );
 
 CREATE TABLE Feedbacks (
-    feedbackSSN	SERIAL,
+    feedbackSSN SERIAL,
     givenByUserSSN INTEGER NOT NULL,
     receivedByUserSSN INTEGER NOT NULL,
     commentType TEXT NOT NULL,
