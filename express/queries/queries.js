@@ -451,7 +451,7 @@ const userRegister = (request, response) => {
       if (errorHash) {
         response.send({ errorMessage: 'Password cannot be empty' });
       } else {
-        const query = 'INSERT INTO users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
+        const query = 'INSERT INTO Users (username, password, name, age, email, dob, phonenum, address, nationality) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)';
         const values = [username, hash, name, age, email, dob, phonenum, address, nationality];
 
         pool.query(query, values, (errorQuery) => {
@@ -535,7 +535,7 @@ const userDelete = (request, response) => {
 const userDetail = (request, response) => {
   const userssn = parseInt(request.params.userssn, 10);
 
-  const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userssn = $1';
+  const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM Users WHERE userssn = $1';
   const values = [userssn];
 
   pool.query(query, values, (errorQuery, resultQuery) => {
