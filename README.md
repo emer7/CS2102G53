@@ -4,9 +4,11 @@
 
 `my-app` is for the frontend (using React).
 
-To deploy and run the application:
+The application is automatically deployed from the latest commit from the master branch.
 
-1. Click on the link https://cs2102-53.herokuapp.com/login
+To run the application:
+
+1. Click on the link: https://cs2102-53.herokuapp.com/login
 
 2. Create an account
 
