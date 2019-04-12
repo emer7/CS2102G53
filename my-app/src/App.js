@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import styled from "styled-components";
 
-import { Grid } from "@material-ui/core";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { AppBar, Toolbar as BaseToolbar } from "@material-ui/core";
 import { Drawer, List, ListItem, ListItemText } from "@material-ui/core";
 import { Button, IconButton } from "@material-ui/core";
@@ -11,6 +9,7 @@ import { Button, IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import DefaultAccountCircle from "@material-ui/icons/AccountCircle";
 
+import Statistics from "./Components/Statistics";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Borrow from "./Components/Borrow";
@@ -38,23 +37,13 @@ const Right = styled.div``;
 class App extends Component {
   constructor(props) {
     const user = {};
-    const mostActiveRows = [];
-    const mostPopularRows = [];
-    const mostFeedbackRows = [];
 
     super(props);
     this.state = {
       isAuthenticated: false,
       user,
-      mostActiveRows,
-      mostPopularRows,
-      mostFeedbackRows,
       showDialog: false
     };
-  }
-
-  componentDidMount() {
-    this.fetchResources();
   }
 
   handleLogin = ({ login, user }) => {
@@ -77,20 +66,6 @@ class App extends Component {
     fetch(`/users/detail/${userssn}`)
       .then(res => res.json())
       .then(data => this.setUserDetail(data));
-  };
-
-  fetchResources = () => {
-    fetch("/users/search/most/active/borrower")
-      .then(res => res.json())
-      .then(data => this.setState({ mostActiveRows: data }));
-
-    fetch("/users/search/most/popular/loaner")
-      .then(res => res.json())
-      .then(data => this.setState({ mostPopularRows: data }));
-
-    fetch("/users/search/most/positive/feedback")
-      .then(res => res.json())
-      .then(data => this.setState({ mostFeedbackRows: data }));
   };
 
   setUserDetail = user => {
@@ -121,16 +96,7 @@ class App extends Component {
   };
 
   render() {
-    const {
-      isAuthenticated,
-      user,
-      mostActiveRows,
-      mostPopularRows,
-      mostFeedbackRows,
-      openDrawer,
-      showDialog,
-      dialogMessage
-    } = this.state;
+    const { isAuthenticated, user, openDrawer, showDialog, dialogMessage } = this.state;
 
     const drawerList = (
       <DrawerList>
@@ -204,64 +170,7 @@ class App extends Component {
         />
 
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={() =>
-              isAuthenticated && (
-                <Grid container>
-                  <Grid item xs sm md lg xl>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="center">Most Active Borrower</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {mostActiveRows.map(row => (
-                          <TableRow key={row.username}>
-                            <TableCell align="center">{row.username}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                  <Grid item xs sm md lg xl>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="center">Most Popular Loaner</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {mostPopularRows.map(row => (
-                          <TableRow key={row.username}>
-                            <TableCell align="center">{row.username}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                  <Grid item xs sm md lg xl>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="center">Most Positive Feedback User</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {mostFeedbackRows.map(row => (
-                          <TableRow key={row.username}>
-                            <TableCell align="center">{row.username}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                </Grid>
-              )
-            }
-          />
+          <Route exact path="/" render={() => isAuthenticated && <Statistics />} />
           <Route
             path="/lend"
             render={props =>
