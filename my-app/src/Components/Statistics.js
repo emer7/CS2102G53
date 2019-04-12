@@ -45,12 +45,14 @@ class Statistics extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="center">Most Active Borrower</TableCell>
+                <TableCell align="center">Number of Times Borrowed</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {mostActiveRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
+                  <TableCell align="center">{row.numOfTimesBorrowed}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -61,12 +63,14 @@ class Statistics extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="center">Most Popular Loaner</TableCell>
+                <TableCell align="center">Number of Times Loaned</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {mostPopularRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
+                  <TableCell align="center">{row.numOfTimesLoaned}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -77,12 +81,14 @@ class Statistics extends Component {
             <TableHead>
               <TableRow>
                 <TableCell align="center">Most Positive Feedback User</TableCell>
+                <TableCell align="center">Number of Praises</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {mostFeedbackRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
+                  <TableCell align="center">{row.numOfTimesPraised}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
