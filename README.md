@@ -1,15 +1,14 @@
-# CS2102G53
+# Lending King
+**CS2102 Group 53 Project**
 
-`Express` is for the backend (API, Database connection, etc).
+The application consists of 2 parts:
+1. Backend (`express`) developed on ExpressJS with Postgres as database.
+2. Frontend (`my-app`) developed on ReactJS using create-react-app.
 
-`my-app` is for the frontend (using React).
+The application is automatically deployed to Heroku from the latest commit on `master` branch.
+Accessible from https://cs2102-53.herokuapp.com
 
-The application is automatically deployed from the latest commit from the master branch.
-
-To run the application:
-
-1. Click on the link: https://cs2102-53.herokuapp.com/login
-
-2. Create an account
-
-3. Login to use the application
+To run the app locally:
+1. Clone the repo.
+2. `yarn build` to install and build all the packages and the application.
+3. `yarn start` to start the application.
