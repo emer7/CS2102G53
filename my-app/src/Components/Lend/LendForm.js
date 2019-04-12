@@ -74,7 +74,7 @@ class LendForm extends Component {
             <Grid item xs sm md lg xl>
               <TextField
                 name="name"
-                label="Item name"
+                label="Item Name"
                 fullWidth
                 value={name}
                 onChange={this.handleNameChange}
@@ -83,7 +83,7 @@ class LendForm extends Component {
             <Grid item xs sm md lg xl>
               <TextField
                 name="description"
-                label="Item description"
+                label="Item Description"
                 multiline
                 fullWidth
                 value={description}
@@ -94,7 +94,7 @@ class LendForm extends Component {
               <TextField
                 name="minBidPrice"
                 type="number"
-                label="Minimum bid price"
+                label="Minimum Bid Price"
                 placeholder="0"
                 InputProps={{ inputProps: { min: "0" } }}
                 fullWidth

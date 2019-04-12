@@ -162,15 +162,35 @@ const itemView = (request, response) => {
 // Updates an existing item
 const itemUpdate = (request, response) => {
   const {
-    userssn, name, description, minbidprice, loandurationindays, itemssn,
+    name, description, minbidprice, loandurationindays, itemssn,
   } = request.body;
 
-  const query = 'UPDATE Items SET loanedBySSN = $1, name = $2, description = $3, minBidPrice = $4, loanDurationInDays = $5 WHERE itemSSN = $6';
-  const values = [userssn, name, description, minbidprice, loandurationindays, itemssn];
+  const query = 'UPDATE Items SET name = $1, description = $2, minBidPrice = $3, loanDurationInDays = $4 WHERE itemSSN = $5';
+  const values = [name, description, minbidprice, loandurationindays, itemssn];
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ errorMessage: error.message });
+      if (
+        error.message.includes('items_name_check')
+        || error.message.includes('null value in column "name"')
+      ) {
+        response.send({ errorMessage: 'Item name cannot be empty' });
+      } else if (
+        error.message.includes('items_description_check')
+        || error.message.includes('null value in column "description"')
+      ) {
+        response.send({ errorMessage: 'Description cannot be empty' });
+      } else if (error.message.includes('null value in column "minbidprice"')) {
+        response.send({ errorMessage: 'Minimum bid price cannot be empty' });
+      } else if (error.message.includes('null value in column "loandurationindays"')) {
+        response.send({ errorMessage: 'Loan duration in days cannot be empty' });
+      } else if (error.message.includes('items_minbidprice_check')) {
+        response.send({ errorMessage: 'Minimum bid price cannot be negative' });
+      } else if (error.message.includes('items_loandurationindays_check')) {
+        response.send({ errorMessage: 'Loan duration cannot be negative' });
+      } else {
+        response.send({ errorMessage: error.message });
+      }
     } else {
       response.send(true);
     }

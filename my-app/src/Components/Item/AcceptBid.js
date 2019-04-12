@@ -54,7 +54,14 @@ class AcceptBid extends Component {
     const { user, item, updateItemDetail, handleShowDialog } = this.props;
     const { itemssn } = item;
     const { userssn } = user;
-    const itemObject = { userssn, name, description, minbidprice, loandurationindays, itemssn };
+    const itemObject = {
+      userssn,
+      name,
+      description,
+      minbidprice: minbidprice || undefined,
+      loandurationindays: loandurationindays || undefined,
+      itemssn
+    };
 
     fetch("/items/update", {
       method: "PUT",
@@ -74,12 +81,11 @@ class AcceptBid extends Component {
   };
 
   handleSubmit = () => {
-    const { user, item, history, handleShowDialog } = this.props;
+    const { item, history, handleShowDialog } = this.props;
     const { bid } = this.state;
     const { itemssn } = item;
-    const { userssn } = user;
     const { bidssn, bidamt, placedbyssn } = bid;
-    const bidObject = { bidssn, itemssn, bidamt, placedbyssn, userssn };
+    const bidObject = { bidssn, itemssn, bidamt, placedbyssn };
 
     fetch("/bid/winning/accept", {
       method: "POST",
@@ -110,7 +116,7 @@ class AcceptBid extends Component {
               <Grid item xs sm md lg xl>
                 <TextField
                   name="name"
-                  label="Name"
+                  label="Item Name"
                   value={name}
                   fullWidth
                   onChange={this.handleNameChange}
@@ -119,7 +125,7 @@ class AcceptBid extends Component {
               <Grid item xs sm md lg xl>
                 <TextField
                   name="description"
-                  label="Description"
+                  label="Item Description"
                   multiline
                   value={description}
                   fullWidth
@@ -130,7 +136,7 @@ class AcceptBid extends Component {
                 <TextField
                   name="minBidPrice"
                   type="number"
-                  label="Minimum bid price"
+                  label="Minimum Bid Price"
                   value={minbidprice}
                   fullWidth
                   onChange={this.handleMinBidPriceChange}
