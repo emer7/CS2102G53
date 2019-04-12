@@ -5,9 +5,12 @@ const pool = require('../config/db');
 const transactionViewAllLoaned = (request, response) => {
   const loanerSSN = parseInt(request.params.loanerSSN, 10);
 
-  const query = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description FROM ((Borrows B INNER JOIN Transactions T ON B.transactionssn = T.transactionssn) INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON B.borrowerssn = U.userssn WHERE B.itemSSN IN (SELECT itemSSN FROM Items WHERE loanedBySSN = $1)';
+  const select = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description ';
+  const from = 'FROM ((Borrows B INNER JOIN Transactions T ON B.transactionSSN = T.transactionSSN) INNER JOIN Items I ON B.itemSSN = I.itemSSN) INNER JOIN Users U ON B.borrowerSSN = U.userSSN ';
+  const where = 'WHERE B.itemSSN IN (SELECT itemSSN FROM Items WHERE loanedBySSN = $1)';
   const values = [loanerSSN];
 
+  const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
       response.send({ errorMessage: error.message });
@@ -21,9 +24,12 @@ const transactionViewAllLoaned = (request, response) => {
 const transactionViewAllBorrowed = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
-  const query = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description FROM ((Borrows B NATURAL JOIN Transactions T) INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyssn = U.userssn WHERE B.borrowerSSN = $1';
+  const select = 'SELECT U.username, B.itemSSN, T.returnedStatus, I.name, I.description ';
+  const from = 'FROM ((Borrows B NATURAL JOIN Transactions T) INNER JOIN Items I ON B.itemSSN = I.itemSSN) INNER JOIN Users U ON I.loanedbySSN = U.userSSN ';
+  const where = 'WHERE B.borrowerSSN = $1';
   const values = [borrowerSSN];
 
+  const query = select + from + where;
   pool.query(query, values, (error, results) => {
     if (error) {
       response.send({ errorMessage: error.message });
@@ -36,27 +42,27 @@ const transactionViewAllBorrowed = (request, response) => {
 // Accept winning bid
 const acceptWinningBid = (request, response) => {
   const {
-    bidssn, itemssn, bidamt, placedbyssn, userssn,
+    bidSSN, itemSSN, bidamt, placedbySSN, userSSN,
   } = request.body;
 
   const queryWinningBid = 'INSERT INTO WinningBids (bidSSN, itemSSN) VALUES ($1, $2)';
-  const valuesWinningBid = [bidssn, itemssn];
+  const valuesWinningBid = [bidSSN, itemSSN];
 
   pool.query(queryWinningBid, valuesWinningBid, (errorWinningBids) => {
     if (errorWinningBids) {
       response.send({ errorMessage: errorWinningBids.message });
     } else {
       const queryPayment = 'INSERT INTO Payments (paymentType, paidStatus, paymentAmount, madeByUserSSN, receivedByUserSSN) VALUES ($1, FALSE, $2, $3, $4) RETURNING *';
-      const valuesPayment = ['AUTOMATIC', bidamt, placedbyssn, userssn];
+      const valuesPayment = ['AUTOMATIC', bidamt, placedbySSN, userSSN];
 
       pool.query(queryPayment, valuesPayment, (errorPayments, resultsPayments) => {
         if (errorPayments) {
           response.send({ errorMessage: errorPayments.message });
         } else {
-          const { paymentssn } = resultsPayments.rows[0];
+          const { paymentSSN } = resultsPayments.rows[0];
 
           const queryTransactions = 'INSERT INTO Transactions (itemSSN, paymentSSN, returnedStatus) VALUES ($1, $2, FALSE)';
-          const valuesTransactions = [itemssn, paymentssn];
+          const valuesTransactions = [itemSSN, paymentSSN];
 
           pool.query(queryTransactions, valuesTransactions, (errorTransactions) => {
             if (errorTransactions) {
@@ -73,10 +79,10 @@ const acceptWinningBid = (request, response) => {
 
 // Update a payment to pay
 const paymentUpdateToPaid = (request, response) => {
-  const { paymentssn } = request.body;
+  const { paymentSSN } = request.body;
 
-  const query = 'UPDATE Payments SET paidstatus = TRUE WHERE paymentssn = $1';
-  const values = [paymentssn];
+  const query = 'UPDATE Payments SET paidstatus = TRUE WHERE paymentSSN = $1';
+  const values = [paymentSSN];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -88,10 +94,10 @@ const paymentUpdateToPaid = (request, response) => {
 };
 
 const paymentDelete = (request, response) => {
-  const paymentssn = parseInt(request.params.paymentSSN, 10);
+  const paymentSSN = parseInt(request.params.paymentSSN, 10);
 
-  const query = 'DELETE FROM Payments WHERE paymentssn = $1';
-  const values = [paymentssn];
+  const query = 'DELETE FROM Payments WHERE paymentSSN = $1';
+  const values = [paymentSSN];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -105,11 +111,11 @@ const paymentDelete = (request, response) => {
 // Creates new item
 const itemCreate = (request, response) => {
   const {
-    userssn, name, description, minbidprice, loandurationindays,
+    userSSN, name, description, minbidprice, loandurationindays,
   } = request.body;
 
-  const query = 'INSERT INTO Items (loanedbyssn, name, description, minbidprice, loandurationindays) VALUES ($1, $2, $3, $4, $5)';
-  const values = [userssn, name, description, minbidprice, loandurationindays];
+  const query = 'INSERT INTO Items (loanedbySSN, name, description, minbidprice, loandurationindays) VALUES ($1, $2, $3, $4, $5)';
+  const values = [userSSN, name, description, minbidprice, loandurationindays];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -144,8 +150,8 @@ const itemCreate = (request, response) => {
 const itemView = (request, response) => {
   const itemSSN = parseInt(request.params.itemSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
-  const from = 'FROM Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn ';
+  const select = 'SELECT I.itemSSN, I.loanedbySSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const from = 'FROM Items I INNER JOIN Users U ON I.loanedbySSN = U.userSSN ';
   const where = 'WHERE itemSSN = $1';
   const values = [itemSSN];
 
@@ -162,11 +168,11 @@ const itemView = (request, response) => {
 // Updates an existing item
 const itemUpdate = (request, response) => {
   const {
-    name, description, minbidprice, loandurationindays, itemssn,
+    name, description, minbidprice, loandurationindays, itemSSN,
   } = request.body;
 
   const query = 'UPDATE Items SET name = $1, description = $2, minBidPrice = $3, loanDurationInDays = $4 WHERE itemSSN = $5';
-  const values = [name, description, minbidprice, loandurationindays, itemssn];
+  const values = [name, description, minbidprice, loandurationindays, itemSSN];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -233,7 +239,7 @@ const viewAllExceptWith = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
   const { searchQuery } = request.params;
 
-  const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT DISTINCT I.itemSSN, I.loanedbySSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = "WHERE I.loanedBySSN <> $1 AND T.transactionSSN IS NULL AND CONCAT(I.name, ' ', I.description) LIKE $2";
   const values = [loanedBySSN, `%${searchQuery}%`];
@@ -252,7 +258,7 @@ const viewAllExceptWith = (request, response) => {
 const viewAllExcept = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT DISTINCT I.itemSSN, I.loanedbySSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedBySSN <> $1 AND T.transactionSSN IS NULL';
   const values = [loanedBySSN];
@@ -271,7 +277,7 @@ const viewAllExcept = (request, response) => {
 const viewAllLoanedNot = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const select = 'SELECT DISTINCT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
+  const select = 'SELECT DISTINCT I.itemSSN, I.loanedbySSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username ';
   const from = 'FROM (Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
   const where = 'WHERE I.loanedBySSN = $1 AND T.transactionSSN IS NULL';
   const values = [loanedBySSN];
@@ -290,8 +296,8 @@ const viewAllLoanedNot = (request, response) => {
 const viewAllBorrowing = (request, response) => {
   const borrowerSSN = parseInt(request.params.borrowerSSN, 10);
 
-  const select = 'SELECT B.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionssn, T.enddate ';
-  const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyssn = U.userssn) INNER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
+  const select = 'SELECT B.itemSSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.transactionSSN, T.enddate ';
+  const from = 'FROM (((Borrows B INNER JOIN Items I ON B.itemSSN = I.itemSSN) INNER JOIN Users U ON I.loanedbySSN = U.userSSN) INNER JOIN Transactions T ON T.transactionSSN = B.transactionSSN) ';
   const where = 'WHERE T.returnedStatus = FALSE AND B.borrowerSSN = $1';
   const values = [borrowerSSN];
 
@@ -309,8 +315,8 @@ const viewAllBorrowing = (request, response) => {
 const viewAllLoaned = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.enddate ';
-  const from = 'FROM ((Items I INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON P.paymentssn = T.paymentssn) INNER JOIN Users U ON P.madeByUserSSN = U.userssn ';
+  const select = 'SELECT I.itemSSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, T.enddate ';
+  const from = 'FROM ((Items I INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON P.paymentSSN = T.paymentSSN) INNER JOIN Users U ON P.madeByUserSSN = U.userSSN ';
   const where = 'WHERE I.loanedBySSN = $1 AND T.returnedStatus = FALSE AND P.paidStatus = TRUE';
   const values = [loanedBySSN];
 
@@ -327,9 +333,9 @@ const viewAllLoaned = (request, response) => {
 const viewAllAccepted = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
 
-  const select = 'SELECT I.itemssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, P.paymentssn, T.transactionssn, B.bidamt ';
-  const from = 'FROM ((((Items I INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Users U ON I.loanedbyssn = U.userssn) INNER JOIN Transactions T ON I.itemssn = T.itemssn) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
-  const where = 'WHERE P.madebyuserssn = $1 AND P.paidstatus = false';
+  const select = 'SELECT I.itemSSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, P.paymentSSN, T.transactionSSN, B.bidamt ';
+  const from = 'FROM ((((Items I INNER JOIN WinningBids W ON I.itemSSN = W.itemSSN) INNER JOIN Bids B ON W.bidSSN = B.bidSSN) INNER JOIN Users U ON I.loanedbySSN = U.userSSN) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentSSN = P.paymentSSN ';
+  const where = 'WHERE P.madebyuserSSN = $1 AND P.paidstatus = false';
   const values = [userSSN];
 
   const query = select + from + where;
@@ -345,8 +351,8 @@ const viewAllAccepted = (request, response) => {
 const viewAllWaiting = (request, response) => {
   const loanedBySSN = parseInt(request.params.loanedBySSN, 10);
 
-  const select = 'SELECT I.itemssn, I.loanedbyssn, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
-  const from = 'FROM ((((Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) INNER JOIN WinningBids W ON I.itemssn = W.itemssn) INNER JOIN Bids B ON W.bidssn = B.bidssn) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentssn = P.paymentssn ';
+  const select = 'SELECT I.itemSSN, I.loanedbySSN, I.name, I.description, I.minbidprice, I.loandurationindays, U.username, B.bidamt ';
+  const from = 'FROM ((((Items I INNER JOIN Users U ON I.loanedBySSN = U.userSSN) INNER JOIN WinningBids W ON I.itemSSN = W.itemSSN) INNER JOIN Bids B ON W.bidSSN = B.bidSSN) INNER JOIN Transactions T ON I.itemSSN = T.itemSSN) INNER JOIN Payments P ON T.paymentSSN = P.paymentSSN ';
   const where = 'WHERE P.receivedByUserSSN = $1 AND P.paidstatus = false';
   const values = [loanedBySSN];
 
@@ -362,10 +368,10 @@ const viewAllWaiting = (request, response) => {
 
 // Create a new bid
 const bidCreate = (request, response) => {
-  const { userssn, itemssn, bidamt } = request.body;
+  const { userSSN, itemSSN, bidamt } = request.body;
 
   const query = 'INSERT INTO Bids (placedBySSN, itemSSN, bidAmt, bidDateTime) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)';
-  const values = [userssn, itemssn, bidamt];
+  const values = [userSSN, itemSSN, bidamt];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -399,10 +405,10 @@ const bidViewAllItem = (request, response) => {
 const bidViewAllUser = (request, response) => {
   const placedBySSN = parseInt(request.params.placedBySSN, 10);
 
-  const select = 'SELECT B1.bidssn, B1.bidamt, B1.biddatetime, I.itemssn, I.name, I.description, I.minbidprice, U.username ';
-  const from = 'FROM ((Bids B1 INNER JOIN Items I ON B1.itemssn = I.itemssn) INNER JOIN Users U ON I.loanedbyssn = U.userssn) LEFT OUTER JOIN Transactions T ON I.itemssn = T.itemssn ';
-  const where = 'WHERE B1.placedbyssn = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbyssn = B1.placedbyssn AND B2.itemssn = B1.itemssn)) ';
-  const and = 'AND T.transactionssn IS NULL';
+  const select = 'SELECT B1.bidSSN, B1.bidamt, B1.biddatetime, I.itemSSN, I.name, I.description, I.minbidprice, U.username ';
+  const from = 'FROM ((Bids B1 INNER JOIN Items I ON B1.itemSSN = I.itemSSN) INNER JOIN Users U ON I.loanedbySSN = U.userSSN) LEFT OUTER JOIN Transactions T ON I.itemSSN = T.itemSSN ';
+  const where = 'WHERE B1.placedbySSN = $1 AND (B1.biddatetime >= ALL (SELECT B2.biddatetime FROM Bids B2 WHERE B2.placedbySSN = B1.placedbySSN AND B2.itemSSN = B1.itemSSN)) ';
+  const and = 'AND T.transactionSSN IS NULL';
   const values = [placedBySSN];
 
   const query = select + from + where + and;
@@ -417,10 +423,10 @@ const bidViewAllUser = (request, response) => {
 
 // Delete an existing bid
 const bidDelete = (request, response) => {
-  const { itemssn, userssn } = request.body;
+  const { itemSSN, userSSN } = request.body;
 
   const query = 'DELETE FROM Bids WHERE itemSSN = $1 AND placedBySSN = $2';
-  const values = [itemssn, userssn];
+  const values = [itemSSN, userSSN];
 
   pool.query(query, values, (error) => {
     if (error) {
@@ -475,11 +481,11 @@ const userRegister = (request, response) => {
 // Updates an exisiting user
 const userUpdate = (request, response) => {
   const {
-    name, age, email, dob, phonenum, address, nationality, userssn,
+    name, age, email, dob, phonenum, address, nationality, userSSN,
   } = request.body;
 
-  const query = 'UPDATE Users SET name = $1, age = $2, email = $3, dob = $4, phoneNum = $5, address = $6, nationality = $7 WHERE userssn = $8';
-  const values = [name, age, email, dob, phonenum, address, nationality, userssn];
+  const query = 'UPDATE Users SET name = $1, age = $2, email = $3, dob = $4, phoneNum = $5, address = $6, nationality = $7 WHERE userSSN = $8';
+  const values = [name, age, email, dob, phonenum, address, nationality, userSSN];
   pool.query(query, values, (errorQuery) => {
     if (errorQuery) {
       response.send({ errorMessage: errorQuery.message });
@@ -491,7 +497,7 @@ const userUpdate = (request, response) => {
 
 // Updates an exisiting user
 const userUpdatePassword = (request, response) => {
-  const { password, userssn } = request.body;
+  const { password, userSSN } = request.body;
 
   if (!password || password.length === 0) {
     response.send({ errorMessage: 'Password cannot be empty' });
@@ -500,8 +506,8 @@ const userUpdatePassword = (request, response) => {
       if (errorHash) {
         response.send({ errorMessage: 'Password cannot be empty' });
       } else {
-        const query = 'UPDATE Users SET password = $1 WHERE userssn = $2';
-        const values = [hash, userssn];
+        const query = 'UPDATE Users SET password = $1 WHERE userSSN = $2';
+        const values = [hash, userSSN];
         pool.query(query, values, (errorQuery) => {
           if (errorQuery) {
             response.send({ errorMessage: errorQuery.message });
@@ -535,7 +541,7 @@ const userDelete = (request, response) => {
 const userDetail = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
 
-  const query = 'SELECT userssn, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userssn = $1';
+  const query = 'SELECT userSSN, username, name, age, email, dob, phonenum, address, nationality FROM users WHERE userSSN = $1';
   const values = [userSSN];
 
   pool.query(query, values, (errorQuery, resultQuery) => {
@@ -559,7 +565,7 @@ const userDetail = (request, response) => {
 const userAllExcept = (request, response) => {
   const userSSN = parseInt(request.params.userSSN, 10);
 
-  const query = 'SELECT userssn, username, name FROM Users WHERE userssn <> $1';
+  const query = 'SELECT userSSN, username, name FROM Users WHERE userSSN <> $1';
   const values = [userSSN];
 
   pool.query(query, values, (error, results) => {
@@ -573,7 +579,7 @@ const userAllExcept = (request, response) => {
 
 // View most active borrower
 const userSearchMostActive = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerssn = U.userssn GROUP BY U.username ORDER BY numOfTimesBorrowed DESC';
+  const query = 'SELECT U.username, COUNT(*) as numOfTimesBorrowed FROM Borrows B INNER JOIN Users U ON B.borrowerSSN = U.userSSN GROUP BY U.username ORDER BY numOfTimesBorrowed DESC';
 
   pool.query(query, (error, results) => {
     if (error) {
@@ -586,8 +592,11 @@ const userSearchMostActive = (request, response) => {
 
 // View user with most number of positive feedback
 const userSearchMostPositive = (request, response) => {
-  const query = "SELECT U.username, COUNT(*) as numOfTimesPraised FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn WHERE commentType = 'Good' GROUP BY U.username ORDER BY numOfTimesPraised DESC";
+  const select = "SELECT U.username, COUNT(*) as numOfTimesPraised ";
+  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userSSN ';
+  const where = 'WHERE commentType = 'Good' GROUP BY U.username ORDER BY numOfTimesPraised DESC';
 
+  const query = select + from + where;
   pool.query(query, (error, results) => {
     if (error) {
       response.send({ errorMessage: error.message });
@@ -598,8 +607,11 @@ const userSearchMostPositive = (request, response) => {
 };
 
 const userSearchMostPopular = (request, response) => {
-  const query = 'SELECT U.username, COUNT(*) as numOfTimesLoaned FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbyssn = U.userssn) ON B.itemssn = I.itemssn GROUP BY U.username ORDER BY numOfTimesLoaned DESC';
+  const select = 'SELECT U.username, COUNT(*) as numOfTimesLoaned ';
+  const from = 'FROM Borrows B INNER JOIN (Items I INNER JOIN Users U ON I.loanedbySSN = U.userSSN) ON B.itemSSN = I.itemSSN ';
+  const group = 'GROUP BY U.username ORDER BY numOfTimesLoaned DESC';
 
+  const query = select + from + group;
   pool.query(query, (error, results) => {
     if (error) {
       response.send({ errorMessage: error.message });
@@ -612,15 +624,15 @@ const userSearchMostPopular = (request, response) => {
 // Create a feedback
 const feedbackCreate = (request, response) => {
   const {
-    userssn, receivedbyuserssn, commenttype, commentbody,
+    userSSN, receivedbyuserSSN, commenttype, commentbody,
   } = request.body;
 
   const query = 'INSERT INTO Feedbacks (givenByUserSSN, receivedByUserSSN, commentType, commentBody) VALUES ($1, $2, $3, $4)';
-  const values = [userssn, receivedbyuserssn, commenttype, commentbody];
+  const values = [userSSN, receivedbyuserSSN, commenttype, commentbody];
 
   pool.query(query, values, (error) => {
     if (error) {
-      if (error.message.includes('null value in column "receivedbyuserssn"')) {
+      if (error.message.includes('null value in column "receivedbyuserSSN"')) {
         response.send({ errorMessage: 'User must be selected' });
       } else if (
         error.message.includes('feedbacks_commenttype_check')
@@ -643,17 +655,17 @@ const feedbackCreate = (request, response) => {
 
 // Updates an existing feedback
 const feedbackUpdate = (request, response) => {
-  const { commenttype, commentbody, feedbackssn } = request.body;
+  const { commenttype, commentbody, feedbackSSN } = request.body;
 
   const query = 'UPDATE Feedbacks SET commentType = $1, commentBody = $2 WHERE feedbackSSN = $3';
-  const values = [commenttype, commentbody, feedbackssn];
+  const values = [commenttype, commentbody, feedbackSSN];
 
-  if (!feedbackssn || feedbackssn.length === 0) {
+  if (!feedbackSSN || feedbackSSN.length === 0) {
     response.send({ errorMessage: 'Feedback to be edited must be selected' });
   } else {
     pool.query(query, values, (error) => {
       if (error) {
-        if (error.message.includes('null value in column "receivedbyuserssn"')) {
+        if (error.message.includes('null value in column "receivedbyuserSSN"')) {
           response.send({ errorMessage: 'User must be selected' });
         } else if (
           error.message.includes('feedbacks_commenttype_check')
@@ -696,7 +708,7 @@ const feedbackViewAll = (request, response) => {
   const receivedByUserSSN = parseInt(request.params.receivedByUserSSN, 10);
 
   const select = 'SELECT F.feedbackSSN, F.givenByUserSSN, F.commenttype, F.commentbody, U.username ';
-  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.givenbyuserssn = U.userssn ';
+  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.givenbyuserSSN = U.userSSN ';
   const where = 'WHERE receivedByUserSSN = $1';
   const values = [receivedByUserSSN];
 
@@ -715,7 +727,7 @@ const feedbackViewAllGiven = (request, response) => {
   const givenByUserSSN = parseInt(request.params.givenByUserSSN, 10);
 
   const select = 'SELECT F.feedbackSSN, F.receivedByUserSSN, F.commenttype, F.commentbody, U.username ';
-  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userssn ';
+  const from = 'FROM Feedbacks F INNER JOIN Users U ON F.receivedByUserSSN = U.userSSN ';
   const where = 'WHERE givenByUserSSN = $1';
   const values = [givenByUserSSN];
 
