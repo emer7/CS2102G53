@@ -19,6 +19,22 @@ import Profile from "./Components/Profile";
 import Feedback from "./Components/Feedback";
 import Dialog from "./Components/Dialog";
 
+const Welcome = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 144px;
+  font-face: Roboto;
+  font-weight: bold;
+  text-align: center;
+  font-style: italic;
+  color: #1a237e;
+
+  user-select: none;
+`;
+
 const Toolbar = styled(BaseToolbar)`
   display: flex;
   justify-content: space-between;
@@ -170,7 +186,11 @@ class App extends Component {
         />
 
         <Switch>
-          <Route exact path="/" render={() => isAuthenticated && <Statistics />} />
+          <Route
+            exact
+            path="/"
+            render={() => (isAuthenticated ? <Statistics /> : <Welcome>Lending King</Welcome>)}
+          />
           <Route
             path="/lend"
             render={props =>
