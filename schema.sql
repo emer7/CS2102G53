@@ -67,7 +67,7 @@ CREATE TABLE Items (
     name VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     minBidPrice INTEGER NOT NULL,
-    loanDurationInDays INTEGER,
+    loanDurationInDays INTEGER NOT NULL,
     PRIMARY KEY (itemSSN),
     FOREIGN KEY (loanedBySSN) REFERENCES Loaners(loanerSSN) ON DELETE CASCADE,
     CHECK (name <> ''),

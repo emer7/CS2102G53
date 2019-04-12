@@ -113,7 +113,27 @@ const itemCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ errorMessage: error.message });
+      if (
+        error.message.includes('items_name_check')
+        || error.message.includes('null value in column "name"')
+      ) {
+        response.send({ errorMessage: 'Item name cannot be empty' });
+      } else if (
+        error.message.includes('items_description_check')
+        || error.message.includes('null value in column "description"')
+      ) {
+        response.send({ errorMessage: 'Description cannot be empty' });
+      } else if (error.message.includes('null value in column "minbidprice"')) {
+        response.send({ errorMessage: 'Minimum bid price cannot be empty' });
+      } else if (error.message.includes('null value in column "loandurationindays"')) {
+        response.send({ errorMessage: 'Loan duration in days cannot be empty' });
+      } else if (error.message.includes('items_minbidprice_check')) {
+        response.send({ errorMessage: 'Minimum bid price cannot be negative' });
+      } else if (error.message.includes('items_loandurationindays_check')) {
+        response.send({ errorMessage: 'Loan duration cannot be negative' });
+      } else {
+        response.send({ errorMessage: error.message });
+      }
     } else {
       response.send(true);
     }
@@ -416,8 +436,10 @@ const userRegister = (request, response) => {
 
         pool.query(query, values, (errorQuery) => {
           if (errorQuery) {
-            if (errorQuery.message.includes('unique')) {
+            if (errorQuery.message.includes('users_username_key')) {
               response.send({ errorMessage: 'Username is taken' });
+            } else if (errorQuery.message.includes('users_username_check')) {
+              response.send({ errorMessage: 'Username cannot be empty' });
             } else {
               response.send({ errorMessage: errorQuery.message });
             }

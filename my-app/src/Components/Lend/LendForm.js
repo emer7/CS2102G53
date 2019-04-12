@@ -39,7 +39,13 @@ class LendForm extends Component {
     const { name, description, minbidprice, loandurationindays } = this.state;
     const { user, history, handleShowDialog } = this.props;
     const { userssn } = user;
-    const itemObject = { userssn, name, description, minbidprice, loandurationindays };
+    const itemObject = {
+      userssn,
+      name,
+      description,
+      minbidprice: minbidprice || undefined,
+      loandurationindays: loandurationindays || undefined
+    };
 
     fetch("/items/create", {
       method: "POST",
@@ -68,7 +74,7 @@ class LendForm extends Component {
             <Grid item xs sm md lg xl>
               <TextField
                 name="name"
-                label="Name"
+                label="Item name"
                 fullWidth
                 value={name}
                 onChange={this.handleNameChange}
@@ -77,7 +83,7 @@ class LendForm extends Component {
             <Grid item xs sm md lg xl>
               <TextField
                 name="description"
-                label="Description"
+                label="Item description"
                 multiline
                 fullWidth
                 value={description}
@@ -89,6 +95,8 @@ class LendForm extends Component {
                 name="minBidPrice"
                 type="number"
                 label="Minimum bid price"
+                placeholder="0"
+                InputProps={{ inputProps: { min: "0" } }}
                 fullWidth
                 value={minbidprice}
                 onChange={this.handleMinBidPriceChange}
@@ -99,6 +107,8 @@ class LendForm extends Component {
                 name="loanDuration"
                 type="number"
                 label="Loan Duration in Days"
+                placeholder="0"
+                InputProps={{ inputProps: { min: "0" } }}
                 fullWidth
                 value={loandurationindays}
                 onChange={this.handleLoandDurationChange}
