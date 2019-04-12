@@ -620,7 +620,21 @@ const feedbackCreate = (request, response) => {
 
   pool.query(query, values, (error) => {
     if (error) {
-      response.send({ errorMessage: error.message });
+      if (error.message.includes('null value in column "receivedbyuserssn"')) {
+        response.send({ errorMessage: 'User must be selected' });
+      } else if (
+        error.message.includes('feedbacks_commenttype_check')
+        || error.message.includes('null value in column "commenttype"')
+      ) {
+        response.send({ errorMessage: 'Comment Type cannot be empty' });
+      } else if (
+        error.message.includes('feedbacks_commentbody_check')
+        || error.message.includes('null value in column "commentbody"')
+      ) {
+        response.send({ errorMessage: 'Comment Body cannot be empty' });
+      } else {
+        response.send({ errorMessage: error.message });
+      }
     } else {
       response.send(true);
     }
