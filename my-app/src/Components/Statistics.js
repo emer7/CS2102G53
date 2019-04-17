@@ -52,7 +52,7 @@ class Statistics extends Component {
               {mostActiveRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
-                  <TableCell align="center">{row.numOfTimesBorrowed}</TableCell>
+                  <TableCell align="center">{row.numoftimesborrowed}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -70,7 +70,7 @@ class Statistics extends Component {
               {mostPopularRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
-                  <TableCell align="center">{row.numOfTimesLoaned}</TableCell>
+                  <TableCell align="center">{row.numoftimesloaned}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -88,7 +88,7 @@ class Statistics extends Component {
               {mostFeedbackRows.map(row => (
                 <TableRow key={row.username}>
                   <TableCell align="center">{row.username}</TableCell>
-                  <TableCell align="center">{row.numOfTimesPraised}</TableCell>
+                  <TableCell align="center">{row.numoftimespraised}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
